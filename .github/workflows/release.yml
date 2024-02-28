@@ -14,8 +14,11 @@ on:
   push:
     tags:
       - 'v*'
+<<<<<<< HEAD
 permissions:
   contents: write
+=======
+>>>>>>> 5e29cad (feat: add git files)
 jobs:
   goreleaser:
     runs-on: ubuntu-latest
