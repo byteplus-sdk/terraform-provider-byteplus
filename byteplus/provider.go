@@ -143,9 +143,9 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_ecs_deployment_set_associate": ecs_deployment_set_associate.ResourceByteplusEcsDeploymentSetAssociate(),
 
 			// ================ VPC ================
-			"byteplus_vpc":             vpc.ResourceByteplusVpc(),
-			"byteplus_subnet":          subnet.ResourceByteplusSubnet(),
-			"byteplus_security_groups": security_group.ResourceByteplusSecurityGroup(),
+			"byteplus_vpc":            vpc.ResourceByteplusVpc(),
+			"byteplus_subnet":         subnet.ResourceByteplusSubnet(),
+			"byteplus_security_group": security_group.ResourceByteplusSecurityGroup(),
 
 			// ================ EBS ================
 			"byteplus_volume": volume.ResourceByteplusVolume(),
