@@ -32,7 +32,7 @@ func (s *ByteplusImageService) ReadResources(condition map[string]interface{}) (
 		ok      bool
 	)
 	return bp.WithNextTokenQuery(condition, "MaxResults", "NextToken", 20, nil, func(m map[string]interface{}) (data []interface{}, next string, err error) {
-		action := "DescribeInstances"
+		action := "DescribeImages"
 		logger.Debug(logger.ReqFormat, action, condition)
 		if condition == nil {
 			resp, err = s.Client.UniversalClient.DoCall(getUniversalInfo(action), nil)
