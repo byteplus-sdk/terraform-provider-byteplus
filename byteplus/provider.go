@@ -3,7 +3,10 @@ package byteplus
 import (
 	"fmt"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ebs/volume"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ecs/image"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ecs/zone"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpc/security_group"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpc/subnet"
 	"os"
 	"strconv"
 	"strings"
@@ -117,17 +120,22 @@ func Provider() terraform.ResourceProvider {
 		},
 		DataSourcesMap: map[string]*schema.Resource{
 			// ================ ECS ================
-			"byteplus_zones": zone.DataSourceByteplusZones(),
+			"byteplus_zones":  zone.DataSourceByteplusZones(),
+			"byteplus_images": image.DataSourceByteplusImages(),
 
 			// ================ VPC ================
-			"byteplus_vpcs": vpc.DataSourceByteplusVpcs(),
+			"byteplus_vpcs":            vpc.DataSourceByteplusVpcs(),
+			"byteplus_subnets":         subnet.DataSourceByteplusSubnets(),
+			"byteplus_security_groups": security_group.DataSourceByteplusSecurityGroups(),
 
 			// ================ EBS ================
 			"byteplus_volumes": volume.DataSourceByteplusVolumes(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			// ================ VPC ================
-			"byteplus_vpc": vpc.ResourceByteplusVpc(),
+			"byteplus_vpc":             vpc.ResourceByteplusVpc(),
+			"byteplus_subnet":          subnet.ResourceByteplusSubnet(),
+			"byteplus_security_groups": security_group.ResourceByteplusSecurityGroup(),
 
 			// ================ EBS ================
 			"byteplus_volume": volume.ResourceByteplusVolume(),
