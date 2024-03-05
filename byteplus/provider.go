@@ -2,14 +2,6 @@ package byteplus
 
 import (
 	"fmt"
-	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ebs/volume"
-	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ecs/ecs_deployment_set"
-	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ecs/ecs_deployment_set_associate"
-	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ecs/ecs_instance"
-	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ecs/image"
-	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ecs/zone"
-	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpc/security_group"
-	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpc/subnet"
 	"os"
 	"strconv"
 	"strings"
@@ -21,6 +13,17 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ebs/volume"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ecs/ecs_deployment_set"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ecs/ecs_deployment_set_associate"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ecs/ecs_instance"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ecs/image"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ecs/zone"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpc/network_interface"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpc/network_interface_attach"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpc/security_group"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpc/security_group_rule"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpc/subnet"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpc/vpc"
 )
 
@@ -129,9 +132,11 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_ecs_deployment_sets": ecs_deployment_set.DataSourceByteplusEcsDeploymentSets(),
 
 			// ================ VPC ================
-			"byteplus_vpcs":            vpc.DataSourceByteplusVpcs(),
-			"byteplus_subnets":         subnet.DataSourceByteplusSubnets(),
-			"byteplus_security_groups": security_group.DataSourceByteplusSecurityGroups(),
+			"byteplus_vpcs":                 vpc.DataSourceByteplusVpcs(),
+			"byteplus_subnets":              subnet.DataSourceByteplusSubnets(),
+			"byteplus_security_groups":      security_group.DataSourceByteplusSecurityGroups(),
+			"byteplus_security_group_rules": security_group_rule.DataSourceByteplusSecurityGroupRules(),
+			"byteplus_network_interfaces":   network_interface.DataSourceByteplusNetworkInterfaces(),
 
 			// ================ EBS ================
 			"byteplus_volumes": volume.DataSourceByteplusVolumes(),
@@ -143,9 +148,12 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_ecs_deployment_set_associate": ecs_deployment_set_associate.ResourceByteplusEcsDeploymentSetAssociate(),
 
 			// ================ VPC ================
-			"byteplus_vpc":            vpc.ResourceByteplusVpc(),
-			"byteplus_subnet":         subnet.ResourceByteplusSubnet(),
-			"byteplus_security_group": security_group.ResourceByteplusSecurityGroup(),
+			"byteplus_vpc":                      vpc.ResourceByteplusVpc(),
+			"byteplus_subnet":                   subnet.ResourceByteplusSubnet(),
+			"byteplus_security_group":           security_group.ResourceByteplusSecurityGroup(),
+			"byteplus_security_group_rule":      security_group_rule.ResourceByteplusSecurityGroupRule(),
+			"byteplus_network_interface":        network_interface.ResourceByteplusNetworkInterface(),
+			"byteplus_network_interface_attach": network_interface_attach.ResourceByteplusNetworkInterfaceAttach(),
 
 			// ================ EBS ================
 			"byteplus_volume": volume.ResourceByteplusVolume(),
