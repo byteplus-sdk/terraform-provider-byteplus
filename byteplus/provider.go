@@ -19,8 +19,14 @@ import (
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ecs/ecs_instance"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ecs/image"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ecs/zone"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/nat/dnat_entry"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/nat/nat_gateway"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/nat/snat_entry"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpc/network_interface"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpc/network_interface_attach"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpc/route_entry"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpc/route_table"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpc/route_table_associate"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpc/security_group"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpc/security_group_rule"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpc/subnet"
@@ -137,9 +143,16 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_security_groups":      security_group.DataSourceByteplusSecurityGroups(),
 			"byteplus_security_group_rules": security_group_rule.DataSourceByteplusSecurityGroupRules(),
 			"byteplus_network_interfaces":   network_interface.DataSourceByteplusNetworkInterfaces(),
+			"byteplus_route_tables":         route_table.DataSourceByteplusRouteTables(),
+			"byteplus_route_entries":        route_entry.DataSourceByteplusRouteEntries(),
 
 			// ================ EBS ================
 			"byteplus_volumes": volume.DataSourceByteplusVolumes(),
+
+			// ================ NAT ================
+			"byteplus_nat_gateways": nat_gateway.DataSourceByteplusNatGateways(),
+			"byteplus_dnat_entries": dnat_entry.DataSourceByteplusDnatEntries(),
+			"byteplus_snat_entries": snat_entry.DataSourceByteplusSnatEntries(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			// ================ ECS ================
@@ -154,9 +167,17 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_security_group_rule":      security_group_rule.ResourceByteplusSecurityGroupRule(),
 			"byteplus_network_interface":        network_interface.ResourceByteplusNetworkInterface(),
 			"byteplus_network_interface_attach": network_interface_attach.ResourceByteplusNetworkInterfaceAttach(),
+			"byteplus_route_table":              route_table.ResourceByteplusRouteTable(),
+			"byteplus_route_table_associate":    route_table_associate.ResourceByteplusRouteTableAssociate(),
+			"byteplus_route_entry":              route_entry.ResourceByteplusRouteEntry(),
 
 			// ================ EBS ================
 			"byteplus_volume": volume.ResourceByteplusVolume(),
+
+			// ================ NAT ================
+			"byteplus_nat_gateway": nat_gateway.ResourceByteplusNatGateway(),
+			"byteplus_dnat_entry":  dnat_entry.ResourceByteplusDnatEntry(),
+			"byteplus_snat_entry":  snat_entry.ResourceByteplusSnatEntry(),
 		},
 		ConfigureFunc: ProviderConfigure,
 	}
