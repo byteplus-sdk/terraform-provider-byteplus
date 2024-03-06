@@ -17,6 +17,10 @@ import (
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/clb/acl_entry"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/clb/certificate"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/clb/clb"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/clb/listener"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/clb/rule"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/clb/server_group"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/clb/server_group_server"
 	clbZone "github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/clb/zone"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ebs/volume"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ecs/ecs_deployment_set"
@@ -174,10 +178,14 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_eip_addresses": eip_address.DataSourceByteplusEipAddresses(),
 
 			// ================ CLB ================
-			"byteplus_clbs":         clb.DataSourceByteplusClbs(),
-			"byteplus_acls":         acl.DataSourceByteplusAcls(),
-			"byteplus_certificates": certificate.DataSourceByteplusCertificates(),
-			"byteplus_clb_zones":    clbZone.DataSourceByteplusClbZones(),
+			"byteplus_clbs":                 clb.DataSourceByteplusClbs(),
+			"byteplus_acls":                 acl.DataSourceByteplusAcls(),
+			"byteplus_certificates":         certificate.DataSourceByteplusCertificates(),
+			"byteplus_listeners":            listener.DataSourceByteplusListeners(),
+			"byteplus_server_groups":        server_group.DataSourceByteplusServerGroups(),
+			"byteplus_clb_rules":            rule.DataSourceByteplusRules(),
+			"byteplus_server_group_servers": server_group_server.DataSourceByteplusServerGroupServers(),
+			"byteplus_clb_zones":            clbZone.DataSourceByteplusClbZones(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			// ================ ECS ================
@@ -213,10 +221,14 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_eip_associate": eip_associate.ResourceByteplusEipAssociate(),
 
 			// ================ CLB ================
-			"byteplus_clb":         clb.ResourceByteplusClb(),
-			"byteplus_acl":         acl.ResourceByteplusAcl(),
-			"byteplus_acl_entry":   acl_entry.ResourceByteplusAclEntry(),
-			"byteplus_certificate": certificate.ResourceByteplusCertificate(),
+			"byteplus_clb":                 clb.ResourceByteplusClb(),
+			"byteplus_acl":                 acl.ResourceByteplusAcl(),
+			"byteplus_acl_entry":           acl_entry.ResourceByteplusAclEntry(),
+			"byteplus_certificate":         certificate.ResourceByteplusCertificate(),
+			"byteplus_listener":            listener.ResourceByteplusListener(),
+			"byteplus_server_group":        server_group.ResourceByteplusServerGroup(),
+			"byteplus_clb_rule":            rule.ResourceByteplusRule(),
+			"byteplus_server_group_server": server_group_server.ResourceByteplusServerGroupServer(),
 		},
 		ConfigureFunc: ProviderConfigure,
 	}
