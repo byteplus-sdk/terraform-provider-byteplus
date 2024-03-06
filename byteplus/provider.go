@@ -13,6 +13,11 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/clb/acl"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/clb/acl_entry"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/clb/certificate"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/clb/clb"
+	clbZone "github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/clb/zone"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ebs/volume"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ecs/ecs_deployment_set"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ecs/ecs_deployment_set_associate"
@@ -167,6 +172,12 @@ func Provider() terraform.ResourceProvider {
 
 			// ================ EIP ================
 			"byteplus_eip_addresses": eip_address.DataSourceByteplusEipAddresses(),
+
+			// ================ CLB ================
+			"byteplus_clbs":         clb.DataSourceByteplusClbs(),
+			"byteplus_acls":         acl.DataSourceByteplusAcls(),
+			"byteplus_certificates": certificate.DataSourceByteplusCertificates(),
+			"byteplus_clb_zones":    clbZone.DataSourceByteplusClbZones(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			// ================ ECS ================
@@ -200,6 +211,12 @@ func Provider() terraform.ResourceProvider {
 			// ================ EIP ================
 			"byteplus_eip_address":   eip_address.ResourceByteplusEipAddress(),
 			"byteplus_eip_associate": eip_associate.ResourceByteplusEipAssociate(),
+
+			// ================ CLB ================
+			"byteplus_clb":         clb.ResourceByteplusClb(),
+			"byteplus_acl":         acl.ResourceByteplusAcl(),
+			"byteplus_acl_entry":   acl_entry.ResourceByteplusAclEntry(),
+			"byteplus_certificate": certificate.ResourceByteplusCertificate(),
 		},
 		ConfigureFunc: ProviderConfigure,
 	}
