@@ -19,9 +19,16 @@ import (
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ecs/ecs_instance"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ecs/image"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ecs/zone"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/eip/eip_address"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/eip/eip_associate"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/nat/dnat_entry"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/nat/nat_gateway"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/nat/snat_entry"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpc/ipv6_address"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpc/ipv6_address_bandwidth"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpc/ipv6_gateway"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpc/network_acl"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpc/network_acl_associate"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpc/network_interface"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpc/network_interface_attach"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpc/route_entry"
@@ -138,13 +145,17 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_ecs_deployment_sets": ecs_deployment_set.DataSourceByteplusEcsDeploymentSets(),
 
 			// ================ VPC ================
-			"byteplus_vpcs":                 vpc.DataSourceByteplusVpcs(),
-			"byteplus_subnets":              subnet.DataSourceByteplusSubnets(),
-			"byteplus_security_groups":      security_group.DataSourceByteplusSecurityGroups(),
-			"byteplus_security_group_rules": security_group_rule.DataSourceByteplusSecurityGroupRules(),
-			"byteplus_network_interfaces":   network_interface.DataSourceByteplusNetworkInterfaces(),
-			"byteplus_route_tables":         route_table.DataSourceByteplusRouteTables(),
-			"byteplus_route_entries":        route_entry.DataSourceByteplusRouteEntries(),
+			"byteplus_vpcs":                        vpc.DataSourceByteplusVpcs(),
+			"byteplus_subnets":                     subnet.DataSourceByteplusSubnets(),
+			"byteplus_security_groups":             security_group.DataSourceByteplusSecurityGroups(),
+			"byteplus_security_group_rules":        security_group_rule.DataSourceByteplusSecurityGroupRules(),
+			"byteplus_network_interfaces":          network_interface.DataSourceByteplusNetworkInterfaces(),
+			"byteplus_route_tables":                route_table.DataSourceByteplusRouteTables(),
+			"byteplus_route_entries":               route_entry.DataSourceByteplusRouteEntries(),
+			"byteplus_vpc_ipv6_gateways":           ipv6_gateway.DataSourceByteplusIpv6Gateways(),
+			"byteplus_vpc_ipv6_addresses":          ipv6_address.DataSourceByteplusIpv6Addresses(),
+			"byteplus_vpc_ipv6_address_bandwidths": ipv6_address_bandwidth.DataSourceByteplusIpv6AddressBandwidths(),
+			"byteplus_network_acls":                network_acl.DataSourceByteplusNetworkAcls(),
 
 			// ================ EBS ================
 			"byteplus_volumes": volume.DataSourceByteplusVolumes(),
@@ -153,6 +164,9 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_nat_gateways": nat_gateway.DataSourceByteplusNatGateways(),
 			"byteplus_dnat_entries": dnat_entry.DataSourceByteplusDnatEntries(),
 			"byteplus_snat_entries": snat_entry.DataSourceByteplusSnatEntries(),
+
+			// ================ EIP ================
+			"byteplus_eip_addresses": eip_address.DataSourceByteplusEipAddresses(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			// ================ ECS ================
@@ -161,15 +175,19 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_ecs_deployment_set_associate": ecs_deployment_set_associate.ResourceByteplusEcsDeploymentSetAssociate(),
 
 			// ================ VPC ================
-			"byteplus_vpc":                      vpc.ResourceByteplusVpc(),
-			"byteplus_subnet":                   subnet.ResourceByteplusSubnet(),
-			"byteplus_security_group":           security_group.ResourceByteplusSecurityGroup(),
-			"byteplus_security_group_rule":      security_group_rule.ResourceByteplusSecurityGroupRule(),
-			"byteplus_network_interface":        network_interface.ResourceByteplusNetworkInterface(),
-			"byteplus_network_interface_attach": network_interface_attach.ResourceByteplusNetworkInterfaceAttach(),
-			"byteplus_route_table":              route_table.ResourceByteplusRouteTable(),
-			"byteplus_route_table_associate":    route_table_associate.ResourceByteplusRouteTableAssociate(),
-			"byteplus_route_entry":              route_entry.ResourceByteplusRouteEntry(),
+			"byteplus_vpc":                        vpc.ResourceByteplusVpc(),
+			"byteplus_subnet":                     subnet.ResourceByteplusSubnet(),
+			"byteplus_security_group":             security_group.ResourceByteplusSecurityGroup(),
+			"byteplus_security_group_rule":        security_group_rule.ResourceByteplusSecurityGroupRule(),
+			"byteplus_network_interface":          network_interface.ResourceByteplusNetworkInterface(),
+			"byteplus_network_interface_attach":   network_interface_attach.ResourceByteplusNetworkInterfaceAttach(),
+			"byteplus_route_table":                route_table.ResourceByteplusRouteTable(),
+			"byteplus_route_table_associate":      route_table_associate.ResourceByteplusRouteTableAssociate(),
+			"byteplus_route_entry":                route_entry.ResourceByteplusRouteEntry(),
+			"byteplus_vpc_ipv6_gateway":           ipv6_gateway.ResourceByteplusIpv6Gateway(),
+			"byteplus_vpc_ipv6_address_bandwidth": ipv6_address_bandwidth.ResourceByteplusIpv6AddressBandwidth(),
+			"byteplus_network_acl":                network_acl.ResourceByteplusNetworkAcl(),
+			"byteplus_network_acl_associate":      network_acl_associate.ResourceByteplusNetworkAclAssociate(),
 
 			// ================ EBS ================
 			"byteplus_volume": volume.ResourceByteplusVolume(),
@@ -178,6 +196,10 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_nat_gateway": nat_gateway.ResourceByteplusNatGateway(),
 			"byteplus_dnat_entry":  dnat_entry.ResourceByteplusDnatEntry(),
 			"byteplus_snat_entry":  snat_entry.ResourceByteplusSnatEntry(),
+
+			// ================ EIP ================
+			"byteplus_eip_address":   eip_address.ResourceByteplusEipAddress(),
+			"byteplus_eip_associate": eip_associate.ResourceByteplusEipAssociate(),
 		},
 		ConfigureFunc: ProviderConfigure,
 	}
