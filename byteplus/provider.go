@@ -48,6 +48,9 @@ import (
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/nat/dnat_entry"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/nat/nat_gateway"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/nat/snat_entry"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vke/cluster"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vke/node"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vke/node_pool"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpc/ipv6_address"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpc/ipv6_address_bandwidth"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpc/ipv6_gateway"
@@ -208,6 +211,11 @@ func Provider() terraform.ResourceProvider {
 
 			// ============= Bandwidth Package =============
 			"byteplus_bandwidth_packages": bandwidth_package.DataSourceByteplusBandwidthPackages(),
+
+			// ================ VKE ================
+			"byteplus_vke_clusters":   cluster.DataSourceByteplusVkeVkeClusters(),
+			"byteplus_vke_node_pools": node_pool.DataSourceByteplusNodePools(),
+			"byteplus_vke_nodes":      node.DataSourceByteplusVkeNodes(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			// ================ ECS ================
@@ -259,6 +267,11 @@ func Provider() terraform.ResourceProvider {
 			// ============= Bandwidth Package =============
 			"byteplus_bandwidth_package":            bandwidth_package.ResourceByteplusBandwidthPackage(),
 			"byteplus_bandwidth_package_attachment": bandwidth_package_attachment.ResourceByteplusBandwidthPackageAttachment(),
+
+			// ================ VKE ================
+			"byteplus_vke_cluster":   cluster.ResourceByteplusVkeCluster(),
+			"byteplus_vke_node_pool": node_pool.ResourceByteplusNodePool(),
+			"byteplus_vke_node":      node.ResourceByteplusVkeNode(),
 		},
 		ConfigureFunc: ProviderConfigure,
 	}
