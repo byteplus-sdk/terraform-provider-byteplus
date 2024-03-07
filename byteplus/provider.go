@@ -23,10 +23,17 @@ import (
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/clb/server_group_server"
 	clbZone "github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/clb/zone"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ebs/volume"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ebs/volume_attach"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ecs/ecs_available_resource"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ecs/ecs_deployment_set"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ecs/ecs_deployment_set_associate"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ecs/ecs_instance"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ecs/ecs_instance_state"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ecs/ecs_instance_type"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ecs/ecs_key_pair"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ecs/ecs_key_pair_associate"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ecs/image"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ecs/region"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ecs/zone"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/eip/eip_address"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/eip/eip_associate"
@@ -148,10 +155,14 @@ func Provider() terraform.ResourceProvider {
 		},
 		DataSourcesMap: map[string]*schema.Resource{
 			// ================ ECS ================
-			"byteplus_zones":               zone.DataSourceByteplusZones(),
-			"byteplus_images":              image.DataSourceByteplusImages(),
-			"byteplus_ecs_instances":       ecs_instance.DataSourceByteplusEcsInstances(),
-			"byteplus_ecs_deployment_sets": ecs_deployment_set.DataSourceByteplusEcsDeploymentSets(),
+			"byteplus_zones":                   zone.DataSourceByteplusZones(),
+			"byteplus_images":                  image.DataSourceByteplusImages(),
+			"byteplus_regions":                 region.DataSourceByteplusRegions(),
+			"byteplus_ecs_instances":           ecs_instance.DataSourceByteplusEcsInstances(),
+			"byteplus_ecs_deployment_sets":     ecs_deployment_set.DataSourceByteplusEcsDeploymentSets(),
+			"byteplus_ecs_key_pairs":           ecs_key_pair.DataSourceByteplusEcsKeyPairs(),
+			"byteplus_ecs_instance_types":      ecs_instance_type.DataSourceByteplusEcsInstanceTypes(),
+			"byteplus_ecs_available_resources": ecs_available_resource.DataSourceByteplusEcsAvailableResources(),
 
 			// ================ VPC ================
 			"byteplus_vpcs":                        vpc.DataSourceByteplusVpcs(),
@@ -190,8 +201,11 @@ func Provider() terraform.ResourceProvider {
 		ResourcesMap: map[string]*schema.Resource{
 			// ================ ECS ================
 			"byteplus_ecs_instance":                 ecs_instance.ResourceByteplusEcsInstance(),
+			"byteplus_ecs_instance_state":           ecs_instance_state.ResourceByteplusEcsInstanceState(),
 			"byteplus_ecs_deployment_set":           ecs_deployment_set.ResourceByteplusEcsDeploymentSet(),
 			"byteplus_ecs_deployment_set_associate": ecs_deployment_set_associate.ResourceByteplusEcsDeploymentSetAssociate(),
+			"byteplus_ecs_key_pair":                 ecs_key_pair.ResourceByteplusEcsKeyPair(),
+			"byteplus_ecs_key_pair_associate":       ecs_key_pair_associate.ResourceByteplusEcsKeyPairAssociate(),
 
 			// ================ VPC ================
 			"byteplus_vpc":                        vpc.ResourceByteplusVpc(),
@@ -209,7 +223,8 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_network_acl_associate":      network_acl_associate.ResourceByteplusNetworkAclAssociate(),
 
 			// ================ EBS ================
-			"byteplus_volume": volume.ResourceByteplusVolume(),
+			"byteplus_volume":        volume.ResourceByteplusVolume(),
+			"byteplus_volume_attach": volume_attach.ResourceByteplusVolumeAttach(),
 
 			// ================ NAT ================
 			"byteplus_nat_gateway": nat_gateway.ResourceByteplusNatGateway(),

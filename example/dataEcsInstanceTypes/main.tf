@@ -1,0 +1,1 @@
+data "byteplus_ecs_instance_types" "foo" {}
