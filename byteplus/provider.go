@@ -54,9 +54,15 @@ import (
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/nat/dnat_entry"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/nat/nat_gateway"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/nat/snat_entry"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vke/addon"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vke/cluster"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vke/default_node_pool"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vke/default_node_pool_batch_attach"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vke/kubeconfig"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vke/node"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vke/node_pool"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vke/support_addon"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vke/support_resource_types"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpc/ipv6_address"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpc/ipv6_address_bandwidth"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpc/ipv6_gateway"
@@ -220,9 +226,13 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_bandwidth_packages": bandwidth_package.DataSourceByteplusBandwidthPackages(),
 
 			// ================ VKE ================
-			"byteplus_vke_clusters":   cluster.DataSourceByteplusVkeVkeClusters(),
-			"byteplus_vke_node_pools": node_pool.DataSourceByteplusNodePools(),
-			"byteplus_vke_nodes":      node.DataSourceByteplusVkeNodes(),
+			"byteplus_vke_clusters":               cluster.DataSourceByteplusVkeVkeClusters(),
+			"byteplus_vke_node_pools":             node_pool.DataSourceByteplusNodePools(),
+			"byteplus_vke_nodes":                  node.DataSourceByteplusVkeNodes(),
+			"byteplus_vke_addons":                 addon.DataSourceByteplusVkeAddons(),
+			"byteplus_vke_support_addons":         support_addon.DataSourceByteplusVkeVkeSupportedAddons(),
+			"byteplus_vke_kubeconfigs":            kubeconfig.DataSourceByteplusVkeKubeconfigs(),
+			"byteplus_vke_support_resource_types": support_resource_types.DataSourceByteplusVkeVkeSupportResourceTypes(),
 
 			// ================ AutoScaling ================
 			"byteplus_scaling_groups":          scaling_group.DataSourceByteplusScalingGroups(),
@@ -283,9 +293,13 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_bandwidth_package_attachment": bandwidth_package_attachment.ResourceByteplusBandwidthPackageAttachment(),
 
 			// ================ VKE ================
-			"byteplus_vke_cluster":   cluster.ResourceByteplusVkeCluster(),
-			"byteplus_vke_node_pool": node_pool.ResourceByteplusNodePool(),
-			"byteplus_vke_node":      node.ResourceByteplusVkeNode(),
+			"byteplus_vke_cluster":                        cluster.ResourceByteplusVkeCluster(),
+			"byteplus_vke_node_pool":                      node_pool.ResourceByteplusNodePool(),
+			"byteplus_vke_node":                           node.ResourceByteplusVkeNode(),
+			"byteplus_vke_addon":                          addon.ResourceByteplusVkeAddon(),
+			"byteplus_vke_default_node_pool":              default_node_pool.ResourceByteplusDefaultNodePool(),
+			"byteplus_vke_default_node_pool_batch_attach": default_node_pool_batch_attach.ResourceByteplusDefaultNodePoolBatchAttach(),
+			"byteplus_vke_kubeconfig":                     kubeconfig.ResourceByteplusVkeKubeconfig(),
 
 			// ================ AutoScaling ================
 			"byteplus_scaling_group":                    scaling_group.ResourceByteplusScalingGroup(),
