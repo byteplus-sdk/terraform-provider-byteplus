@@ -19,6 +19,11 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/autoscaling/scaling_configuration"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/autoscaling/scaling_configuration_attachment"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/autoscaling/scaling_group"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/autoscaling/scaling_lifecycle_hook"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/autoscaling/scaling_policy"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/bandwidth_package/bandwidth_package"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/bandwidth_package/bandwidth_package_attachment"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/clb/acl"
@@ -40,6 +45,7 @@ import (
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ecs/ecs_instance_type"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ecs/ecs_key_pair"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ecs/ecs_key_pair_associate"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ecs/ecs_launch_template"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ecs/image"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ecs/region"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ecs/zone"
@@ -174,6 +180,7 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_ecs_key_pairs":           ecs_key_pair.DataSourceByteplusEcsKeyPairs(),
 			"byteplus_ecs_instance_types":      ecs_instance_type.DataSourceByteplusEcsInstanceTypes(),
 			"byteplus_ecs_available_resources": ecs_available_resource.DataSourceByteplusEcsAvailableResources(),
+			"byteplus_ecs_launch_templates":    ecs_launch_template.DataSourceByteplusEcsLaunchTemplates(),
 
 			// ================ VPC ================
 			"byteplus_vpcs":                        vpc.DataSourceByteplusVpcs(),
@@ -216,6 +223,12 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_vke_clusters":   cluster.DataSourceByteplusVkeVkeClusters(),
 			"byteplus_vke_node_pools": node_pool.DataSourceByteplusNodePools(),
 			"byteplus_vke_nodes":      node.DataSourceByteplusVkeNodes(),
+
+			// ================ AutoScaling ================
+			"byteplus_scaling_groups":          scaling_group.DataSourceByteplusScalingGroups(),
+			"byteplus_scaling_configurations":  scaling_configuration.DataSourceByteplusScalingConfigurations(),
+			"byteplus_scaling_policies":        scaling_policy.DataSourceByteplusScalingPolicies(),
+			"byteplus_scaling_lifecycle_hooks": scaling_lifecycle_hook.DataSourceByteplusScalingLifecycleHooks(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			// ================ ECS ================
@@ -225,6 +238,7 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_ecs_deployment_set_associate": ecs_deployment_set_associate.ResourceByteplusEcsDeploymentSetAssociate(),
 			"byteplus_ecs_key_pair":                 ecs_key_pair.ResourceByteplusEcsKeyPair(),
 			"byteplus_ecs_key_pair_associate":       ecs_key_pair_associate.ResourceByteplusEcsKeyPairAssociate(),
+			"byteplus_ecs_launch_template":          ecs_launch_template.ResourceByteplusEcsLaunchTemplate(),
 
 			// ================ VPC ================
 			"byteplus_vpc":                        vpc.ResourceByteplusVpc(),
@@ -272,6 +286,13 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_vke_cluster":   cluster.ResourceByteplusVkeCluster(),
 			"byteplus_vke_node_pool": node_pool.ResourceByteplusNodePool(),
 			"byteplus_vke_node":      node.ResourceByteplusVkeNode(),
+
+			// ================ AutoScaling ================
+			"byteplus_scaling_group":                    scaling_group.ResourceByteplusScalingGroup(),
+			"byteplus_scaling_configuration":            scaling_configuration.ResourceByteplusScalingConfiguration(),
+			"byteplus_scaling_configuration_attachment": scaling_configuration_attachment.ResourceByteplusScalingConfigurationAttachment(),
+			"byteplus_scaling_policy":                   scaling_policy.ResourceByteplusScalingPolicy(),
+			"byteplus_scaling_lifecycle_hook":           scaling_lifecycle_hook.ResourceByteplusScalingLifecycleHook(),
 		},
 		ConfigureFunc: ProviderConfigure,
 	}
