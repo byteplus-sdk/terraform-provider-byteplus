@@ -93,6 +93,11 @@ import (
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/nat/dnat_entry"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/nat/nat_gateway"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/nat/snat_entry"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/privatelink/vpc_endpoint"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/privatelink/vpc_endpoint_connection"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/privatelink/vpc_endpoint_service"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/privatelink/vpc_endpoint_service_permission"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/privatelink/vpc_endpoint_zone"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/rds_postgresql/rds_postgresql_account"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/rds_postgresql/rds_postgresql_database"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/rds_postgresql/rds_postgresql_instance"
@@ -339,6 +344,13 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_iam_user_group_policy_attachments": iam_user_group_policy_attachment.DataSourceByteplusIamUserGroupPolicyAttachments(),
 			"byteplus_iam_saml_providers":                iam_saml_provider.DataSourceByteplusIamSamlProviders(),
 			"byteplus_iam_access_keys":                   iam_access_key.DataSourceByteplusIamAccessKeys(),
+
+			// ================ PrivateLink ==================
+			"byteplus_privatelink_vpc_endpoints":                    vpc_endpoint.DataSourceByteplusPrivatelinkVpcEndpoints(),
+			"byteplus_privatelink_vpc_endpoint_services":            vpc_endpoint_service.DataSourceByteplusPrivatelinkVpcEndpointServices(),
+			"byteplus_privatelink_vpc_endpoint_service_permissions": vpc_endpoint_service_permission.DataSourceByteplusPrivatelinkVpcEndpointServicePermissions(),
+			"byteplus_privatelink_vpc_endpoint_connections":         vpc_endpoint_connection.DataSourceByteplusPrivatelinkVpcEndpointConnections(),
+			"byteplus_privatelink_vpc_endpoint_zones":               vpc_endpoint_zone.DataSourceByteplusPrivatelinkVpcEndpointZones(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			// ================ ECS ================
@@ -466,6 +478,13 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_iam_user_group_attachment":        iam_user_group_attachment.ResourceByteplusIamUserGroupAttachment(),
 			"byteplus_iam_user_group_policy_attachment": iam_user_group_policy_attachment.ResourceByteplusIamUserGroupPolicyAttachment(),
 			"byteplus_iam_saml_provider":                iam_saml_provider.ResourceByteplusIamSamlProvider(),
+
+			// ================ PrivateLink ==================
+			"byteplus_privatelink_vpc_endpoint":                    vpc_endpoint.ResourceByteplusPrivatelinkVpcEndpoint(),
+			"byteplus_privatelink_vpc_endpoint_service":            vpc_endpoint_service.ResourceByteplusPrivatelinkVpcEndpointService(),
+			"byteplus_privatelink_vpc_endpoint_service_permission": vpc_endpoint_service_permission.ResourceByteplusPrivatelinkVpcEndpointServicePermission(),
+			"byteplus_privatelink_vpc_endpoint_connection":         vpc_endpoint_connection.ResourceByteplusPrivatelinkVpcEndpointConnectionService(),
+			"byteplus_privatelink_vpc_endpoint_zone":               vpc_endpoint_zone.ResourceByteplusPrivatelinkVpcEndpointZone(),
 		},
 		ConfigureFunc: ProviderConfigure,
 	}
