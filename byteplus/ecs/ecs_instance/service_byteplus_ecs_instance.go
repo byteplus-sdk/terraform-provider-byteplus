@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ecs/ecs_deployment_set_associate"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/eip/eip_address"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpc/subnet"
 	bp "github.com/byteplus-sdk/terraform-provider-byteplus/common"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/logger"
@@ -160,6 +161,18 @@ func (s *ByteplusEcsService) ReadResource(resourceData *schema.ResourceData, ins
 				return data, fmt.Errorf("CpuOptions is not map ")
 			}
 			cpuOptions["NumaPerSocket"] = numa
+		}
+	}
+
+	if eipId := resourceData.Get("eip_id"); eipId != "" {
+		if v, exist := data["EipAddress"]; exist && v != nil {
+			eipMap, ok := v.(map[string]interface{})
+			if !ok {
+				return data, fmt.Errorf("DescribeInstances EipAddress is not map")
+			}
+			if id, ok := eipMap["AllocationId"]; ok && eipId.(string) != id.(string) {
+				return data, fmt.Errorf("The eip id of the instance is mismatched, specified id: %s, assigned id: %s ", eipId, id)
+			}
 		}
 	}
 
@@ -596,6 +609,45 @@ func (s *ByteplusEcsService) CreateResource(resourceData *schema.ResourceData, r
 	}
 	callbacks = append(callbacks, ipv6Callback)
 
+	// 绑定eip
+	eipCallback := bp.Callback{
+		Call: bp.SdkCall{
+			Action:      "AssociateEipAddress",
+			ConvertMode: bp.RequestConvertIgnore,
+			BeforeCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (bool, error) {
+				eipId, ok := d.GetOk("eip_id")
+				if !ok {
+					return false, nil
+				}
+				(*call.SdkParam)["AllocationId"] = eipId.(string)
+				(*call.SdkParam)["InstanceId"] = d.Id()
+				(*call.SdkParam)["InstanceType"] = "EcsInstance"
+				return true, nil
+			},
+			ExecuteCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (*map[string]interface{}, error) {
+				logger.Debug(logger.RespFormat, call.Action, call.SdkParam)
+				output, err := s.Client.UniversalClient.DoCall(getVpcUniversalInfo(call.Action), call.SdkParam)
+				logger.Debug(logger.RespFormat, call.Action, *call.SdkParam, *output)
+				if err != nil {
+					d.Set("eip_id", nil)
+				}
+				return output, err
+			},
+			Refresh: &bp.StateRefresh{
+				Target:  []string{"RUNNING"},
+				Timeout: resourceData.Timeout(schema.TimeoutCreate),
+			},
+			ExtraRefresh: map[bp.ResourceService]*bp.StateRefresh{
+				eip_address.NewEipAddressService(s.Client): {
+					Target:     []string{"Attached"},
+					Timeout:    resourceData.Timeout(schema.TimeoutCreate),
+					ResourceId: resourceData.Get("eip_id").(string),
+				},
+			},
+		},
+	}
+	callbacks = append(callbacks, eipCallback)
+
 	return callbacks
 }
 
@@ -965,6 +1017,41 @@ func (s *ByteplusEcsService) ModifyResource(resourceData *schema.ResourceData, r
 }
 
 func (s *ByteplusEcsService) RemoveResource(resourceData *schema.ResourceData, r *schema.Resource) []bp.Callback {
+	var callbacks []bp.Callback
+
+	// 解绑eip
+	eipCallback := bp.Callback{
+		Call: bp.SdkCall{
+			Action:      "DisassociateEipAddress",
+			ConvertMode: bp.RequestConvertIgnore,
+			BeforeCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (bool, error) {
+				eipId, ok := d.GetOk("eip_id")
+				if !ok {
+					return false, nil
+				}
+				(*call.SdkParam)["AllocationId"] = eipId.(string)
+				(*call.SdkParam)["InstanceId"] = d.Id()
+				return true, nil
+			},
+			ExecuteCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (*map[string]interface{}, error) {
+				logger.Debug(logger.RespFormat, call.Action, call.SdkParam)
+				return s.Client.UniversalClient.DoCall(getVpcUniversalInfo(call.Action), call.SdkParam)
+			},
+			Refresh: &bp.StateRefresh{
+				Target:  []string{"RUNNING"},
+				Timeout: resourceData.Timeout(schema.TimeoutCreate),
+			},
+			ExtraRefresh: map[bp.ResourceService]*bp.StateRefresh{
+				eip_address.NewEipAddressService(s.Client): {
+					Target:     []string{"Available"},
+					Timeout:    resourceData.Timeout(schema.TimeoutDelete),
+					ResourceId: resourceData.Get("eip_id").(string),
+				},
+			},
+		},
+	}
+	callbacks = append(callbacks, eipCallback)
+
 	callback := bp.Callback{
 		Call: bp.SdkCall{
 			Action:      "DeleteInstance",
@@ -1006,7 +1093,9 @@ func (s *ByteplusEcsService) RemoveResource(resourceData *schema.ResourceData, r
 			},
 		},
 	}
-	return []bp.Callback{callback}
+	callbacks = append(callbacks, callback)
+
+	return callbacks
 }
 
 func (s *ByteplusEcsService) DatasourceResources(data *schema.ResourceData, resource *schema.Resource) bp.DataSourceInfo {
