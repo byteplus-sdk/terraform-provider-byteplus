@@ -13,6 +13,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/bandwidth_package/bandwidth_package"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/bandwidth_package/bandwidth_package_attachment"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/clb/acl"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/clb/acl_entry"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/clb/certificate"
@@ -197,6 +199,9 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_clb_rules":            rule.DataSourceByteplusRules(),
 			"byteplus_server_group_servers": server_group_server.DataSourceByteplusServerGroupServers(),
 			"byteplus_clb_zones":            clbZone.DataSourceByteplusClbZones(),
+
+			// ============= Bandwidth Package =============
+			"byteplus_bandwidth_packages": bandwidth_package.DataSourceByteplusBandwidthPackages(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			// ================ ECS ================
@@ -244,6 +249,10 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_server_group":        server_group.ResourceByteplusServerGroup(),
 			"byteplus_clb_rule":            rule.ResourceByteplusRule(),
 			"byteplus_server_group_server": server_group_server.ResourceByteplusServerGroupServer(),
+
+			// ============= Bandwidth Package =============
+			"byteplus_bandwidth_package":            bandwidth_package.ResourceByteplusBandwidthPackage(),
+			"byteplus_bandwidth_package_attachment": bandwidth_package_attachment.ResourceByteplusBandwidthPackageAttachment(),
 		},
 		ConfigureFunc: ProviderConfigure,
 	}
