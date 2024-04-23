@@ -120,18 +120,19 @@ type Product struct {
 var deprecatedMapping = map[string]string{}
 
 var resourceKeys = map[string]string{
-	"vpc":            "VPC",
-	"ecs":            "ECS",
-	"clb":            "CLB",
-	"eip":            "EIP",
-	"ebs":            "EBS",
-	"nat":            "NAT",
-	"vke":            "VKE",
-	"cr":             "CR",
-	"cen":            "CEN",
-	"vpn":            "VPN",
-	"autoscaling":    "AUTOSCALING",
-	"direct_connect": "DIRECT_CONNECT",
+	"vpc":               "VPC",
+	"ecs":               "ECS",
+	"clb":               "CLB",
+	"eip":               "EIP",
+	"ebs":               "EBS",
+	"nat":               "NAT",
+	"vke":               "VKE",
+	"cr":                "CR",
+	"cen":               "CEN",
+	"vpn":               "VPN",
+	"autoscaling":       "AUTOSCALING",
+	"direct_connect":    "DIRECT_CONNECT",
+	"bandwidth_package": "BANDWIDTH_PACKAGE",
 }
 
 type Products struct {
