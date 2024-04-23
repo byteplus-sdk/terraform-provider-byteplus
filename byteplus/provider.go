@@ -1,13 +1,19 @@
 package byteplus
 
 import (
+	"context"
 	"fmt"
+	"net/http"
+	"net/url"
 	"os"
 	"strconv"
 	"strings"
+	"time"
 
-	"github.com/byteplus-sdk/byteplus-sdk-golang/base"
-	"github.com/byteplus-sdk/byteplus-sdk-golang/service/sts"
+	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus"
+	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/byteplusutil"
+	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/credentials"
+	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/session"
 	bp "github.com/byteplus-sdk/terraform-provider-byteplus/common"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
@@ -336,51 +342,76 @@ func ProviderConfigure(d *schema.ResourceData) (interface{}, error) {
 		if err != nil {
 			return nil, err
 		}
-		config.AccessKey = cred.AccessKeyId
-		config.SecretKey = cred.SecretAccessKey
-		config.SessionToken = cred.SessionToken
+		config.AccessKey = cred["AccessKeyId"].(string)
+		config.SecretKey = cred["SecretAccessKey"].(string)
+		config.SessionToken = cred["SessionToken"].(string)
 	}
 
 	client, err := config.Client()
 	return client, err
 }
 
-func assumeRole(c bp.Config, arTrn, arSessionName, arPolicy string, arDurationSeconds int) (*sts.Credentials, error) {
-	ins := sts.NewInstance()
-	if c.Region != "" {
-		ins.SetRegion(c.Region)
-	}
-	if c.Endpoint != "" {
-		ins.SetHost(c.Endpoint)
+func assumeRole(c bp.Config, arTrn, arSessionName, arPolicy string, arDurationSeconds int) (map[string]interface{}, error) {
+	version := fmt.Sprintf("%s/%s", bp.TerraformProviderName, bp.TerraformProviderVersion)
+	conf := byteplus.NewConfig().
+		WithRegion(c.Region).
+		WithExtraUserAgent(byteplus.String(version)).
+		WithCredentials(credentials.NewStaticCredentials(c.AccessKey, c.SecretKey, c.SessionToken)).
+		WithDisableSSL(c.DisableSSL).
+		WithExtendHttpRequest(func(ctx context.Context, request *http.Request) {
+			if len(c.CustomerHeaders) > 0 {
+				for k, v := range c.CustomerHeaders {
+					request.Header.Add(k, v)
+				}
+			}
+		}).
+		WithEndpoint(byteplusutil.NewEndpoint().WithCustomerEndpoint(c.Endpoint).GetEndpoint())
+
+	if c.ProxyUrl != "" {
+		u, _ := url.Parse(c.ProxyUrl)
+		t := &http.Transport{
+			Proxy: http.ProxyURL(u),
+		}
+		httpClient := http.DefaultClient
+		httpClient.Transport = t
+		httpClient.Timeout = time.Duration(30000) * time.Millisecond
 	}
 
-	ins.Client.SetAccessKey(c.AccessKey)
-	ins.Client.SetSecretKey(c.SecretKey)
-	input := &sts.AssumeRoleRequest{
-		RoleTrn:         arTrn,
-		RoleSessionName: arSessionName,
-		DurationSeconds: arDurationSeconds,
-		Policy:          arPolicy,
-	}
-	output, statusCode, err := ins.AssumeRole(input)
-	var (
-		reqId  string
-		errObj *base.ErrorObj
-	)
-	if output != nil {
-		reqId = output.ResponseMetadata.RequestId
-		errObj = output.ResponseMetadata.Error
-	}
+	sess, err := session.NewSession(conf)
 	if err != nil {
-		return nil, fmt.Errorf("AssumeRole error, httpcode is %v and reqId is %s error is %s", statusCode, reqId, err.Error())
-	}
-	if errObj != nil {
-		return nil, fmt.Errorf("AssumeRole error, code is %v and reqId is %s error is %s", errObj.Code, reqId, errObj.Message)
+		return nil, err
 	}
 
-	if output.Result == nil || output.Result.Credentials == nil {
-		return nil, fmt.Errorf("assume role failed, result is nil")
-	}
+	universalClient := bp.NewUniversalClient(sess, c.CustomerEndpoints)
 
-	return output.Result.Credentials, nil
+	action := "AssumeRole"
+	req := map[string]interface{}{
+		"RoleTrn":         arTrn,
+		"RoleSessionName": arSessionName,
+		"DurationSeconds": arDurationSeconds,
+		"Policy":          arPolicy,
+	}
+	resp, err := universalClient.DoCall(getUniversalInfo(action), &req)
+	if err != nil {
+		return nil, fmt.Errorf("AssumeRole failed, error: %s", err.Error())
+	}
+	results, err := bp.ObtainSdkValue("Result.Credentials", *resp)
+	if err != nil {
+		return nil, err
+	}
+	cred, ok := results.(map[string]interface{})
+	if !ok {
+		return nil, fmt.Errorf("AssumeRole Result.Credentials is not Map")
+	}
+	return cred, nil
+}
+
+func getUniversalInfo(actionName string) bp.UniversalInfo {
+	return bp.UniversalInfo{
+		ServiceName: "sts",
+		Version:     "2018-01-01",
+		HttpMethod:  bp.GET,
+		ContentType: bp.Default,
+		Action:      actionName,
+	}
 }
