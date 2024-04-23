@@ -4,7 +4,6 @@ go 1.12
 
 require (
 	github.com/byteplus-sdk/byteplus-go-sdk v0.0.0
-	github.com/byteplus-sdk/byteplus-sdk-golang v1.0.22
 	github.com/fatih/color v1.7.0
 	github.com/google/uuid v1.3.0
 	github.com/hashicorp/hcl/v2 v2.0.0
