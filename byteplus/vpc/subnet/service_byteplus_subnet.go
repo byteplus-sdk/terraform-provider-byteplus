@@ -170,6 +170,10 @@ func (s *ByteplusSubnetService) CreateResource(resourceData *schema.ResourceData
 				"ipv6_cidr_block": {
 					Ignore: true,
 				},
+				"tags": {
+					TargetField: "Tags",
+					ConvertType: bp.ConvertListN,
+				},
 			},
 			BeforeCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (bool, error) {
 				ipv6CidrBlock, exists := d.GetOkExists("ipv6_cidr_block")
@@ -207,6 +211,8 @@ func (s *ByteplusSubnetService) CreateResource(resourceData *schema.ResourceData
 }
 
 func (s *ByteplusSubnetService) ModifyResource(resourceData *schema.ResourceData, resource *schema.Resource) []bp.Callback {
+	var callbacks []bp.Callback
+
 	callback := bp.Callback{
 		Call: bp.SdkCall{
 			Action:      "ModifySubnetAttributes",
@@ -229,6 +235,7 @@ func (s *ByteplusSubnetService) ModifyResource(resourceData *schema.ResourceData
 					}
 				}
 
+				delete(*call.SdkParam, "Tags")
 				return true, nil
 			},
 			ExecuteCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (*map[string]interface{}, error) {
@@ -241,7 +248,13 @@ func (s *ByteplusSubnetService) ModifyResource(resourceData *schema.ResourceData
 			},
 		},
 	}
-	return []bp.Callback{callback}
+	callbacks = append(callbacks, callback)
+
+	// 更新Tags
+	setResourceTagsCallbacks := bp.SetResourceTags(s.Client, "TagResources", "UntagResources", "subnet", resourceData, getUniversalInfo)
+	callbacks = append(callbacks, setResourceTagsCallbacks...)
+
+	return callbacks
 }
 
 func (s *ByteplusSubnetService) RemoveResource(resourceData *schema.ResourceData, r *schema.Resource) []bp.Callback {
@@ -292,6 +305,15 @@ func (s *ByteplusSubnetService) DatasourceResources(*schema.ResourceData, *schem
 			"ids": {
 				TargetField: "SubnetIds",
 				ConvertType: bp.ConvertWithN,
+			},
+			"tags": {
+				TargetField: "TagFilters",
+				ConvertType: bp.ConvertListN,
+				NextLevelConvert: map[string]bp.RequestConvert{
+					"value": {
+						TargetField: "Values.1",
+					},
+				},
 			},
 		},
 		NameField:    "SubnetName",
