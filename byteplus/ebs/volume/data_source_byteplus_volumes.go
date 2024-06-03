@@ -68,6 +68,7 @@ func DataSourceByteplusVolumes() *schema.Resource {
 				ValidateFunc: validation.StringInSlice([]string{"system", "data"}, false),
 				Description:  "The Kind of Volume.",
 			},
+			"tags": bp.TagsSchema(),
 			"volumes": {
 				Description: "The collection of Volume query.",
 				Type:        schema.TypeList,
@@ -154,8 +155,10 @@ func DataSourceByteplusVolumes() *schema.Resource {
 							Type:     schema.TypeBool,
 							Computed: true,
 						},
+						"tags": bp.TagsSchemaComputed(),
 					},
-				}},
+				},
+			},
 		},
 	}
 }

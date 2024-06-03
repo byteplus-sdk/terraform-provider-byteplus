@@ -19,6 +19,8 @@ func DataSourceByteplusSubnets() *schema.Resource {
 				Set:         schema.HashString,
 				Description: "A list of Subnet IDs.",
 			},
+			"tags": bp.TagsSchema(),
+
 			"name_regex": {
 				Type:         schema.TypeString,
 				Optional:     true,
@@ -161,6 +163,7 @@ func DataSourceByteplusSubnets() *schema.Resource {
 								},
 							},
 						},
+						"tags": bp.TagsSchemaComputed(),
 					},
 				},
 			},

@@ -158,6 +158,13 @@ func (s *ByteplusVolumeService) CreateResource(resourceData *schema.ResourceData
 		Call: bp.SdkCall{
 			Action:      "CreateVolume",
 			ConvertMode: bp.RequestConvertAll,
+			Convert: map[string]bp.RequestConvert{
+				"tags": {
+					TargetField: "Tags",
+					ConvertType: bp.ConvertListN,
+				},
+			},
+
 			ExecuteCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (*map[string]interface{}, error) {
 				logger.Debug(logger.RespFormat, call.Action, call.SdkParam)
 				return s.Client.UniversalClient.DoCall(getUniversalInfo(call.Action), call.SdkParam)
@@ -197,6 +204,7 @@ func (s *ByteplusVolumeService) ModifyResource(resourceData *schema.ResourceData
 				},
 				BeforeCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (bool, error) {
 					(*call.SdkParam)["VolumeId"] = d.Id()
+					delete(*call.SdkParam, "Tags")
 					return true, nil
 				},
 				ExecuteCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (*map[string]interface{}, error) {
@@ -293,6 +301,11 @@ func (s *ByteplusVolumeService) ModifyResource(resourceData *schema.ResourceData
 			},
 		})
 	}
+
+	// 更新Tags
+	setResourceTagsCallbacks := bp.SetResourceTags(s.Client, "CreateTags", "DeleteTags", "volume", resourceData, getUniversalInfo)
+	callbacks = append(callbacks, setResourceTagsCallbacks...)
+
 	return callbacks
 }
 
@@ -357,6 +370,15 @@ func (s *ByteplusVolumeService) DatasourceResources(*schema.ResourceData, *schem
 			"ids": {
 				TargetField: "VolumeIds",
 				ConvertType: bp.ConvertWithN,
+			},
+			"tags": {
+				TargetField: "TagFilters",
+				ConvertType: bp.ConvertListN,
+				NextLevelConvert: map[string]bp.RequestConvert{
+					"value": {
+						TargetField: "Values.1",
+					},
+				},
 			},
 		},
 		NameField:    "VolumeName",
