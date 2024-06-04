@@ -283,7 +283,8 @@ func (s *ByteplusEcsService) WithResourceResponseHandlers(ecs map[string]interfa
 				wg.Done()
 			}()
 			temp := map[string]interface{}{
-				"InstanceId": ecs["InstanceId"],
+				"InstanceId":  ecs["InstanceId"],
+				"ProjectName": ecs["ProjectName"],
 			}
 			_, ebsErr = s.readEbsVolumes([]interface{}{temp})
 			if ebsErr != nil {
@@ -328,16 +329,49 @@ func (s *ByteplusEcsService) WithResourceResponseHandlers(ecs map[string]interfa
 			var (
 				networkInterfaceParam *map[string]interface{}
 				networkInterfaceResp  *map[string]interface{}
-				networkInterface      interface{}
+				networkInterface      []interface{}
+				networkInterfaces     []interface{}
+				ok                    bool
+				next                  string
 			)
-			networkInterfaceParam = &map[string]interface{}{
-				"InstanceId": instanceId,
-			}
-			networkInterfaceResp, networkInterfaceErr = s.Client.UniversalClient.DoCall(getVpcUniversalInfo("DescribeNetworkInterfaces"), networkInterfaceParam)
-			if networkInterfaceErr != nil {
+
+			networkInterfaceParam = &map[string]interface{}{}
+			if networkInterfaces, ok = ecs["NetworkInterfaces"].([]interface{}); !ok {
 				return
 			}
-			networkInterface, networkInterfaceErr = bp.ObtainSdkValue("Result.NetworkInterfaceSets", *networkInterfaceResp)
+			for index, networkInterface := range networkInterfaces {
+				if networkInterfaceMap, ok := networkInterface.(map[string]interface{}); ok {
+					(*networkInterfaceParam)[fmt.Sprintf("%s.%d", "NetworkInterfaceIds", index)] = networkInterfaceMap["NetworkInterfaceId"].(string)
+				}
+			}
+			networkInterface, networkInterfaceErr = bp.WithNextTokenQuery(*networkInterfaceParam, "MaxResults", "NextToken", 100, nil, func(condition map[string]interface{}) ([]interface{}, string, error) {
+				action := "DescribeNetworkInterfaces"
+				logger.Debug(logger.ReqFormat, action, condition)
+				networkInterfaceResp, networkInterfaceErr = s.Client.UniversalClient.DoCall(getVpcUniversalInfo(action), &condition)
+				if networkInterfaceErr != nil {
+					return networkInterface, next, networkInterfaceErr
+				}
+				logger.Debug(logger.RespFormat, action, condition, *networkInterfaceResp)
+
+				results, networkInterfaceErr := bp.ObtainSdkValue("Result.NetworkInterfaceSets", *networkInterfaceResp)
+				if networkInterfaceErr != nil {
+					return networkInterface, next, networkInterfaceErr
+				}
+				nextToken, err := bp.ObtainSdkValue("Result.NextToken", *networkInterfaceResp)
+				if err != nil {
+					return networkInterface, next, err
+				}
+				next = nextToken.(string)
+				if results == nil {
+					results = []interface{}{}
+				}
+
+				if networkInterface, ok = results.([]interface{}); !ok {
+					return networkInterface, next, errors.New("Result.NetworkInterfaceSets is not Slice")
+				}
+				return networkInterface, next, networkInterfaceErr
+			})
+
 			if networkInterfaceErr != nil {
 				return
 			}
@@ -1397,11 +1431,13 @@ func (s *ByteplusEcsService) readEbsVolumes(sourceData []interface{}) (extraData
 	for _, data := range sourceData {
 		instance := data
 		var (
-			instanceId interface{}
-			action     string
-			resp       *map[string]interface{}
-			results    interface{}
-			_err       error
+			instanceId  interface{}
+			projectName interface{}
+			action      string
+			resp        *map[string]interface{}
+			results     interface{}
+			volumes     []interface{}
+			_err        error
 		)
 		go func() {
 			defer func() {
@@ -1413,9 +1449,24 @@ func (s *ByteplusEcsService) readEbsVolumes(sourceData []interface{}) (extraData
 
 			instanceId, _err = bp.ObtainSdkValue("InstanceId", instance)
 			if _err != nil {
-				syncMap.Store(instanceId, err)
+				syncMap.Store(instanceId, _err)
 				return
 			}
+			projectName, _err = bp.ObtainSdkValue("ProjectName", instance)
+			if _err != nil {
+				syncMap.Store(instanceId, _err)
+				return
+			}
+
+			// query system volume
+			systemVolume, _err := s.describeSystemVolume(instanceId.(string), projectName.(string))
+			if _err != nil {
+				syncMap.Store(instanceId, _err)
+				return
+			}
+			volumes = append(volumes, systemVolume)
+
+			// query data volumes
 			action = "DescribeVolumes"
 			logger.Debug(logger.ReqFormat, action, instanceId)
 			volumeCondition := map[string]interface{}{
@@ -1424,16 +1475,32 @@ func (s *ByteplusEcsService) readEbsVolumes(sourceData []interface{}) (extraData
 			logger.Debug(logger.ReqFormat, action, volumeCondition)
 			resp, _err = s.Client.UniversalClient.DoCall(getEbsUniversalInfo("DescribeVolumes"), &volumeCondition)
 			if _err != nil {
-				syncMap.Store(instanceId, err)
-				return
+				if bp.AccessDeniedError(_err) {
+					// 权限错误，直接返回
+					syncMap.Store(instanceId, volumes)
+					return
+				} else {
+					syncMap.Store(instanceId, _err)
+					return
+				}
 			}
 			logger.Debug(logger.RespFormat, action, volumeCondition, *resp)
 			results, _err = bp.ObtainSdkValue("Result.Volumes", *resp)
 			if _err != nil {
-				syncMap.Store(instanceId, err)
+				syncMap.Store(instanceId, _err)
 				return
 			}
-			syncMap.Store(instanceId, results)
+			if results == nil {
+				results = []interface{}{}
+			}
+			dataVolumes, ok := results.([]interface{})
+			if !ok {
+				syncMap.Store(instanceId, errors.New("Result.Volumes is not Slice"))
+				return
+			}
+			volumes = append(volumes, dataVolumes)
+
+			syncMap.Store(instanceId, volumes)
 		}()
 	}
 	wg.Wait()
@@ -1458,6 +1525,50 @@ func (s *ByteplusEcsService) readEbsVolumes(sourceData []interface{}) (extraData
 		return extraData, fmt.Errorf(errorStr)
 	}
 	return extraData, err
+}
+
+func (s *ByteplusEcsService) describeSystemVolume(instanceId, projectName string) (map[string]interface{}, error) {
+	var (
+		action       string
+		req          *map[string]interface{}
+		resp         *map[string]interface{}
+		results      interface{}
+		systemVolume map[string]interface{}
+		err          error
+	)
+
+	action = "DescribeVolumes"
+	req = &map[string]interface{}{
+		"InstanceId":  instanceId,
+		"ProjectName": projectName,
+		"Kind":        "system",
+	}
+	logger.Debug(logger.ReqFormat, action, *req)
+	resp, err = s.Client.UniversalClient.DoCall(getEbsUniversalInfo("DescribeVolumes"), req)
+	if err != nil {
+		return systemVolume, err
+	}
+	logger.Debug(logger.RespFormat, action, *req, *resp)
+	results, err = bp.ObtainSdkValue("Result.Volumes", *resp)
+	if err != nil {
+		return systemVolume, err
+	}
+	if results == nil {
+		results = []interface{}{}
+	}
+	volumes, ok := results.([]interface{})
+	if !ok {
+		return systemVolume, errors.New("Result.Volumes is not Slice")
+	}
+	for _, volume := range volumes {
+		if systemVolume, ok = volume.(map[string]interface{}); !ok {
+			return systemVolume, errors.New("Volumes Value is not map ")
+		}
+	}
+	if len(systemVolume) == 0 {
+		return systemVolume, fmt.Errorf("System Volume of %s is not exist ", instanceId)
+	}
+	return systemVolume, nil
 }
 
 func getUniversalInfo(actionName string) bp.UniversalInfo {

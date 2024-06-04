@@ -10,4 +10,8 @@ resource "byteplus_volume" "PostVolume" {
   zone_id            = data.byteplus_zones.foo.zones[0].id
   volume_charge_type = "PostPaid"
   project_name       = "default"
+  tags {
+    key   = "k1"
+    value = "v1"
+  }
 }

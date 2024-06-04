@@ -119,6 +119,7 @@ func ResourceByteplusVolume() *schema.Resource {
 				Computed:    true,
 				Description: "The ProjectName of the Volume.",
 			},
+			"tags": bp.TagsSchema(),
 		},
 	}
 }
