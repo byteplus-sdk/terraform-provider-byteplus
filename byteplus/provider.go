@@ -58,6 +58,11 @@ import (
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/nat/dnat_entry"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/nat/nat_gateway"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/nat/snat_entry"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/rds_postgresql/rds_postgresql_account"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/rds_postgresql/rds_postgresql_database"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/rds_postgresql/rds_postgresql_instance"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/rds_postgresql/rds_postgresql_instance_readonly_node"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/rds_postgresql/rds_postgresql_schema"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vke/addon"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vke/cluster"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vke/default_node_pool"
@@ -245,6 +250,12 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_scaling_lifecycle_hooks": scaling_lifecycle_hook.DataSourceByteplusScalingLifecycleHooks(),
 			"byteplus_scaling_activities":      scaling_activity.DataSourceByteplusScalingActivities(),
 			"byteplus_scaling_instances":       scaling_instance.DataSourceByteplusScalingInstances(),
+
+			// ================ Postgresql ================
+			"byteplus_rds_postgresql_databases": rds_postgresql_database.DataSourceByteplusRdsPostgresqlDatabases(),
+			"byteplus_rds_postgresql_accounts":  rds_postgresql_account.DataSourceByteplusRdsPostgresqlAccounts(),
+			"byteplus_rds_postgresql_instances": rds_postgresql_instance.DataSourceByteplusRdsPostgresqlInstances(),
+			"byteplus_rds_postgresql_schemas":   rds_postgresql_schema.DataSourceByteplusRdsPostgresqlSchemas(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			// ================ ECS ================
@@ -315,6 +326,13 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_scaling_lifecycle_hook":           scaling_lifecycle_hook.ResourceByteplusScalingLifecycleHook(),
 			"byteplus_scaling_group_enabler":            scaling_group_enabler.ResourceByteplusScalingGroupEnabler(),
 			"byteplus_scaling_instance_attachment":      scaling_instance_attachment.ResourceByteplusScalingInstanceAttachment(),
+
+			// ================ Postgresql ================
+			"byteplus_rds_postgresql_database":               rds_postgresql_database.ResourceByteplusRdsPostgresqlDatabase(),
+			"byteplus_rds_postgresql_account":                rds_postgresql_account.ResourceByteplusRdsPostgresqlAccount(),
+			"byteplus_rds_postgresql_instance":               rds_postgresql_instance.ResourceByteplusRdsPostgresqlInstance(),
+			"byteplus_rds_postgresql_instance_readonly_node": rds_postgresql_instance_readonly_node.ResourceByteplusRdsPostgresqlInstanceReadonlyNode(),
+			"byteplus_rds_postgresql_schema":                 rds_postgresql_schema.ResourceByteplusRdsPostgresqlSchema(),
 		},
 		ConfigureFunc: ProviderConfigure,
 	}
