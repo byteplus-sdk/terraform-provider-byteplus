@@ -133,6 +133,7 @@ var resourceKeys = map[string]string{
 	"autoscaling":       "AUTOSCALING",
 	"direct_connect":    "DIRECT_CONNECT",
 	"bandwidth_package": "BANDWIDTH_PACKAGE",
+	"rds_postgresql":    "RDS_POSTGRESQL",
 }
 
 type Products struct {
