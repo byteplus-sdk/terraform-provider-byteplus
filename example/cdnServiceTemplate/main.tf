@@ -1,0 +1,1 @@
+resource "byteplus_cdn_service_template" "foo" {}

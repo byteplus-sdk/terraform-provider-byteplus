@@ -1,0 +1,1 @@
+resource "byteplus_cdn_cipher_template" "foo" {}

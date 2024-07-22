@@ -10,6 +10,10 @@ import (
 	"strings"
 	"time"
 
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cdn/cdn_cipher_template"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cdn/cdn_domain"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cdn/cdn_service_template"
+
 	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus"
 	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/byteplusutil"
 	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/credentials"
@@ -256,6 +260,11 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_rds_postgresql_accounts":  rds_postgresql_account.DataSourceByteplusRdsPostgresqlAccounts(),
 			"byteplus_rds_postgresql_instances": rds_postgresql_instance.DataSourceByteplusRdsPostgresqlInstances(),
 			"byteplus_rds_postgresql_schemas":   rds_postgresql_schema.DataSourceByteplusRdsPostgresqlSchemas(),
+
+			// ================ CDN ================
+			"byteplus_cdn_domains":           cdn_domain.DataSourceByteplusCdnDomains(),
+			"byteplus_cdn_cipher_templates":  cdn_cipher_template.DataSourceByteplusCdnCipherTemplates(),
+			"byteplus_cdn_service_templates": cdn_service_template.DataSourceByteplusCdnServiceTemplates(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			// ================ ECS ================
@@ -333,6 +342,11 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_rds_postgresql_instance":               rds_postgresql_instance.ResourceByteplusRdsPostgresqlInstance(),
 			"byteplus_rds_postgresql_instance_readonly_node": rds_postgresql_instance_readonly_node.ResourceByteplusRdsPostgresqlInstanceReadonlyNode(),
 			"byteplus_rds_postgresql_schema":                 rds_postgresql_schema.ResourceByteplusRdsPostgresqlSchema(),
+
+			// ================ CDN ================
+			"byteplus_cdn_domain":           cdn_domain.ResourceByteplusCdnDomain(),
+			"byteplus_cdn_cipher_template":  cdn_cipher_template.ResourceByteplusCdnCipherTemplate(),
+			"byteplus_cdn_service_template": cdn_service_template.ResourceByteplusCdnServiceTemplate(),
 		},
 		ConfigureFunc: ProviderConfigure,
 	}
