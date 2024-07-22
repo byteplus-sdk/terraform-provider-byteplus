@@ -1,0 +1,1 @@
+data "byteplus_cdn_domains" "foo" {}
