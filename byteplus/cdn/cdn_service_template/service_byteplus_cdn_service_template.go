@@ -78,7 +78,7 @@ func (s *ByteplusCdnServiceTemplateService) ReadResource(resourceData *schema.Re
 		id = s.ReadResourceId(resourceData.Id())
 	}
 	filter := map[string]interface{}{
-		"Fuzzy": true,
+		"Fuzzy": false,
 		"Name":  "Id",
 		"Value": []string{id},
 	}
@@ -112,9 +112,6 @@ func (s *ByteplusCdnServiceTemplateService) CreateResource(resourceData *schema.
 			ConvertMode: bp.RequestConvertAll,
 			ContentType: bp.ContentTypeJson,
 			Convert: map[string]bp.RequestConvert{
-				"origin_ipv6": {
-					TargetField: "OriginIPv6",
-				},
 				"service_template_config": {
 					Ignore: true,
 				},
@@ -259,15 +256,11 @@ func (s *ByteplusCdnServiceTemplateService) DatasourceResources(*schema.Resource
 				},
 			},
 		},
-		NameField:    "Title",
-		IdField:      "TemplateId",
-		CollectField: "templates",
-		ContentType:  bp.ContentTypeJson,
-		ResponseConverts: map[string]bp.ResponseConvert{
-			"OriginIPv6": {
-				TargetField: "origin_ipv6",
-			},
-		},
+		NameField:        "Title",
+		IdField:          "TemplateId",
+		CollectField:     "templates",
+		ContentType:      bp.ContentTypeJson,
+		ResponseConverts: map[string]bp.ResponseConvert{},
 	}
 }
 
