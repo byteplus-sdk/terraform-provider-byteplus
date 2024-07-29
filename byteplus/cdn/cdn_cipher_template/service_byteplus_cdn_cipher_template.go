@@ -96,7 +96,18 @@ func (s *ByteplusCdnCipherTemplateService) ReadResources(m map[string]interface{
 		if err != nil {
 			return data, err
 		}
-		template["HTTPS"] = https
+
+		httpsMap, ok := https.(map[string]interface{})
+		if ok {
+			if v, ok = httpsMap["ForcedRedirect"]; ok {
+				httpsMap["ForcedRedirect"] = []interface{}{v}
+			}
+			if v, ok = httpsMap["Hsts"]; ok {
+				httpsMap["Hsts"] = []interface{}{v}
+			}
+		}
+
+		template["HTTPS"] = []interface{}{httpsMap}
 
 		httpForcedRedirect, err := bp.ObtainSdkValue("Result.HttpForcedRedirect", *resp)
 		if err != nil {
@@ -124,7 +135,7 @@ func (s *ByteplusCdnCipherTemplateService) ReadResource(resourceData *schema.Res
 	}
 
 	filter := map[string]interface{}{
-		"Fuzzy": true,
+		"Fuzzy": false,
 		"Name":  "Id",
 		"Value": []string{id},
 	}
@@ -143,6 +154,12 @@ func (s *ByteplusCdnCipherTemplateService) ReadResource(resourceData *schema.Res
 	}
 	if len(data) == 0 {
 		return data, fmt.Errorf("cdn_cipher_template %s not exist ", id)
+	}
+	logger.Debug(logger.RespFormat, "ReadResource Beforce", data)
+	if quic, ok := resourceData.GetOk("quic"); ok {
+		if q, ok := data["Quic"]; !ok || q == nil {
+			data["Quic"] = quic
+		}
 	}
 	return data, err
 }
@@ -167,6 +184,7 @@ func (s *ByteplusCdnCipherTemplateService) CreateResource(resourceData *schema.R
 							TargetField: "ForcedRedirect",
 						},
 						"http2": {
+							ForceGet:    true,
 							TargetField: "HTTP2",
 						},
 						"ocsp": {
@@ -179,6 +197,17 @@ func (s *ByteplusCdnCipherTemplateService) CreateResource(resourceData *schema.R
 						"hsts": {
 							TargetField: "Hsts",
 							ConvertType: bp.ConvertJsonObject,
+							NextLevelConvert: map[string]bp.RequestConvert{
+								"subdomain": {
+									TargetField: "Subdomain",
+								},
+								"switch": {
+									TargetField: "Switch",
+								},
+								"ttl": {
+									TargetField: "Ttl",
+								},
+							},
 						},
 					},
 				},
@@ -251,11 +280,23 @@ func (s *ByteplusCdnCipherTemplateService) ModifyResource(resourceData *schema.R
 							},
 						},
 						"http2": {
+							ForceGet:    true,
 							TargetField: "HTTP2",
 						},
 						"hsts": {
 							TargetField: "Hsts",
 							ConvertType: bp.ConvertJsonObject,
+							NextLevelConvert: map[string]bp.RequestConvert{
+								"subdomain": {
+									TargetField: "Subdomain",
+								},
+								"switch": {
+									TargetField: "Switch",
+								},
+								"ttl": {
+									TargetField: "Ttl",
+								},
+							},
 						},
 						"tls_version": {
 							TargetField: "TlsVersion",

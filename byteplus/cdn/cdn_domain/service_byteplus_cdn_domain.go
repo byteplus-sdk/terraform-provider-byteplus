@@ -77,7 +77,7 @@ func (s *ByteplusCdnDomainService) ReadResource(resourceData *schema.ResourceDat
 	}
 
 	filter := map[string]interface{}{
-		"Fuzzy": true,
+		"Fuzzy": false,
 		"Name":  "Domain",
 		"Value": []string{id},
 	}

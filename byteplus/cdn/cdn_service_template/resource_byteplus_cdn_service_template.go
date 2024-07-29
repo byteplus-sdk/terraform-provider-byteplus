@@ -50,12 +50,6 @@ func ResourceByteplusCdnServiceTemplate() *schema.Resource {
 				Computed:    true,
 				Description: "Indicates the project to which this encryption policy belongs. The default value of the parameter is default, indicating the Default project.",
 			},
-			"origin_ipv6": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				Computed:    true,
-				Description: "Ipv6 return source. choices: [ipv6_first, ipv4_first, followclient].",
-			},
 			"service_template_config": {
 				Type:     schema.TypeString,
 				Required: true,

@@ -14,6 +14,8 @@ import (
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cdn/cdn_domain"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cdn/cdn_service_template"
 
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cdn/cdn_domain_enabler"
+
 	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus"
 	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/byteplusutil"
 	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/credentials"
@@ -347,6 +349,7 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_cdn_domain":           cdn_domain.ResourceByteplusCdnDomain(),
 			"byteplus_cdn_cipher_template":  cdn_cipher_template.ResourceByteplusCdnCipherTemplate(),
 			"byteplus_cdn_service_template": cdn_service_template.ResourceByteplusCdnServiceTemplate(),
+			"byteplus_cdn_domain_enabler":   cdn_domain_enabler.ResourceByteplusCdnDomainEnabler(),
 		},
 		ConfigureFunc: ProviderConfigure,
 	}

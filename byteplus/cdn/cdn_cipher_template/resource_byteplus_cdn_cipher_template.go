@@ -67,10 +67,11 @@ func ResourceByteplusCdnCipherTemplate() *schema.Resource {
 								"false: Indicates that it accepts. The default value for this parameter is false.",
 						},
 						"forced_redirect": {
-							Type:        schema.TypeList,
-							MaxItems:    1,
-							Optional:    true,
-							Description: "Indicates the configuration for the mandatory redirection from HTTP to HTTPS. This feature is disabled by default.",
+							Type:          schema.TypeList,
+							MaxItems:      1,
+							Optional:      true,
+							ConflictsWith: []string{"http_forced_redirect"},
+							Description:   "Indicates the configuration for the mandatory redirection from HTTP to HTTPS. This feature is disabled by default.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"enable_forced_redirect": {
@@ -158,23 +159,6 @@ func ResourceByteplusCdnCipherTemplate() *schema.Resource {
 									"ttl": {
 										Type:     schema.TypeInt,
 										Optional: true,
-										DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
-											if hsts, ok := d.GetOk("hsts"); ok {
-												if len(hsts.([]interface{})) > 0 {
-													h := hsts.([]interface{})[0]
-													if hMap, ok := h.(map[string]interface{}); ok {
-														if v, ok := hMap["switch"]; ok {
-															if vBool, ok := v.(bool); ok {
-																if vBool {
-																	return false
-																}
-															}
-														}
-													}
-												}
-											}
-											return true
-										},
 										Description: "Indicates the expiration time for the Strict-Transport-Security response header in the browser cache, in seconds. " +
 											"If Switch is true, this parameter is required. " +
 											"The value range for this parameter is 0 - 31,536,000 seconds, where 31,536,000 seconds represents 365 days. " +
@@ -188,10 +172,11 @@ func ResourceByteplusCdnCipherTemplate() *schema.Resource {
 			},
 
 			"http_forced_redirect": {
-				Type:        schema.TypeList,
-				Optional:    true,
-				MaxItems:    1,
-				Description: "Indicates the configuration module for the forced redirection from HTTPS to HTTP. This feature is disabled by default.",
+				Type:          schema.TypeList,
+				Optional:      true,
+				MaxItems:      1,
+				ConflictsWith: []string{"https.0.forced_redirect"},
+				Description:   "Indicates the configuration module for the forced redirection from HTTPS to HTTP. This feature is disabled by default.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"enable_forced_redirect": {
