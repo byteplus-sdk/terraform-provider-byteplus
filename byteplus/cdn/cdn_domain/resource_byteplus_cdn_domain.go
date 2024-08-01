@@ -36,6 +36,7 @@ func ResourceByteplusCdnDomain() *schema.Resource {
 			"domain": {
 				Type:     schema.TypeString,
 				Required: true,
+				ForceNew: true,
 				Description: "Indicates a domain name you want to add. " +
 					"The domain name you add must meet all of the following conditions: " +
 					"Length does not exceed 100 characters. " +

@@ -150,12 +150,20 @@ func (s *ByteplusCdnDomainEnablerService) CreateResource(resourceData *schema.Re
 					return nil, err
 				}
 				logger.Debug(logger.RespFormat, "ListCdnDomains", req, *resp)
-				status, err := bp.ObtainSdkValue("Status", *resp)
+				data, err := bp.ObtainSdkValue("Result.Data", *resp)
 				if err != nil {
 					return nil, err
 				}
+				domains := data.([]interface{})
+				var status string
+				if len(domains) > 0 {
+					do := domains[0].(map[string]interface{})
+					status = do["Status"].(string)
+				} else {
+					return nil, fmt.Errorf("Domain not found ")
+				}
 				// 已经online就什么也不做，直接跳过
-				if status.(string) == "online" {
+				if status == "online" {
 					return nil, nil
 				} else {
 					logger.Debug(logger.RespFormat, call.Action, call.SdkParam)
@@ -211,11 +219,19 @@ func (s *ByteplusCdnDomainEnablerService) RemoveResource(resourceData *schema.Re
 					return nil, err
 				}
 				logger.Debug(logger.RespFormat, "ListCdnDomains", req, *resp)
-				status, err := bp.ObtainSdkValue("Status", *resp)
+				data, err := bp.ObtainSdkValue("Result.Data", *resp)
 				if err != nil {
 					return nil, err
 				}
-				if status.(string) == "offline" {
+				domains := data.([]interface{})
+				var status string
+				if len(domains) > 0 {
+					do := domains[0].(map[string]interface{})
+					status = do["Status"].(string)
+				} else {
+					return nil, fmt.Errorf("Domain not found ")
+				}
+				if status == "offline" {
 					return nil, nil
 				} else {
 					logger.Debug(logger.RespFormat, call.Action, call.SdkParam)
