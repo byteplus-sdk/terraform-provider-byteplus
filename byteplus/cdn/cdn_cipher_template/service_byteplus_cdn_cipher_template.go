@@ -161,20 +161,58 @@ func (s *ByteplusCdnCipherTemplateService) ReadResource(resourceData *schema.Res
 			data["Quic"] = quic
 		}
 	}
+	status := data["Status"].(string)
+	if status == "locked" {
+		data["LockTemplate"] = true
+	} else if status == "editing" {
+		data["LockTemplate"] = false
+	}
 	return data, err
 }
 
 func (s *ByteplusCdnCipherTemplateService) RefreshResourceState(resourceData *schema.ResourceData, target []string, timeout time.Duration, id string) *resource.StateChangeConf {
-	return &resource.StateChangeConf{}
+	return &resource.StateChangeConf{
+		Pending:    []string{},
+		Delay:      1 * time.Second,
+		MinTimeout: 1 * time.Second,
+		Target:     target,
+		Timeout:    timeout,
+		Refresh: func() (result interface{}, state string, err error) {
+			var (
+				d          map[string]interface{}
+				status     interface{}
+				failStates []string
+			)
+			failStates = append(failStates, "Failed")
+			d, err = s.ReadResource(resourceData, id)
+			if err != nil {
+				return nil, "", err
+			}
+			status, err = bp.ObtainSdkValue("Status", d)
+			if err != nil {
+				return nil, "", err
+			}
+			for _, v := range failStates {
+				if v == status.(string) {
+					return nil, "", fmt.Errorf("cdn_cipher_template status error, status: %s", status.(string))
+				}
+			}
+			return d, status.(string), err
+		},
+	}
 }
 
 func (s *ByteplusCdnCipherTemplateService) CreateResource(resourceData *schema.ResourceData, resource *schema.Resource) []bp.Callback {
+	var callbacks []bp.Callback
 	callback := bp.Callback{
 		Call: bp.SdkCall{
 			Action:      "CreateCipherTemplate",
 			ConvertMode: bp.RequestConvertAll,
 			ContentType: bp.ContentTypeJson,
 			Convert: map[string]bp.RequestConvert{
+				"lock_template": {
+					Ignore: true,
+				},
 				"https": {
 					ConvertType: bp.ConvertJsonObject,
 					TargetField: "HTTPS",
@@ -231,9 +269,38 @@ func (s *ByteplusCdnCipherTemplateService) CreateResource(resourceData *schema.R
 				d.SetId(id.(string))
 				return nil
 			},
+			Refresh: &bp.StateRefresh{
+				Target:  []string{"editing"},
+				Timeout: resourceData.Timeout(schema.TimeoutCreate),
+			},
 		},
 	}
-	return []bp.Callback{callback}
+	callbacks = append(callbacks, callback)
+	if resourceData.Get("lock_template").(bool) {
+		lockCallback := bp.Callback{
+			Call: bp.SdkCall{
+				Action:      "LockTemplate",
+				ContentType: bp.ContentTypeJson,
+				ConvertMode: bp.RequestConvertIgnore,
+				BeforeCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (bool, error) {
+					(*call.SdkParam)["TemplateId"] = d.Id()
+					return true, nil
+				},
+				ExecuteCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (*map[string]interface{}, error) {
+					logger.Debug(logger.RespFormat, call.Action, call.SdkParam)
+					resp, err := s.Client.UniversalClient.DoCall(getUniversalInfo(call.Action), call.SdkParam)
+					logger.Debug(logger.RespFormat, call.Action, resp, err)
+					return resp, err
+				},
+				Refresh: &bp.StateRefresh{
+					Target:  []string{"locked"},
+					Timeout: resourceData.Timeout(schema.TimeoutCreate),
+				},
+			},
+		}
+		callbacks = append(callbacks, lockCallback)
+	}
+	return callbacks
 }
 
 func (ByteplusCdnCipherTemplateService) WithResourceResponseHandlers(d map[string]interface{}) []bp.ResourceResponseHandler {
@@ -254,14 +321,19 @@ func (ByteplusCdnCipherTemplateService) WithResourceResponseHandlers(d map[strin
 }
 
 func (s *ByteplusCdnCipherTemplateService) ModifyResource(resourceData *schema.ResourceData, resource *schema.Resource) []bp.Callback {
+	var callbacks []bp.Callback
 	callback := bp.Callback{
 		Call: bp.SdkCall{
 			Action:      "UpdateCipherTemplate",
 			ConvertMode: bp.RequestConvertInConvert,
 			ContentType: bp.ContentTypeJson,
 			Convert: map[string]bp.RequestConvert{
+				"lock_template": {
+					Ignore: true,
+				},
 				"https": {
 					TargetField: "HTTPS",
+					ForceGet:    true,
 					ConvertType: bp.ConvertJsonObject,
 					NextLevelConvert: map[string]bp.RequestConvert{
 						"disable_http": {
@@ -307,14 +379,18 @@ func (s *ByteplusCdnCipherTemplateService) ModifyResource(resourceData *schema.R
 				"http_forced_redirect": {
 					TargetField: "HttpForcedRedirect",
 					ConvertType: bp.ConvertJsonObject,
+					ForceGet:    true,
 				},
 				"message": {
+					ForceGet:    true,
 					TargetField: "Message",
 				},
 				"title": {
+					ForceGet:    true,
 					TargetField: "Title",
 				},
 				"quic": {
+					ForceGet:    true,
 					TargetField: "Quic",
 					ConvertType: bp.ConvertJsonObject,
 				},
@@ -331,7 +407,36 @@ func (s *ByteplusCdnCipherTemplateService) ModifyResource(resourceData *schema.R
 			},
 		},
 	}
-	return []bp.Callback{callback}
+	callbacks = append(callbacks, callback)
+	if resourceData.HasChange("lock_template") {
+		lockCallback := bp.Callback{
+			Call: bp.SdkCall{
+				Action:      "LockTemplate",
+				ContentType: bp.ContentTypeJson,
+				ConvertMode: bp.RequestConvertIgnore,
+				BeforeCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (bool, error) {
+					if !d.Get("lock_template").(bool) {
+						// 不允许解锁
+						return false, fmt.Errorf("Template cannot unlock. ")
+					}
+					(*call.SdkParam)["TemplateId"] = d.Id()
+					return true, nil
+				},
+				ExecuteCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (*map[string]interface{}, error) {
+					logger.Debug(logger.RespFormat, call.Action, call.SdkParam)
+					resp, err := s.Client.UniversalClient.DoCall(getUniversalInfo(call.Action), call.SdkParam)
+					logger.Debug(logger.RespFormat, call.Action, resp, err)
+					return resp, err
+				},
+				Refresh: &bp.StateRefresh{
+					Target:  []string{"locked"},
+					Timeout: resourceData.Timeout(schema.TimeoutUpdate),
+				},
+			},
+		}
+		callbacks = append(callbacks, lockCallback)
+	}
+	return callbacks
 }
 
 func (s *ByteplusCdnCipherTemplateService) RemoveResource(resourceData *schema.ResourceData, r *schema.Resource) []bp.Callback {

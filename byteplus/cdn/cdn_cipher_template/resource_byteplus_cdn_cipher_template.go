@@ -215,6 +215,14 @@ func ResourceByteplusCdnCipherTemplate() *schema.Resource {
 					},
 				},
 			},
+			"lock_template": {
+				Type:     schema.TypeBool,
+				Optional: true,
+				Default:  false,
+				Description: "Whether to lock the template. " +
+					"If you set this field to true, then the template will be locked. Please note that the template cannot be modified or unlocked after it is locked. " +
+					"When you want to use this template to create a domain name, please lock the template first. The default value is false.",
+			},
 		},
 	}
 	return resource

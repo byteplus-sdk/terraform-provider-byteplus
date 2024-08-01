@@ -2,9 +2,9 @@ resource "byteplus_cdn_service_template" "foo" {
   title = "tf-test2"
   message = "test2"
   project = "test"
-  origin_ipv6 = "followclient"
   service_template_config = jsonencode(
     {
+      OriginIpv6 = "followclient"
       ConditionalOrigin = {
         OriginRules = []
       }

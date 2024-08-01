@@ -61,10 +61,15 @@ resource "byteplus_cdn_cipher_template" "foo" {
 }
 
 resource "byteplus_cdn_domain" "foo" {
-  domain = "tf-test.com"
+  domain = "tf.byte-test.com"
   service_template_id = byteplus_cdn_service_template.foo.id
-  https_switch = "off"
+  https_switch = "on"
+  cert_id = "cert-"
   cipher_template_id = byteplus_cdn_cipher_template.foo.id
   project = ""
   service_region = "outside_chinese_mainland"
+}
+
+resource "byteplus_cdn_domain_enabler" "foo" {
+  domain = byteplus_cdn_domain.foo.id
 }
