@@ -328,6 +328,9 @@ func (s *ByteplusCdnCipherTemplateService) ModifyResource(resourceData *schema.R
 			ConvertMode: bp.RequestConvertInConvert,
 			ContentType: bp.ContentTypeJson,
 			Convert: map[string]bp.RequestConvert{
+				"project": {
+					Ignore: true,
+				},
 				"lock_template": {
 					Ignore: true,
 				},
@@ -396,8 +399,11 @@ func (s *ByteplusCdnCipherTemplateService) ModifyResource(resourceData *schema.R
 				},
 			},
 			BeforeCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (bool, error) {
-				(*call.SdkParam)["TemplateId"] = d.Id()
-				return true, nil
+				if d.HasChanges("https", "http_forced_redirect", "message", "title", "quic") {
+					(*call.SdkParam)["TemplateId"] = d.Id()
+					return true, nil
+				}
+				return false, nil
 			},
 			ExecuteCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (*map[string]interface{}, error) {
 				logger.Debug(logger.ReqFormat, call.Action, call.SdkParam)
@@ -521,5 +527,14 @@ func getUniversalInfo(actionName string) bp.UniversalInfo {
 		HttpMethod:  bp.POST,
 		ContentType: bp.ApplicationJSON,
 		Action:      actionName,
+	}
+}
+
+func (s *ByteplusCdnCipherTemplateService) ProjectTrn() *bp.ProjectTrn {
+	return &bp.ProjectTrn{
+		ServiceName:          "CDN",
+		ResourceType:         "template",
+		ProjectResponseField: "Project",
+		ProjectSchemaField:   "project",
 	}
 }

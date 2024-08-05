@@ -184,23 +184,35 @@ func (s *ByteplusCdnDomainService) ModifyResource(resourceData *schema.ResourceD
 			Convert: map[string]bp.RequestConvert{
 				"cert_id": {
 					TargetField: "CertId",
+					ForceGet:    true,
 				},
 				"cipher_template_id": {
 					TargetField: "CipherTemplateId",
+					ForceGet:    true,
 				},
 				"https_switch": {
 					TargetField: "HTTPSSwitch",
+					ForceGet:    true,
 				},
 				"service_region": {
 					TargetField: "ServiceRegion",
+					ForceGet:    true,
 				},
 				"service_template_id": {
 					TargetField: "ServiceTemplateId",
+					ForceGet:    true,
+				},
+				"project": {
+					Ignore: true,
 				},
 			},
 			BeforeCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (bool, error) {
-				(*call.SdkParam)["Domains"] = []string{d.Id()}
-				return true, nil
+				if d.HasChanges("service_template_id", "service_region",
+					"https_switch", "cipher_template_id", "cert_id") {
+					(*call.SdkParam)["Domains"] = []string{d.Id()}
+					return true, nil
+				}
+				return false, nil
 			},
 			ExecuteCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (*map[string]interface{}, error) {
 				logger.Debug(logger.ReqFormat, call.Action, call.SdkParam)
@@ -302,5 +314,14 @@ func getUniversalInfo(actionName string) bp.UniversalInfo {
 		HttpMethod:  bp.POST,
 		ContentType: bp.ApplicationJSON,
 		Action:      actionName,
+	}
+}
+
+func (s *ByteplusCdnDomainService) ProjectTrn() *bp.ProjectTrn {
+	return &bp.ProjectTrn{
+		ServiceName:          "CDN",
+		ResourceType:         "Domain",
+		ProjectResponseField: "Project",
+		ProjectSchemaField:   "project",
 	}
 }
