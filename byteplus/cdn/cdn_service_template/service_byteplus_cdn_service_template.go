@@ -237,31 +237,39 @@ func (s *ByteplusCdnServiceTemplateService) ModifyResource(resourceData *schema.
 				},
 				"title": {
 					TargetField: "Title",
+					ForceGet:    true,
 				},
 				"message": {
 					TargetField: "Message",
+					ForceGet:    true,
 				},
 				"service_template_config": {
 					Ignore: true,
 				},
+				"project": {
+					Ignore: true,
+				},
 			},
 			BeforeCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (bool, error) {
-				(*call.SdkParam)["TemplateId"] = d.Id()
-				var (
-					config map[string]interface{}
-				)
-				tmpConfig, ok := d.Get("service_template_config").(string)
-				if !ok {
-					return false, errors.New("service_template_config is not a map")
+				if d.HasChanges("title", "message", "service_template_config") {
+					(*call.SdkParam)["TemplateId"] = d.Id()
+					var (
+						config map[string]interface{}
+					)
+					tmpConfig, ok := d.Get("service_template_config").(string)
+					if !ok {
+						return false, errors.New("service_template_config is not a map")
+					}
+					err := json.Unmarshal([]byte(tmpConfig), &config)
+					if err != nil || len(config) == 0 {
+						return false, errors.New("service_template_config struct err or service_template_config is empty")
+					}
+					for k, v := range config {
+						(*call.SdkParam)[k] = v
+					}
+					return true, nil
 				}
-				err := json.Unmarshal([]byte(tmpConfig), &config)
-				if err != nil || len(config) == 0 {
-					return false, errors.New("service_template_config struct err or service_template_config is empty")
-				}
-				for k, v := range config {
-					(*call.SdkParam)[k] = v
-				}
-				return true, nil
+				return false, nil
 			},
 			ExecuteCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (*map[string]interface{}, error) {
 				logger.Debug(logger.ReqFormat, call.Action, call.SdkParam)
@@ -375,5 +383,14 @@ func getUniversalInfo(actionName string) bp.UniversalInfo {
 		HttpMethod:  bp.POST,
 		ContentType: bp.ApplicationJSON,
 		Action:      actionName,
+	}
+}
+
+func (s *ByteplusCdnServiceTemplateService) ProjectTrn() *bp.ProjectTrn {
+	return &bp.ProjectTrn{
+		ServiceName:          "CDN",
+		ResourceType:         "template",
+		ProjectResponseField: "Project",
+		ProjectSchemaField:   "project",
 	}
 }

@@ -45,7 +45,6 @@ func ResourceByteplusCdnCipherTemplate() *schema.Resource {
 			},
 			"project": {
 				Type:        schema.TypeString,
-				ForceNew:    true,
 				Optional:    true,
 				Computed:    true,
 				Description: "Indicates the project to which this encryption policy belongs. The default value of the parameter is default, indicating the Default project.",

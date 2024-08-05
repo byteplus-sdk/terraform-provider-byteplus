@@ -94,7 +94,6 @@ func ResourceByteplusCdnDomain() *schema.Resource {
 				Type:        schema.TypeString,
 				Optional:    true,
 				Computed:    true,
-				ForceNew:    true,
 				Description: "Indicates the project to which this domain name belongs, with the default value being default.",
 			},
 			"service_region": {
