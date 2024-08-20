@@ -1,5 +1,5 @@
 resource "byteplus_cdn_service_template" "foo" {
-  title = "tf-test2"
+  title   = "tf-test2"
   message = "test2"
   project = ""
   # 是否发布模版
@@ -14,41 +14,41 @@ resource "byteplus_cdn_service_template" "foo" {
         OriginAction = {
           OriginLines = [
             {
-              Address = "10.10.10.10"
-              HttpPort = "80"
-              HttpsPort = "443"
+              Address      = "10.10.10.10"
+              HttpPort     = "80"
+              HttpsPort    = "443"
               InstanceType = "ip"
-              OriginType = "primary"
-              Weight = "1"
+              OriginType   = "primary"
+              Weight       = "1"
             }
           ]
         }
       }]
-      OriginHost = ""
+      OriginHost     = ""
       OriginProtocol = "http"
-      OriginHost = ""
+      OriginHost     = ""
     }
   )
 }
 
 resource "byteplus_cdn_cipher_template" "foo" {
-  title = "tf-test"
-  message = "test for tf"
-  project = ""
+  title         = "tf-test"
+  message       = "test for tf"
+  project       = ""
   lock_template = true
   https {
     disable_http = false
     forced_redirect {
       enable_forced_redirect = true
-      status_code = "302"
+      status_code            = "302"
     }
-    http2 = false
-    ocsp = false
+    http2       = false
+    ocsp        = false
     tls_version = ["tlsv1.1", "tlsv1.2", "tlsv1.3"]
     hsts {
       subdomain = "exclude"
-      switch = true
-      ttl = 3600
+      switch    = true
+      ttl       = 3600
     }
   }
   #  http_forced_redirect {
@@ -61,10 +61,10 @@ resource "byteplus_cdn_cipher_template" "foo" {
 }
 
 resource "byteplus_cdn_domain" "foo" {
-  domain = "tf-test.com"
+  domain              = "tf-test.com"
   service_template_id = byteplus_cdn_service_template.foo.id
-  https_switch = "off"
-  cipher_template_id = byteplus_cdn_cipher_template.foo.id
-  project = ""
-  service_region = "outside_chinese_mainland"
+  https_switch        = "off"
+  cipher_template_id  = byteplus_cdn_cipher_template.foo.id
+  project             = ""
+  service_region      = "outside_chinese_mainland"
 }

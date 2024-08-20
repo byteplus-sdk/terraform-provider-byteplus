@@ -10,12 +10,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cdn/cdn_cipher_template"
-	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cdn/cdn_domain"
-	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cdn/cdn_service_template"
-
-	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cdn/cdn_domain_enabler"
-
 	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus"
 	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/byteplusutil"
 	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/credentials"
@@ -36,6 +30,18 @@ import (
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/autoscaling/scaling_policy"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/bandwidth_package/bandwidth_package"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/bandwidth_package/bandwidth_package_attachment"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cdn/cdn_certificate"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cdn/cdn_cipher_template"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cdn/cdn_cron_job"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cdn/cdn_cron_job_state"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cdn/cdn_domain"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cdn/cdn_domain_enabler"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cdn/cdn_edge_function"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cdn/cdn_edge_function_associate"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cdn/cdn_edge_function_publish"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cdn/cdn_kv"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cdn/cdn_kv_namespace"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cdn/cdn_service_template"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/clb/acl"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/clb/acl_entry"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/clb/certificate"
@@ -264,9 +270,15 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_rds_postgresql_schemas":   rds_postgresql_schema.DataSourceByteplusRdsPostgresqlSchemas(),
 
 			// ================ CDN ================
-			"byteplus_cdn_domains":           cdn_domain.DataSourceByteplusCdnDomains(),
-			"byteplus_cdn_cipher_templates":  cdn_cipher_template.DataSourceByteplusCdnCipherTemplates(),
-			"byteplus_cdn_service_templates": cdn_service_template.DataSourceByteplusCdnServiceTemplates(),
+			"byteplus_cdn_domains":                 cdn_domain.DataSourceByteplusCdnDomains(),
+			"byteplus_cdn_cipher_templates":        cdn_cipher_template.DataSourceByteplusCdnCipherTemplates(),
+			"byteplus_cdn_service_templates":       cdn_service_template.DataSourceByteplusCdnServiceTemplates(),
+			"byteplus_cdn_certificates":            cdn_certificate.DataSourceByteplusCdnCertificates(),
+			"byteplus_cdn_edge_functions":          cdn_edge_function.DataSourceByteplusCdnEdgeFunctions(),
+			"byteplus_cdn_edge_function_publishes": cdn_edge_function_publish.DataSourceByteplusCdnEdgeFunctionPublishs(),
+			"byteplus_cdn_cron_jobs":               cdn_cron_job.DataSourceByteplusCdnCronJobs(),
+			"byteplus_cdn_kv_namespaces":           cdn_kv_namespace.DataSourceByteplusCdnKvNamespaces(),
+			"byteplus_cdn_kvs":                     cdn_kv.DataSourceByteplusCdnKvs(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			// ================ ECS ================
@@ -346,10 +358,18 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_rds_postgresql_schema":                 rds_postgresql_schema.ResourceByteplusRdsPostgresqlSchema(),
 
 			// ================ CDN ================
-			"byteplus_cdn_domain":           cdn_domain.ResourceByteplusCdnDomain(),
-			"byteplus_cdn_cipher_template":  cdn_cipher_template.ResourceByteplusCdnCipherTemplate(),
-			"byteplus_cdn_service_template": cdn_service_template.ResourceByteplusCdnServiceTemplate(),
-			"byteplus_cdn_domain_enabler":   cdn_domain_enabler.ResourceByteplusCdnDomainEnabler(),
+			"byteplus_cdn_domain":                  cdn_domain.ResourceByteplusCdnDomain(),
+			"byteplus_cdn_cipher_template":         cdn_cipher_template.ResourceByteplusCdnCipherTemplate(),
+			"byteplus_cdn_service_template":        cdn_service_template.ResourceByteplusCdnServiceTemplate(),
+			"byteplus_cdn_domain_enabler":          cdn_domain_enabler.ResourceByteplusCdnDomainEnabler(),
+			"byteplus_cdn_certificate":             cdn_certificate.ResourceByteplusCdnCertificate(),
+			"byteplus_cdn_edge_function":           cdn_edge_function.ResourceByteplusCdnEdgeFunction(),
+			"byteplus_cdn_edge_function_publish":   cdn_edge_function_publish.ResourceByteplusCdnEdgeFunctionPublish(),
+			"byteplus_cdn_edge_function_associate": cdn_edge_function_associate.ResourceByteplusCdnEdgeFunctionAssociate(),
+			"byteplus_cdn_cron_job":                cdn_cron_job.ResourceByteplusCdnCronJob(),
+			"byteplus_cdn_cron_job_state":          cdn_cron_job_state.ResourceByteplusCdnCronJobState(),
+			"byteplus_cdn_kv_namespace":            cdn_kv_namespace.ResourceByteplusCdnKvNamespace(),
+			"byteplus_cdn_kv":                      cdn_kv.ResourceByteplusCdnKv(),
 		},
 		ConfigureFunc: ProviderConfigure,
 	}
