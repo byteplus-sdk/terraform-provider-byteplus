@@ -67,8 +67,8 @@ func (p *Project) ModifyProject(trn *ProjectTrn, resourceData *schema.ResourceDa
 						// tos bucket 特殊处理
 						trnStr = fmt.Sprintf("trn:%s:%s:%d:%s", trn.ServiceName, p.Client.Region, int(accountId.(float64)), id)
 					} else if (trn.ServiceName == "transitrouter" && trn.ResourceType == "transitrouterbandwidthpackage") ||
-						(trn.ServiceName == "CDN" && trn.ResourceType == "template") {
-						// transit router bandwidth package 特殊处理
+						(trn.ServiceName == "CDN" && (trn.ResourceType == "template" || trn.ResourceType == "function" || trn.ResourceType == "kv_namespace")) {
+						// transit router bandwidth package & cdn 特殊处理
 						trnStr = fmt.Sprintf("trn:%s:%s:%d:%s/%s", trn.ServiceName, "", int(accountId.(float64)),
 							trn.ResourceType, id)
 					} else {
