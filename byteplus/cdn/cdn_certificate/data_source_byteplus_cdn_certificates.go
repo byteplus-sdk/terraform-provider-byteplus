@@ -115,7 +115,7 @@ func DataSourceByteplusCdnCertificates() *schema.Resource {
 						"cert_fingerprint": {
 							Type:        schema.TypeList,
 							Computed:    true,
-							Description: "",
+							Description: "Indicates the fingerprint information of the certificate.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"sha1": {

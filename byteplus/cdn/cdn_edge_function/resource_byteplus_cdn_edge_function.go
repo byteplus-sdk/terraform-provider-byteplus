@@ -55,7 +55,7 @@ func ResourceByteplusCdnEdgeFunction() *schema.Resource {
 				Type:        schema.TypeString,
 				Optional:    true,
 				Computed:    true,
-				Description: "Code content. The input requirements are as follows：\nNot empty.\nValue after base64 encoding.",
+				Description: "Code content. The input requirements are as follows: \nNot empty.\nValue after base64 encoding.",
 			},
 			"envs": {
 				Type:        schema.TypeSet,

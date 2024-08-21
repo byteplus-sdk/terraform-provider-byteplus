@@ -63,7 +63,7 @@ func ResourceByteplusCdnEdgeFunctionPublish() *schema.Resource {
 					action := d.Get("publish_action")
 					return action.(string) != "SnapshotPublish"
 				},
-				Description: "The publish type of SnapshotPublish：\n200: FullPublish\n100: CanaryPublish. This field is required and valid when the `publish_action` is `SnapshotPublish`.\n" +
+				Description: "The publish type of SnapshotPublish: \n200: FullPublish\n100: CanaryPublish. This field is required and valid when the `publish_action` is `SnapshotPublish`.\n" +
 					"When importing resources, this attribute will not be imported. If this attribute is set, please use lifecycle and ignore_changes ignore changes in fields.",
 			},
 			"version_tag": {
