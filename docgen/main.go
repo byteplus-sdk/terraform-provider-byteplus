@@ -134,6 +134,7 @@ var resourceKeys = map[string]string{
 	"direct_connect":    "DIRECT_CONNECT",
 	"bandwidth_package": "BANDWIDTH_PACKAGE",
 	"rds_postgresql":    "RDS_POSTGRESQL",
+	"cdn":               "CDN",
 }
 
 type Products struct {
