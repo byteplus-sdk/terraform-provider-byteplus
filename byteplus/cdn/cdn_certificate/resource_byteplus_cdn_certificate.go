@@ -36,14 +36,14 @@ func ResourceByteplusCdnCertificate() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
-				Description: "Indicates the content of the certificate file, which must include the complete certificate chain. The line breaks in the content should be replaced with \\r\\n. The certificate file must have an extension of either .crt or .pem." +
+				Description: "Indicates the content of the certificate file, which must include the complete certificate chain. The line breaks in the content should be replaced with \\r\\n. The certificate file must have an extension of either `.crt` or `.pem`.\n" +
 					"When importing resources, this attribute will not be imported. If this attribute is set, please use lifecycle and ignore_changes ignore changes in fields.",
 			},
 			"private_key": {
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
-				Description: "Indicates the content of the certificate private key file. The line breaks in the content should be replaced with \\r\\n. The certificate private key file must have an extension of either .key or .pem." +
+				Description: "Indicates the content of the certificate private key file. The line breaks in the content should be replaced with \\r\\n. The certificate private key file must have an extension of either `.key` or `.pem`.\n" +
 					"When importing resources, this attribute will not be imported. If this attribute is set, please use lifecycle and ignore_changes ignore changes in fields.",
 			},
 			"desc": {
@@ -57,7 +57,7 @@ func ResourceByteplusCdnCertificate() *schema.Resource {
 				Optional: true,
 				Default:  true,
 				ForceNew: true,
-				Description: "Indicates whether uploading the same certificate is allowed. If the fingerprints of two certificates are the same, these certificates are considered identical. This parameter can take the following values:\n\ntrue: Allows the upload of the same certificate.\nfalse: Does not allow the upload of the same certificate. When calling this API, the CDN will check for the existence of an identical certificate. If one exists, you will not be able to upload the certificate, and the Error structure in the response body will include the ID of the existing certificate.\nThe default value of this parameter is true." +
+				Description: "Indicates whether uploading the same certificate is allowed. If the fingerprints of two certificates are the same, these certificates are considered identical. This parameter can take the following values:\n\ntrue: Allows the upload of the same certificate.\nfalse: Does not allow the upload of the same certificate. When calling this API, the CDN will check for the existence of an identical certificate. If one exists, you will not be able to upload the certificate, and the Error structure in the response body will include the ID of the existing certificate.\nThe default value of this parameter is true.\n" +
 					"When importing resources, this attribute will not be imported. If this attribute is set, please use lifecycle and ignore_changes ignore changes in fields.",
 			},
 
@@ -100,7 +100,7 @@ func ResourceByteplusCdnCertificate() *schema.Resource {
 			"cert_fingerprint": {
 				Type:        schema.TypeList,
 				Computed:    true,
-				Description: "",
+				Description: "Indicates the fingerprint information of the certificate.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"sha1": {

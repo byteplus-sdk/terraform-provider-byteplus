@@ -102,8 +102,8 @@ func ResourceByteplusCdnDomain() *schema.Resource {
 				Computed: true,
 				Description: "Indicates the service region enabled for this domain name. " +
 					"This parameter can take the following values: " +
-					"outside_chinese_mainland：Indicates \"Global (excluding Chinese Mainland)\"." +
-					" chinese_mainland：Indicates \"Chinese Mainland\". " +
+					"outside_chinese_mainland: Indicates \"Global (excluding Chinese Mainland)\"." +
+					" chinese_mainland: Indicates \"Chinese Mainland\". " +
 					"global: Indicates \"Global\". " +
 					"The default value of this parameter is outside_chinese_mainland. " +
 					"Note that chinese_mainland or global are not available by default. " +
