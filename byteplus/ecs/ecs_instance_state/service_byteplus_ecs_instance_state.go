@@ -45,6 +45,18 @@ func (s *ByteplusInstanceStateService) CreateResource(resourceData *schema.Resou
 		targetStatus = []string{"STOPPED"}
 	}
 
+	// 根据实例当前状态判断是否执行操作
+	update, err := s.describeCurrentStatus(resourceData, targetStatus)
+	if err != nil {
+		return []bp.Callback{{
+			Err: err,
+		}}
+	}
+	if !update {
+		resourceData.SetId(fmt.Sprintf("state:%v", resourceData.Get("instance_id")))
+		return []bp.Callback{}
+	}
+
 	callback := bp.Callback{
 		Call: bp.SdkCall{
 			Action:      action,
@@ -214,6 +226,17 @@ func (s *ByteplusInstanceStateService) ModifyResource(resourceData *schema.Resou
 		targetStatus = []string{"STOPPED"}
 	}
 
+	// 根据实例当前状态判断是否执行操作
+	update, err := s.describeCurrentStatus(resourceData, targetStatus)
+	if err != nil {
+		return []bp.Callback{{
+			Err: err,
+		}}
+	}
+	if !update {
+		return []bp.Callback{}
+	}
+
 	strs := strings.Split(resourceData.Id(), ":")
 
 	callback := bp.Callback{
@@ -262,6 +285,25 @@ func (s *ByteplusInstanceStateService) DatasourceResources(*schema.ResourceData,
 
 func (s *ByteplusInstanceStateService) ReadResourceId(id string) string {
 	return id
+}
+
+func (s *ByteplusInstanceStateService) describeCurrentStatus(resourceData *schema.ResourceData, targetStatus []string) (bool, error) {
+	instanceId := resourceData.Get("instance_id").(string)
+	data, err := s.ReadResource(resourceData, "state:"+instanceId)
+	if err != nil {
+		return false, err
+	}
+	status, err := bp.ObtainSdkValue("Status", data)
+	if err != nil {
+		return false, err
+	}
+	for _, v := range targetStatus {
+		// 目标状态和当前状态相同时，不执行操作
+		if v == status.(string) {
+			return false, nil
+		}
+	}
+	return true, nil
 }
 
 func getUniversalInfo(actionName string) bp.UniversalInfo {
