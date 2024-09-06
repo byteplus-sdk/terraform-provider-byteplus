@@ -98,6 +98,12 @@ import (
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpc/security_group_rule"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpc/subnet"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpc/vpc"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpn/customer_gateway"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpn/ssl_vpn_client_cert"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpn/ssl_vpn_server"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpn/vpn_connection"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpn/vpn_gateway"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpn/vpn_gateway_route"
 )
 
 func Provider() terraform.ResourceProvider {
@@ -279,6 +285,14 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_cdn_cron_jobs":               cdn_cron_job.DataSourceByteplusCdnCronJobs(),
 			"byteplus_cdn_kv_namespaces":           cdn_kv_namespace.DataSourceByteplusCdnKvNamespaces(),
 			"byteplus_cdn_kvs":                     cdn_kv.DataSourceByteplusCdnKvs(),
+
+			// ================ VPN ================
+			"byteplus_vpn_gateways":         vpn_gateway.DataSourceByteplusVpnGateways(),
+			"byteplus_customer_gateways":    customer_gateway.DataSourceByteplusCustomerGateways(),
+			"byteplus_vpn_connections":      vpn_connection.DataSourceByteplusVpnConnections(),
+			"byteplus_vpn_gateway_routes":   vpn_gateway_route.DataSourceByteplusVpnGatewayRoutes(),
+			"byteplus_ssl_vpn_servers":      ssl_vpn_server.DataSourceByteplusSslVpnServers(),
+			"byteplus_ssl_vpn_client_certs": ssl_vpn_client_cert.DataSourceByteplusSslVpnClientCerts(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			// ================ ECS ================
@@ -370,6 +384,14 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_cdn_cron_job_state":          cdn_cron_job_state.ResourceByteplusCdnCronJobState(),
 			"byteplus_cdn_kv_namespace":            cdn_kv_namespace.ResourceByteplusCdnKvNamespace(),
 			"byteplus_cdn_kv":                      cdn_kv.ResourceByteplusCdnKv(),
+
+			// ================ VPN ================
+			"byteplus_vpn_gateway":         vpn_gateway.ResourceByteplusVpnGateway(),
+			"byteplus_customer_gateway":    customer_gateway.ResourceByteplusCustomerGateway(),
+			"byteplus_vpn_connection":      vpn_connection.ResourceByteplusVpnConnection(),
+			"byteplus_vpn_gateway_route":   vpn_gateway_route.ResourceByteplusVpnGatewayRoute(),
+			"byteplus_ssl_vpn_server":      ssl_vpn_server.ResourceByteplusSslVpnServer(),
+			"byteplus_ssl_vpn_client_cert": ssl_vpn_client_cert.ResourceByteplusSslClientCertServer(),
 		},
 		ConfigureFunc: ProviderConfigure,
 	}
