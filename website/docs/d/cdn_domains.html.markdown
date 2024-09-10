@@ -1,5 +1,5 @@
 ---
-subcategory: "CDN"
+subcategory: "CLASSIC_CDN"
 layout: "byteplus"
 page_title: "Byteplus: byteplus_cdn_domains"
 sidebar_current: "docs-byteplus-datasource-cdn_domains"
