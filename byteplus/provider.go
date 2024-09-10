@@ -42,6 +42,14 @@ import (
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cdn/cdn_kv"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cdn/cdn_kv_namespace"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cdn/cdn_service_template"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cen/cen"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cen/cen_attach_instance"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cen/cen_bandwidth_package"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cen/cen_bandwidth_package_associate"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cen/cen_grant_instance"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cen/cen_inter_region_bandwidth"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cen/cen_route_entry"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cen/cen_service_route_entry"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/classic_cdn/classic_cdn_certificate"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/classic_cdn/classic_cdn_config"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/classic_cdn/classic_cdn_domain"
@@ -303,6 +311,14 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_classic_cdn_domains":        classic_cdn_domain.DataSourceByteplusCdnDomains(),
 			"byteplus_classic_cdn_configs":        classic_cdn_config.DataSourceByteplusCdnConfigs(),
 			"byteplus_classic_cdn_shared_configs": classic_cdn_shared_config.DataSourceByteplusCdnSharedConfigs(),
+
+			// ================ Cen ================
+			"byteplus_cens":                        cen.DataSourceByteplusCens(),
+			"byteplus_cen_attach_instances":        cen_attach_instance.DataSourceByteplusCenAttachInstances(),
+			"byteplus_cen_route_entries":           cen_route_entry.DataSourceByteplusCenRouteEntries(),
+			"byteplus_cen_bandwidth_packages":      cen_bandwidth_package.DataSourceByteplusCenBandwidthPackages(),
+			"byteplus_cen_inter_region_bandwidths": cen_inter_region_bandwidth.DataSourceByteplusCenInterRegionBandwidths(),
+			"byteplus_cen_service_route_entries":   cen_service_route_entry.DataSourceByteplusCenServiceRouteEntries(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			// ================ ECS ================
@@ -407,6 +423,16 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_classic_cdn_certificate":   classic_cdn_certificate.ResourceByteplusCdnCertificate(),
 			"byteplus_classic_cdn_domain":        classic_cdn_domain.ResourceByteplusCdnDomain(),
 			"byteplus_classic_cdn_shared_config": classic_cdn_shared_config.ResourceByteplusCdnSharedConfig(),
+
+			// ================ Cen ================
+			"byteplus_cen":                             cen.ResourceByteplusCen(),
+			"byteplus_cen_attach_instance":             cen_attach_instance.ResourceByteplusCenAttachInstance(),
+			"byteplus_cen_grant_instance":              cen_grant_instance.ResourceByteplusCenGrantInstance(),
+			"byteplus_cen_route_entry":                 cen_route_entry.ResourceByteplusCenRouteEntry(),
+			"byteplus_cen_bandwidth_package":           cen_bandwidth_package.ResourceByteplusCenBandwidthPackage(),
+			"byteplus_cen_bandwidth_package_associate": cen_bandwidth_package_associate.ResourceByteplusCenBandwidthPackageAssociate(),
+			"byteplus_cen_inter_region_bandwidth":      cen_inter_region_bandwidth.ResourceByteplusCenInterRegionBandwidth(),
+			"byteplus_cen_service_route_entry":         cen_service_route_entry.ResourceByteplusCenServiceRouteEntry(),
 		},
 		ConfigureFunc: ProviderConfigure,
 	}

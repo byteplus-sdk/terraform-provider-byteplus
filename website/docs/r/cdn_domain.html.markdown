@@ -1,5 +1,5 @@
 ---
-subcategory: "CLASSIC_CDN"
+subcategory: "CDN"
 layout: "byteplus"
 page_title: "Byteplus: byteplus_cdn_domain"
 sidebar_current: "docs-byteplus-resource-cdn_domain"
@@ -98,9 +98,8 @@ In addition to all arguments above, the following attributes are exported:
 
 
 ## Import
-CdnDomain can be imported using the domain, e.g.
+CdnDomain can be imported using the id, e.g.
 ```
-$ terraform import byteplus_cdn_domain.default www.byteplus.com
+$ terraform import byteplus_cdn_domain.default resource_id
 ```
-Please note that when you execute destroy, we will first take the domain name offline and then delete it.
 
