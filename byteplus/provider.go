@@ -42,6 +42,10 @@ import (
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cdn/cdn_kv"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cdn/cdn_kv_namespace"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cdn/cdn_service_template"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/classic_cdn/classic_cdn_certificate"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/classic_cdn/classic_cdn_config"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/classic_cdn/classic_cdn_domain"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/classic_cdn/classic_cdn_shared_config"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/clb/acl"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/clb/acl_entry"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/clb/certificate"
@@ -293,6 +297,12 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_vpn_gateway_routes":   vpn_gateway_route.DataSourceByteplusVpnGatewayRoutes(),
 			"byteplus_ssl_vpn_servers":      ssl_vpn_server.DataSourceByteplusSslVpnServers(),
 			"byteplus_ssl_vpn_client_certs": ssl_vpn_client_cert.DataSourceByteplusSslVpnClientCerts(),
+
+			// ================ Classic CDN ================
+			"byteplus_classic_cdn_certificates":   classic_cdn_certificate.DataSourceByteplusCdnCertificates(),
+			"byteplus_classic_cdn_domains":        classic_cdn_domain.DataSourceByteplusCdnDomains(),
+			"byteplus_classic_cdn_configs":        classic_cdn_config.DataSourceByteplusCdnConfigs(),
+			"byteplus_classic_cdn_shared_configs": classic_cdn_shared_config.DataSourceByteplusCdnSharedConfigs(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			// ================ ECS ================
@@ -392,6 +402,11 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_vpn_gateway_route":   vpn_gateway_route.ResourceByteplusVpnGatewayRoute(),
 			"byteplus_ssl_vpn_server":      ssl_vpn_server.ResourceByteplusSslVpnServer(),
 			"byteplus_ssl_vpn_client_cert": ssl_vpn_client_cert.ResourceByteplusSslClientCertServer(),
+
+			// ================ Classic CDN ================
+			"byteplus_classic_cdn_certificate":   classic_cdn_certificate.ResourceByteplusCdnCertificate(),
+			"byteplus_classic_cdn_domain":        classic_cdn_domain.ResourceByteplusCdnDomain(),
+			"byteplus_classic_cdn_shared_config": classic_cdn_shared_config.ResourceByteplusCdnSharedConfig(),
 		},
 		ConfigureFunc: ProviderConfigure,
 	}
