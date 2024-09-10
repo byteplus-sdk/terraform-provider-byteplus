@@ -208,7 +208,7 @@ func (s *ByteplusCenServiceRouteEntryService) ModifyResource(resourceData *schem
 			},
 			BeforeCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (bool, error) {
 				mode := d.Get("publish_mode").(string)
-				instances := d.Get("publish_to_instances").([]interface{})
+				instances := d.Get("publish_to_instances").(*schema.Set).List()
 				if mode == "Custom" && len(instances) == 0 {
 					return false, fmt.Errorf("public_to_instances must exist when publish_mode is Custom")
 				}
