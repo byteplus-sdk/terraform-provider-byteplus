@@ -2,5 +2,5 @@ package common
 
 const (
 	TerraformProviderName    = "terraform-provider-byteplus"
-	TerraformProviderVersion = "0.0.7"
+	TerraformProviderVersion = "0.0.8"
 )
