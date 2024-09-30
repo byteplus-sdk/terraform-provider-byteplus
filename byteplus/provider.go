@@ -79,6 +79,17 @@ import (
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ecs/zone"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/eip/eip_address"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/eip/eip_associate"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/iam/iam_access_key"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/iam/iam_login_profile"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/iam/iam_policy"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/iam/iam_role"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/iam/iam_role_policy_attachment"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/iam/iam_saml_provider"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/iam/iam_user"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/iam/iam_user_group"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/iam/iam_user_group_attachment"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/iam/iam_user_group_policy_attachment"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/iam/iam_user_policy_attachment"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/nat/dnat_entry"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/nat/nat_gateway"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/nat/snat_entry"
@@ -319,6 +330,15 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_cen_bandwidth_packages":      cen_bandwidth_package.DataSourceByteplusCenBandwidthPackages(),
 			"byteplus_cen_inter_region_bandwidths": cen_inter_region_bandwidth.DataSourceByteplusCenInterRegionBandwidths(),
 			"byteplus_cen_service_route_entries":   cen_service_route_entry.DataSourceByteplusCenServiceRouteEntries(),
+
+			// ================ IAM ================
+			"byteplus_iam_policies":                      iam_policy.DataSourceByteplusIamPolicies(),
+			"byteplus_iam_roles":                         iam_role.DataSourceByteplusIamRoles(),
+			"byteplus_iam_users":                         iam_user.DataSourceByteplusIamUsers(),
+			"byteplus_iam_user_groups":                   iam_user_group.DataSourceByteplusIamUserGroups(),
+			"byteplus_iam_user_group_policy_attachments": iam_user_group_policy_attachment.DataSourceByteplusIamUserGroupPolicyAttachments(),
+			"byteplus_iam_saml_providers":                iam_saml_provider.DataSourceByteplusIamSamlProviders(),
+			"byteplus_iam_access_keys":                   iam_access_key.DataSourceByteplusIamAccessKeys(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			// ================ ECS ================
@@ -433,6 +453,19 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_cen_bandwidth_package_associate": cen_bandwidth_package_associate.ResourceByteplusCenBandwidthPackageAssociate(),
 			"byteplus_cen_inter_region_bandwidth":      cen_inter_region_bandwidth.ResourceByteplusCenInterRegionBandwidth(),
 			"byteplus_cen_service_route_entry":         cen_service_route_entry.ResourceByteplusCenServiceRouteEntry(),
+
+			// ================ IAM ================
+			"byteplus_iam_policy":                       iam_policy.ResourceByteplusIamPolicy(),
+			"byteplus_iam_role":                         iam_role.ResourceByteplusIamRole(),
+			"byteplus_iam_role_policy_attachment":       iam_role_policy_attachment.ResourceByteplusIamRolePolicyAttachment(),
+			"byteplus_iam_access_key":                   iam_access_key.ResourceByteplusIamAccessKey(),
+			"byteplus_iam_user":                         iam_user.ResourceByteplusIamUser(),
+			"byteplus_iam_login_profile":                iam_login_profile.ResourceByteplusIamLoginProfile(),
+			"byteplus_iam_user_policy_attachment":       iam_user_policy_attachment.ResourceByteplusIamUserPolicyAttachment(),
+			"byteplus_iam_user_group":                   iam_user_group.ResourceByteplusIamUserGroup(),
+			"byteplus_iam_user_group_attachment":        iam_user_group_attachment.ResourceByteplusIamUserGroupAttachment(),
+			"byteplus_iam_user_group_policy_attachment": iam_user_group_policy_attachment.ResourceByteplusIamUserGroupPolicyAttachment(),
+			"byteplus_iam_saml_provider":                iam_saml_provider.ResourceByteplusIamSamlProvider(),
 		},
 		ConfigureFunc: ProviderConfigure,
 	}
