@@ -31,7 +31,7 @@ provider "byteplus" {
   access_key = "your ak"
   secret_key = "your sk"
   session_token = "sts token"
-  region = "cn-beijing"
+  region = "ap-southeast-1"
 }
 
 # Query Vpc
@@ -68,7 +68,7 @@ Usage:
 provider "byteplus" {
    access_key = "your ak"
    secret_key = "your sk"
-   region = "cn-beijing"
+   region = "ap-southeast-1"
 }
 ```
 
@@ -89,6 +89,6 @@ Usage:
 ```
 $ export BYTEPLUS_ACCESS_KEY="your_public_key"
 $ export BYTEPLUS_SECRET_KEY="your_private_key"
-$ export BYTEPLUS_REGION="cn-beijing"
+$ export BYTEPLUS_REGION="ap-southeast-1"
 $ terraform plan
 ```
