@@ -156,8 +156,8 @@ func AccTestPreCheck(t *testing.T) {
 		t.Fatal("BYTEPLUS_SECRET_KEY must be set for acceptance tests")
 	}
 	if v := os.Getenv("BYTEPLUS_REGION"); v == "" {
-		log.Println("[INFO] Test: Using cn-beijing as test region")
-		os.Setenv("BYTEPLUS_REGION", "cn-beijing")
+		log.Println("[INFO] Test: Using ap-southeast-1 as test region")
+		os.Setenv("BYTEPLUS_REGION", "ap-southeast-1")
 	}
 }
 
