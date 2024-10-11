@@ -132,7 +132,7 @@ func (s *ByteplusCdnCertificateService) RefreshResourceState(resourceData *schem
 				status     interface{}
 				failStates []string
 			)
-			failStates = append(failStates, "Failed")
+			failStates = append(failStates, "expired")
 			d, err = s.ReadResource(resourceData, id)
 			if err != nil {
 				return nil, "", err
@@ -186,7 +186,7 @@ func (s *ByteplusCdnCertificateService) CreateResource(resourceData *schema.Reso
 				return nil
 			},
 			Refresh: &bp.StateRefresh{
-				Target:  []string{"running"},
+				Target:  []string{"running", "expiring_soon"},
 				Timeout: resourceData.Timeout(schema.TimeoutCreate),
 			},
 		},
