@@ -137,6 +137,7 @@ var resourceKeys = map[string]string{
 	"cdn":               "CDN",
 	"classic_cdn":       "CLASSIC_CDN",
 	"iam":               "IAM",
+	"privatelink":       "PRIVATELINK",
 }
 
 type Products struct {
