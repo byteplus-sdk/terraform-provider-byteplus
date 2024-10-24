@@ -96,6 +96,7 @@ func ResourceByteplusCdnDomain() *schema.Resource {
 				Computed:    true,
 				Description: "Indicates the project to which this domain name belongs, with the default value being default.",
 			},
+			"tags": bp.TagsSchema(),
 			"service_region": {
 				Type:     schema.TypeString,
 				Optional: true,
