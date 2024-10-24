@@ -184,6 +184,7 @@ func DataSourceByteplusCdnDomains() *schema.Resource {
 							Computed:    true,
 							Description: "Indicates the project to which the domain name belongs.",
 						},
+						"tags": bp.TagsSchemaComputed(),
 						"templates": {
 							Type:     schema.TypeList,
 							Computed: true,

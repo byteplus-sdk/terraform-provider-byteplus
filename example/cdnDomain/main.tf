@@ -67,4 +67,12 @@ resource "byteplus_cdn_domain" "foo" {
   cipher_template_id  = byteplus_cdn_cipher_template.foo.id
   project             = ""
   service_region      = "outside_chinese_mainland"
+  tags {
+    key = "k1"
+    value = "v1"
+  }
+  tags {
+    key = "k2"
+    value = "v2"
+  }
 }
