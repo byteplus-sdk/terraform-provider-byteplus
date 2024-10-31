@@ -37,6 +37,9 @@ In addition to all arguments above, the following attributes are exported:
     * `remark` - Indicates the reason why the domain name is locked. If LockStatus is on, this parameter indicates the reason why the domain name is locked. If LockStatus is off, the value of this parameter is empty ("").
     * `service_region` - Indicates the service region enabled for the domain name. This parameter can be: outside_chinese_mainland: Indicates Global (Excluding Chinese Mainland). chinese_mainland: Indicates Chinese Mainland. global: Indicates Global.
     * `status` - Indicates the status of the domain name. This parameter can be: online: Indicates the status is Enabled. offline: Indicates the status is Disabled. configuring: Indicates the status is Configuring.
+    * `tags` - Tags.
+        * `key` - The Key of Tags.
+        * `value` - The Value of Tags.
     * `templates` - Indicates the list of policies bound to the domain name. A domain name must and can only be bound to one delivery policy, and optionally to one encryption policy.
         * `exception` - Indicates whether the policy contains special configurations. Special configurations refer to those configurations that are operated by BytePlus engineers instead of users. This parameter can be: true: Indicates it contains special configurations. false: Indicates it does not contain special configurations.
         * `template_id` - Indicates the ID of a policy.
