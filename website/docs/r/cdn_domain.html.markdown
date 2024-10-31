@@ -79,6 +79,14 @@ resource "byteplus_cdn_domain" "foo" {
   cipher_template_id  = byteplus_cdn_cipher_template.foo.id
   project             = ""
   service_region      = "outside_chinese_mainland"
+  tags {
+    key   = "k1"
+    value = "v1"
+  }
+  tags {
+    key   = "k2"
+    value = "v2"
+  }
 }
 ```
 ## Argument Reference
@@ -90,6 +98,12 @@ The following arguments are supported:
 * `https_switch` - (Optional) Indicates whether to enable "HTTPS Encryption Service" for this domain name. This parameter can take the following values: on: Indicates to enable this service. off: Indicates not to enable this service. The default value of this parameter is off.
 * `project` - (Optional) Indicates the project to which this domain name belongs, with the default value being default.
 * `service_region` - (Optional) Indicates the service region enabled for this domain name. This parameter can take the following values: outside_chinese_mainland: Indicates "Global (excluding Chinese Mainland)". chinese_mainland: Indicates "Chinese Mainland". global: Indicates "Global". The default value of this parameter is outside_chinese_mainland. Note that chinese_mainland or global are not available by default. To make the two service regions available, please submit a ticket. Also, since both regions include Chinese Mainland, you must complete the following additional actions: Perform real-name authentication for your BytePlus account. Perform ICP filing for your domain name.
+* `tags` - (Optional) Tags.
+
+The `tags` object supports the following:
+
+* `key` - (Required) The Key of Tags.
+* `value` - (Required) The Value of Tags.
 
 ## Attributes Reference
 In addition to all arguments above, the following attributes are exported:
