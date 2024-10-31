@@ -93,6 +93,12 @@ import (
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/nat/dnat_entry"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/nat/nat_gateway"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/nat/snat_entry"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/organization/organization"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/organization/organization_account"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/organization/organization_service_control_policy"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/organization/organization_service_control_policy_attachment"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/organization/organization_service_control_policy_enabler"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/organization/organization_unit"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/privatelink/vpc_endpoint"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/privatelink/vpc_endpoint_connection"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/privatelink/vpc_endpoint_service"
@@ -351,6 +357,12 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_privatelink_vpc_endpoint_service_permissions": vpc_endpoint_service_permission.DataSourceByteplusPrivatelinkVpcEndpointServicePermissions(),
 			"byteplus_privatelink_vpc_endpoint_connections":         vpc_endpoint_connection.DataSourceByteplusPrivatelinkVpcEndpointConnections(),
 			"byteplus_privatelink_vpc_endpoint_zones":               vpc_endpoint_zone.DataSourceByteplusPrivatelinkVpcEndpointZones(),
+
+			// ================ Organization ================
+			"byteplus_organization_units":                    organization_unit.DataSourceByteplusOrganizationUnits(),
+			"byteplus_organization_service_control_policies": organization_service_control_policy.DataSourceByteplusServiceControlPolicies(),
+			"byteplus_organization_accounts":                 organization_account.DataSourceByteplusOrganizationAccounts(),
+			"byteplus_organizations":                         organization.DataSourceByteplusOrganizations(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			// ================ ECS ================
@@ -485,6 +497,14 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_privatelink_vpc_endpoint_service_permission": vpc_endpoint_service_permission.ResourceByteplusPrivatelinkVpcEndpointServicePermission(),
 			"byteplus_privatelink_vpc_endpoint_connection":         vpc_endpoint_connection.ResourceByteplusPrivatelinkVpcEndpointConnectionService(),
 			"byteplus_privatelink_vpc_endpoint_zone":               vpc_endpoint_zone.ResourceByteplusPrivatelinkVpcEndpointZone(),
+
+			// ================ Organization ================
+			"byteplus_organization_unit":                              organization_unit.ResourceByteplusOrganizationUnit(),
+			"byteplus_organization_service_control_policy_enabler":    organization_service_control_policy_enabler.ResourceByteplusOrganizationServiceControlPolicyEnabler(),
+			"byteplus_organization_service_control_policy":            organization_service_control_policy.ResourceByteplusServiceControlPolicy(),
+			"byteplus_organization_service_control_policy_attachment": organization_service_control_policy_attachment.ResourceByteplusServiceControlPolicyAttachment(),
+			"byteplus_organization_account":                           organization_account.ResourceByteplusOrganizationAccount(),
+			"byteplus_organization":                                   organization.ResourceByteplusOrganization(),
 		},
 		ConfigureFunc: ProviderConfigure,
 	}
