@@ -357,6 +357,7 @@ func (s *ByteplusCdnDomainService) DatasourceResources(*schema.ResourceData, *sc
 		},
 		IdField:      "Domain",
 		CollectField: "domains",
+		ContentType:  bp.ContentTypeJson,
 		ResponseConverts: map[string]bp.ResponseConvert{
 			"HTTPS": {
 				TargetField: "https",

@@ -141,6 +141,10 @@ func (s *ByteplusCdnDomainService) CreateResource(resourceData *schema.ResourceD
 				"https_switch": {
 					TargetField: "HTTPSSwitch",
 				},
+				"tags": {
+					TargetField: "Tags",
+					ConvertType: bp.ConvertJsonObjectArray,
+				},
 			},
 			ExecuteCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (*map[string]interface{}, error) {
 				logger.Debug(logger.RespFormat, call.Action, call.SdkParam)
@@ -177,6 +181,8 @@ func (ByteplusCdnDomainService) WithResourceResponseHandlers(d map[string]interf
 }
 
 func (s *ByteplusCdnDomainService) ModifyResource(resourceData *schema.ResourceData, resource *schema.Resource) []bp.Callback {
+	var callbacks []bp.Callback
+
 	callback := bp.Callback{
 		Call: bp.SdkCall{
 			Action:      "UpdateTemplateDomain",
@@ -210,6 +216,8 @@ func (s *ByteplusCdnDomainService) ModifyResource(resourceData *schema.ResourceD
 				if d.HasChanges("service_template_id", "service_region",
 					"https_switch", "cipher_template_id", "cert_id") {
 					(*call.SdkParam)["Domains"] = []string{d.Id()}
+
+					delete(*call.SdkParam, "Tags")
 					return true, nil
 				}
 				return false, nil
@@ -226,7 +234,12 @@ func (s *ByteplusCdnDomainService) ModifyResource(resourceData *schema.ResourceD
 			},
 		},
 	}
-	return []bp.Callback{callback}
+	callbacks = append(callbacks, callback)
+
+	// 更新Tags
+	callbacks = s.setResourceTags(resourceData, "domain", callbacks)
+
+	return callbacks
 }
 
 func (s *ByteplusCdnDomainService) RemoveResource(resourceData *schema.ResourceData, r *schema.Resource) []bp.Callback {
@@ -305,6 +318,60 @@ func (s *ByteplusCdnDomainService) DatasourceResources(*schema.ResourceData, *sc
 
 func (s *ByteplusCdnDomainService) ReadResourceId(id string) string {
 	return id
+}
+
+func (s *ByteplusCdnDomainService) setResourceTags(resourceData *schema.ResourceData, resourceType string, callbacks []bp.Callback) []bp.Callback {
+	addedTags, removedTags, _, _ := bp.GetSetDifference("tags", resourceData, bp.TagsHash, false)
+
+	removeCallback := bp.Callback{
+		Call: bp.SdkCall{
+			Action:      "UntagResources",
+			ConvertMode: bp.RequestConvertIgnore,
+			BeforeCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (bool, error) {
+				if removedTags != nil && len(removedTags.List()) > 0 {
+					(*call.SdkParam)["ResourceIds"] = []string{resourceData.Id()}
+					(*call.SdkParam)["ResourceType"] = resourceType
+					(*call.SdkParam)["TagKeys"] = make([]string, 0)
+					for _, tag := range removedTags.List() {
+						(*call.SdkParam)["TagKeys"] = append((*call.SdkParam)["TagKeys"].([]string), tag.(map[string]interface{})["key"].(string))
+					}
+					return true, nil
+				}
+				return false, nil
+			},
+			ExecuteCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (*map[string]interface{}, error) {
+				logger.Debug(logger.ReqFormat, call.Action, call.SdkParam)
+				return s.Client.UniversalClient.DoCall(getUniversalInfo(call.Action), call.SdkParam)
+			},
+		},
+	}
+	callbacks = append(callbacks, removeCallback)
+
+	addCallback := bp.Callback{
+		Call: bp.SdkCall{
+			Action:      "TagResources",
+			ConvertMode: bp.RequestConvertIgnore,
+			BeforeCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (bool, error) {
+				if addedTags != nil && len(addedTags.List()) > 0 {
+					(*call.SdkParam)["ResourceIds"] = []string{resourceData.Id()}
+					(*call.SdkParam)["ResourceType"] = resourceType
+					(*call.SdkParam)["Tags"] = make([]map[string]interface{}, 0)
+					for _, tag := range addedTags.List() {
+						(*call.SdkParam)["Tags"] = append((*call.SdkParam)["Tags"].([]map[string]interface{}), tag.(map[string]interface{}))
+					}
+					return true, nil
+				}
+				return false, nil
+			},
+			ExecuteCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (*map[string]interface{}, error) {
+				logger.Debug(logger.ReqFormat, call.Action, call.SdkParam)
+				return s.Client.UniversalClient.DoCall(getUniversalInfo(call.Action), call.SdkParam)
+			},
+		},
+	}
+	callbacks = append(callbacks, addCallback)
+
+	return callbacks
 }
 
 func getUniversalInfo(actionName string) bp.UniversalInfo {
