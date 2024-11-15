@@ -204,6 +204,25 @@ func (s *ByteplusCdnCertificateService) RemoveResource(resourceData *schema.Reso
 			AfterCall: func(d *schema.ResourceData, client *bp.SdkClient, resp *map[string]interface{}, call bp.SdkCall) error {
 				return bp.CheckResourceUtilRemoved(d, s.ReadResource, 5*time.Minute)
 			},
+			CallError: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall, baseErr error) error {
+				//出现错误后重试
+				return resource.Retry(30*time.Second, func() *resource.RetryError {
+					_, callErr := s.ReadResource(d, "")
+					if callErr != nil {
+						if bp.ResourceNotFoundError(callErr) {
+							return nil
+						} else {
+							return resource.NonRetryableError(fmt.Errorf("error on reading classic cdn certificate on delete %q, %w", d.Id(), callErr))
+						}
+					}
+					_, callErr = call.ExecuteCall(d, client, call)
+					if callErr == nil {
+						return nil
+					}
+					logger.Debug(logger.RespFormat, call.Action, call.SdkParam, callErr)
+					return resource.RetryableError(callErr)
+				})
+			},
 		},
 	}
 	return []bp.Callback{callback}
