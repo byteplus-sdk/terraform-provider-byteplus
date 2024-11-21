@@ -63,6 +63,11 @@ import (
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/clb/server_group"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/clb/server_group_server"
 	clbZone "github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/clb/zone"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/direct_connect/direct_connect_bgp_peer"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/direct_connect/direct_connect_connection"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/direct_connect/direct_connect_gateway"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/direct_connect/direct_connect_gateway_route"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/direct_connect/direct_connect_virtual_interface"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ebs/volume"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ebs/volume_attach"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ecs/ecs_available_resource"
@@ -363,6 +368,13 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_organization_service_control_policies": organization_service_control_policy.DataSourceByteplusServiceControlPolicies(),
 			"byteplus_organization_accounts":                 organization_account.DataSourceByteplusOrganizationAccounts(),
 			"byteplus_organizations":                         organization.DataSourceByteplusOrganizations(),
+
+			// ================ DirectConnect ================
+			"byteplus_direct_connect_connections":        direct_connect_connection.DataSourceByteplusDirectConnectConnections(),
+			"byteplus_direct_connect_gateways":           direct_connect_gateway.DataSourceByteplusDirectConnectGateways(),
+			"byteplus_direct_connect_virtual_interfaces": direct_connect_virtual_interface.DataSourceByteplusDirectConnectVirtualInterfaces(),
+			"byteplus_direct_connect_bgp_peers":          direct_connect_bgp_peer.DataSourceByteplusDirectConnectBgpPeers(),
+			"byteplus_direct_connect_gateway_routes":     direct_connect_gateway_route.DataSourceByteplusDirectConnectGatewayRoutes(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			// ================ ECS ================
@@ -505,6 +517,13 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_organization_service_control_policy_attachment": organization_service_control_policy_attachment.ResourceByteplusServiceControlPolicyAttachment(),
 			"byteplus_organization_account":                           organization_account.ResourceByteplusOrganizationAccount(),
 			"byteplus_organization":                                   organization.ResourceByteplusOrganization(),
+
+			// ================ DirectConnect ================
+			"byteplus_direct_connect_connection":        direct_connect_connection.ResourceByteplusDirectConnectConnection(),
+			"byteplus_direct_connect_gateway":           direct_connect_gateway.ResourceByteplusDirectConnectGateway(),
+			"byteplus_direct_connect_virtual_interface": direct_connect_virtual_interface.ResourceByteplusDirectConnectVirtualInterface(),
+			"byteplus_direct_connect_bgp_peer":          direct_connect_bgp_peer.ResourceByteplusDirectConnectBgpPeer(),
+			"byteplus_direct_connect_gateway_route":     direct_connect_gateway_route.ResourceByteplusDirectConnectGatewayRoute(),
 		},
 		ConfigureFunc: ProviderConfigure,
 	}
