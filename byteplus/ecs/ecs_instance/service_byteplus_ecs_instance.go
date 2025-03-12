@@ -850,7 +850,7 @@ func (s *ByteplusEcsService) ModifyResource(resourceData *schema.ResourceData, r
 			},
 			ExecuteCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (*map[string]interface{}, error) {
 				logger.Debug(logger.RespFormat, call.Action, call.SdkParam)
-				return s.Client.UniversalClient.DoCall(getUniversalInfo(call.Action), call.SdkParam)
+				return s.Client.UniversalClient.DoCall(getEbsUniversalInfo(call.Action), call.SdkParam)
 			},
 			AfterCall: func(d *schema.ResourceData, client *bp.SdkClient, resp *map[string]interface{}, call bp.SdkCall) error {
 				return nil
