@@ -36,11 +36,11 @@ func (s *ByteplusCloudMonitorContactGroupService) ReadResources(m map[string]int
 	)
 	return bp.WithPageNumberQuery(m, "PageSize", "PageNumber", 100, 1, func(condition map[string]interface{}) ([]interface{}, error) {
 		action := "ListContactGroups"
-		//if condition != nil {
-		//	if ids, exist := condition["Ids"]; exist && len(ids.([]interface{})) != 0 {
-		//		action = "ListContactGroupByIds"
-		//	}
-		//}
+		if condition != nil {
+			if ids, exist := condition["Ids"]; exist && len(ids.([]interface{})) != 0 {
+				action = "ListContactGroupByIds"
+			}
+		}
 
 		bytes, _ := json.Marshal(condition)
 		logger.Debug(logger.ReqFormat, action, string(bytes))
@@ -81,7 +81,7 @@ func (s *ByteplusCloudMonitorContactGroupService) ReadResource(resourceData *sch
 		id = s.ReadResourceId(resourceData.Id())
 	}
 	req := map[string]interface{}{
-		//"Ids": []interface{}{id},
+		"Ids": []interface{}{id},
 	}
 	results, err = s.ReadResources(req)
 	if err != nil {
@@ -239,12 +239,12 @@ func (s *ByteplusCloudMonitorContactGroupService) RemoveResource(resourceData *s
 
 func (s *ByteplusCloudMonitorContactGroupService) DatasourceResources(*schema.ResourceData, *schema.Resource) bp.DataSourceInfo {
 	return bp.DataSourceInfo{
-		//RequestConverts: map[string]bp.RequestConvert{
-		//	"ids": {
-		//		TargetField: "Ids",
-		//		ConvertType: bp.ConvertJsonArray,
-		//	},
-		//},
+		RequestConverts: map[string]bp.RequestConvert{
+			"ids": {
+				TargetField: "Ids",
+				ConvertType: bp.ConvertJsonArray,
+			},
+		},
 		NameField:    "Name",
 		IdField:      "Id",
 		CollectField: "groups",

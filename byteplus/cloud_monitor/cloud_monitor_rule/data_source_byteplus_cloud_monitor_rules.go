@@ -186,6 +186,16 @@ func DataSourceByteplusCloudMonitorRules() *schema.Resource {
 							Computed:    true,
 							Description: "Alarm sending aggregation strategy.",
 						},
+						"notification_id": {
+							Type:        schema.TypeString,
+							Computed:    true,
+							Description: "The notification id of the cloud monitor rule.",
+						},
+						"project_name": {
+							Type:        schema.TypeString,
+							Computed:    true,
+							Description: "The project name of the cloud monitor rule.",
+						},
 						"regions": {
 							Type:     schema.TypeList,
 							Computed: true,
@@ -245,6 +255,59 @@ func DataSourceByteplusCloudMonitorRules() *schema.Resource {
 										Type:        schema.TypeString,
 										Computed:    true,
 										Description: "The period of the cloud monitor rule.",
+									},
+								},
+							},
+						},
+						"level_conditions": {
+							Type:        schema.TypeList,
+							Computed:    true,
+							Description: "The level conditions of the cloud monitor rule.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"level": {
+										Type:        schema.TypeString,
+										Computed:    true,
+										Description: "The level of the cloud monitor rule.",
+									},
+									"conditions": {
+										Type:        schema.TypeList,
+										Computed:    true,
+										Description: "The conditions of the cloud monitor rule.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+												"metric_name": {
+													Type:        schema.TypeString,
+													Computed:    true,
+													Description: "The metric name of the cloud monitor rule.",
+												},
+												"metric_unit": {
+													Type:        schema.TypeString,
+													Computed:    true,
+													Description: "The metric unit of the cloud monitor rule.",
+												},
+												"statistics": {
+													Type:        schema.TypeString,
+													Computed:    true,
+													Description: "The statistics of the cloud monitor rule.",
+												},
+												"comparison_operator": {
+													Type:        schema.TypeString,
+													Computed:    true,
+													Description: "The comparison operation of the cloud monitor rule.",
+												},
+												"threshold": {
+													Type:        schema.TypeString,
+													Computed:    true,
+													Description: "The threshold of the cloud monitor rule.",
+												},
+												"period": {
+													Type:        schema.TypeString,
+													Computed:    true,
+													Description: "The period of the cloud monitor rule.",
+												},
+											},
+										},
 									},
 								},
 							},

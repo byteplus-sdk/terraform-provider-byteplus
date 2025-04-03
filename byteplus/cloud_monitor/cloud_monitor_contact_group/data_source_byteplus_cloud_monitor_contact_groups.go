@@ -9,21 +9,21 @@ func DataSourceByteplusCloudMonitorContactGroups() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceByteplusCloudMonitorContactGroupsRead,
 		Schema: map[string]*schema.Schema{
-			//"ids": {
-			//	Type:     schema.TypeSet,
-			//	Optional: true,
-			//	Elem: &schema.Schema{
-			//		Type: schema.TypeString,
-			//	},
-			//	Set:           schema.HashString,
-			//	ConflictsWith: []string{"name"},
-			//	Description:   "A list of cloud monitor contact group ids.",
-			//},
-			"name": {
-				Type:     schema.TypeString,
+			"ids": {
+				Type:     schema.TypeSet,
 				Optional: true,
-				//ConflictsWith: []string{"ids"},
-				Description: "The keyword of the contact group names. Fuzzy match is supported.",
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
+				Set:           schema.HashString,
+				ConflictsWith: []string{"name"},
+				Description:   "A list of cloud monitor contact group ids.",
+			},
+			"name": {
+				Type:          schema.TypeString,
+				Optional:      true,
+				ConflictsWith: []string{"ids"},
+				Description:   "The keyword of the contact group names. Fuzzy match is supported.",
 			},
 			"output_file": {
 				Type:        schema.TypeString,
