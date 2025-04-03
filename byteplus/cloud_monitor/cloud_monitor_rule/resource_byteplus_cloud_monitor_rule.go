@@ -59,9 +59,10 @@ func ResourceByteplusCloudMonitorRule() *schema.Resource {
 			},
 			"level": {
 				Type:         schema.TypeString,
-				Required:     true,
+				Optional:     true,
+				ExactlyOneOf: []string{"level", "level_conditions"},
 				ValidateFunc: validation.StringInSlice([]string{"critical", "warning", "notice"}, false),
-				Description:  "The severity level of the cloud monitor rule. Valid values: `critical`, `warning`, `notice`.",
+				Description:  "The severity level of the cloud monitor rule. Valid values: `critical`, `warning`, `notice`. One of `level` and `level_conditions` must be specified.",
 			},
 			"enable_state": {
 				Type:         schema.TypeString,
@@ -106,6 +107,18 @@ func ResourceByteplusCloudMonitorRule() *schema.Resource {
 				Optional:    true,
 				Computed:    true,
 				Description: "Alarm sending aggregation strategy.\n\nrule（default）: aggregation by rule.\nresource: aggregation by rule and resource.",
+			},
+			"notification_id": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Computed:    true,
+				Description: "The notification id of the cloud monitor rule.",
+			},
+			"project_name": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Computed:    true,
+				Description: "The project name of the cloud monitor rule.",
 			},
 			"alert_methods": {
 				Type:     schema.TypeSet,
@@ -200,9 +213,10 @@ func ResourceByteplusCloudMonitorRule() *schema.Resource {
 				Description: "The region ids of the cloud monitor rule.",
 			},
 			"conditions": {
-				Type:        schema.TypeSet,
-				Required:    true,
-				Description: "The conditions that trigger the alarm.\nSpecify an array that contains a maximum of 10 metric math expressions.",
+				Type:         schema.TypeSet,
+				Optional:     true,
+				ExactlyOneOf: []string{"conditions", "level_conditions"},
+				Description:  "The conditions that trigger the alarm.\nSpecify an array that contains a maximum of 10 metric math expressions. One of `conditions` and `level_conditions` must be specified.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"metric_name": {
@@ -234,6 +248,61 @@ func ResourceByteplusCloudMonitorRule() *schema.Resource {
 							Type:        schema.TypeString,
 							Computed:    true,
 							Description: "The period of the cloud monitor rule.",
+						},
+					},
+				},
+			},
+			"level_conditions": {
+				Type:         schema.TypeSet,
+				Optional:     true,
+				ExactlyOneOf: []string{"conditions", "level_conditions"},
+				Description:  "The level conditions that trigger the alarm. One of `conditions` and `level_conditions` must be specified.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"level": {
+							Type:         schema.TypeString,
+							Required:     true,
+							ValidateFunc: validation.StringInSlice([]string{"critical", "warning", "notice"}, false),
+							Description:  "The severity level of the cloud monitor rule. Valid values: `critical`, `warning`, `notice`.",
+						},
+						"conditions": {
+							Type:        schema.TypeSet,
+							Optional:    true,
+							Description: "The conditions that trigger the alarm.\nSpecify an array that contains a maximum of 10 metric math expressions.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+									"metric_name": {
+										Type:        schema.TypeString,
+										Required:    true,
+										Description: "The metric name of the cloud monitor rule.",
+									},
+									"metric_unit": {
+										Type:        schema.TypeString,
+										Required:    true,
+										Description: "The metric unit of the cloud monitor rule.",
+									},
+									"statistics": {
+										Type:        schema.TypeString,
+										Required:    true,
+										Description: "The statistics of the cloud monitor rule. Valid values: `avg`, `max`, `min`.",
+									},
+									"comparison_operator": {
+										Type:        schema.TypeString,
+										Required:    true,
+										Description: "The comparison operation of the cloud monitor rule. Valid values: `>`, `>=`, `<`, `<=`, `!=`, `=`.",
+									},
+									"threshold": {
+										Type:        schema.TypeString,
+										Required:    true,
+										Description: "The threshold of the cloud monitor rule.",
+									},
+									"period": {
+										Type:        schema.TypeString,
+										Computed:    true,
+										Description: "The period of the cloud monitor rule.",
+									},
+								},
+							},
 						},
 					},
 				},

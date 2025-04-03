@@ -116,6 +116,15 @@ func (s *ByteplusCloudMonitorRuleService) ReadResource(resourceData *schema.Reso
 	if len(data) == 0 {
 		return data, fmt.Errorf("cloud_monitor_rule %s not exist ", id)
 	}
+
+	if _, exist := resourceData.GetOk("conditions"); exist {
+		delete(data, "LevelConditions")
+	}
+	if _, exist := resourceData.GetOk("level_conditions"); exist {
+		delete(data, "Conditions")
+		delete(data, "Level")
+	}
+
 	return data, err
 }
 
@@ -185,6 +194,38 @@ func (s *ByteplusCloudMonitorRuleService) CreateResource(resourceData *schema.Re
 				"regions": {
 					TargetField: "Regions",
 					ConvertType: bp.ConvertJsonArray,
+				},
+				"level_conditions": {
+					TargetField: "LevelConditions",
+					ConvertType: bp.ConvertJsonObjectArray,
+					NextLevelConvert: map[string]bp.RequestConvert{
+						"level": {
+							TargetField: "Level",
+							ForceGet:    true,
+						},
+						"conditions": {
+							TargetField: "Conditions",
+							ConvertType: bp.ConvertJsonObjectArray,
+							ForceGet:    true,
+							NextLevelConvert: map[string]bp.RequestConvert{
+								"metric_name": {
+									TargetField: "MetricName",
+								},
+								"metric_unit": {
+									TargetField: "MetricUnit",
+								},
+								"statistics": {
+									TargetField: "Statistics",
+								},
+								"comparison_operator": {
+									TargetField: "ComparisonOperator",
+								},
+								"threshold": {
+									TargetField: "Threshold",
+								},
+							},
+						},
+					},
 				},
 				"conditions": {
 					TargetField: "Conditions",
@@ -351,6 +392,39 @@ func (s *ByteplusCloudMonitorRuleService) ModifyResource(resourceData *schema.Re
 					ForceGet:    true,
 					ConvertType: bp.ConvertJsonArray,
 				},
+				"level_conditions": {
+					TargetField: "LevelConditions",
+					ConvertType: bp.ConvertJsonObjectArray,
+					ForceGet:    true,
+					NextLevelConvert: map[string]bp.RequestConvert{
+						"level": {
+							TargetField: "Level",
+							ForceGet:    true,
+						},
+						"conditions": {
+							TargetField: "Conditions",
+							ConvertType: bp.ConvertJsonObjectArray,
+							ForceGet:    true,
+							NextLevelConvert: map[string]bp.RequestConvert{
+								"metric_name": {
+									TargetField: "MetricName",
+								},
+								"metric_unit": {
+									TargetField: "MetricUnit",
+								},
+								"statistics": {
+									TargetField: "Statistics",
+								},
+								"comparison_operator": {
+									TargetField: "ComparisonOperator",
+								},
+								"threshold": {
+									TargetField: "Threshold",
+								},
+							},
+						},
+					},
+				},
 				"conditions": {
 					TargetField: "Conditions",
 					ForceGet:    true,
@@ -516,6 +590,15 @@ func (s *ByteplusCloudMonitorRuleService) DatasourceResources(*schema.ResourceDa
 
 func (s *ByteplusCloudMonitorRuleService) ReadResourceId(id string) string {
 	return id
+}
+
+func (s *ByteplusCloudMonitorRuleService) ProjectTrn() *bp.ProjectTrn {
+	return &bp.ProjectTrn{
+		ServiceName:          "Volc_Observe",
+		ResourceType:         "rule",
+		ProjectResponseField: "ProjectName",
+		ProjectSchemaField:   "project_name",
+	}
 }
 
 func getUniversalInfo(actionName string) bp.UniversalInfo {
