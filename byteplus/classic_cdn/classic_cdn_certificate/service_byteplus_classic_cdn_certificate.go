@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"strings"
 	"time"
 
 	bp "github.com/byteplus-sdk/terraform-provider-byteplus/common"
@@ -75,8 +76,16 @@ func (s *ByteplusCdnCertificateService) ReadResource(resourceData *schema.Resour
 	if id == "" {
 		id = s.ReadResourceId(resourceData.Id())
 	}
+	source, ok := resourceData.GetOk("source")
+	if !ok || source.(string) == "" {
+		if strings.HasPrefix(id, "cert-") {
+			source = "cert_center"
+		} else if strings.HasPrefix(id, "cert_hosting-") {
+			source = "cdn_cert_hosting"
+		}
+	}
 	req := map[string]interface{}{
-		"Source": resourceData.Get("source"),
+		"Source": source,
 	}
 	results, err = s.ReadResources(req)
 	if err != nil {
