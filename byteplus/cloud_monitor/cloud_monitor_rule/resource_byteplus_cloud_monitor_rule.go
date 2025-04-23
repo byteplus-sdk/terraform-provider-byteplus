@@ -106,7 +106,7 @@ func ResourceByteplusCloudMonitorRule() *schema.Resource {
 				Type:        schema.TypeString,
 				Optional:    true,
 				Computed:    true,
-				Description: "Alarm sending aggregation strategy.\n\nrule（default）: aggregation by rule.\nresource: aggregation by rule and resource.",
+				Description: "Alarm sending aggregation strategy.\n\nrule(default): aggregation by rule.\nresource: aggregation by rule and resource.",
 			},
 			"notification_id": {
 				Type:        schema.TypeString,

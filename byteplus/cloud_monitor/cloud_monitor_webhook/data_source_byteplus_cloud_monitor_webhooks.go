@@ -42,7 +42,7 @@ func DataSourceByteplusCloudMonitorWebhooks() *schema.Resource {
 				Type:          schema.TypeString,
 				Optional:      true,
 				ConflictsWith: []string{"ids"},
-				Description:   "Type of the webhook.\n\ncustom：Custom webhook\nwecom：WeChat webhook\nlark：Lark webhook\ndingtalk：DingTalk webhook.",
+				Description:   "Type of the webhook.\n\ncustom: Custom webhook\nwecom: WeChat webhook\nlark: Lark webhook\ndingtalk: DingTalk webhook.",
 			},
 			"url": {
 				Type:          schema.TypeString,
