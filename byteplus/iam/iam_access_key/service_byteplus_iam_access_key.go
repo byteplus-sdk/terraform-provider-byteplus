@@ -294,6 +294,7 @@ func getUniversalInfo(actionName string) bp.UniversalInfo {
 		Version:     "2018-01-01",
 		HttpMethod:  bp.GET,
 		ContentType: bp.Default,
+		RegionType:  bp.Global,
 	}
 }
 

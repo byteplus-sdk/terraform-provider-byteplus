@@ -67,8 +67,9 @@ func (p *Project) ModifyProject(trn *ProjectTrn, resourceData *schema.ResourceDa
 						// tos bucket 特殊处理
 						trnStr = fmt.Sprintf("trn:%s:%s:%d:%s", trn.ServiceName, p.Client.Region, int(accountId.(float64)), id)
 					} else if (trn.ServiceName == "transitrouter" && trn.ResourceType == "transitrouterbandwidthpackage") ||
-						(trn.ServiceName == "CDN" && (trn.ResourceType == "template" || trn.ResourceType == "function" || trn.ResourceType == "kv_namespace")) {
-						// transit router bandwidth package & cdn 特殊处理
+						(trn.ServiceName == "CDN" && (trn.ResourceType == "template" || trn.ResourceType == "function" || trn.ResourceType == "kv_namespace")) ||
+						(trn.ServiceName == "Volc_Observe" && trn.ResourceType == "rule") {
+						// transit router bandwidth package & cdn & cloud monitor 特殊处理
 						trnStr = fmt.Sprintf("trn:%s:%s:%d:%s/%s", trn.ServiceName, "", int(accountId.(float64)),
 							trn.ResourceType, id)
 					} else {
@@ -168,8 +169,10 @@ func (p *Project) ModifyProjectOld(trn ProjectTrn, resourceData *schema.Resource
 func (p *Project) getUniversalInfo(actionName string) UniversalInfo {
 	return UniversalInfo{
 		ServiceName: "iam",
+		Action:      actionName,
 		Version:     "2021-08-01",
 		HttpMethod:  GET,
-		Action:      actionName,
+		ContentType: Default,
+		RegionType:  Global,
 	}
 }
