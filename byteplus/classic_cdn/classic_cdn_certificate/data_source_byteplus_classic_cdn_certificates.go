@@ -14,7 +14,7 @@ func DataSourceByteplusCdnCertificates() *schema.Resource {
 				Required: true,
 				Description: "Specify the location for storing the certificate. " +
 					"The parameter can take the following values: " +
-					"`volc_cert_center`: indicates that the certificate will be stored in the certificate center." +
+					"`cert_center`: indicates that the certificate will be stored in the certificate center." +
 					"`cdn_cert_hosting`: indicates that the certificate will be hosted on the content delivery network.",
 			},
 			"name": {
@@ -55,7 +55,7 @@ func DataSourceByteplusCdnCertificates() *schema.Resource {
 							Computed: true,
 							Description: "Specify the location for storing the certificate. " +
 								"The parameter can take the following values: " +
-								"`volc_cert_center`: indicates that the certificate will be stored in the certificate center." +
+								"`cert_center`: indicates that the certificate will be stored in the certificate center." +
 								"`cdn_cert_hosting`: indicates that the certificate will be hosted on the content delivery network.",
 						},
 						"cert_id": {

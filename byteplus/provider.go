@@ -3,6 +3,8 @@ package byteplus
 import (
 	"context"
 	"fmt"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cloud_monitor/cloud_monitor_object_group"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cloud_monitor/cloud_monitor_webhook"
 	"net/http"
 	"net/url"
 	"os"
@@ -63,6 +65,9 @@ import (
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/clb/server_group"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/clb/server_group_server"
 	clbZone "github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/clb/zone"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cloud_monitor/cloud_monitor_contact"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cloud_monitor/cloud_monitor_contact_group"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cloud_monitor/cloud_monitor_rule"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/direct_connect/direct_connect_bgp_peer"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/direct_connect/direct_connect_connection"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/direct_connect/direct_connect_gateway"
@@ -375,6 +380,13 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_direct_connect_virtual_interfaces": direct_connect_virtual_interface.DataSourceByteplusDirectConnectVirtualInterfaces(),
 			"byteplus_direct_connect_bgp_peers":          direct_connect_bgp_peer.DataSourceByteplusDirectConnectBgpPeers(),
 			"byteplus_direct_connect_gateway_routes":     direct_connect_gateway_route.DataSourceByteplusDirectConnectGatewayRoutes(),
+
+			// ============= Cloud Monitor =============
+			"byteplus_cloud_monitor_contacts":       cloud_monitor_contact.DataSourceByteplusCloudMonitorContacts(),
+			"byteplus_cloud_monitor_contact_groups": cloud_monitor_contact_group.DataSourceByteplusCloudMonitorContactGroups(),
+			"byteplus_cloud_monitor_rules":          cloud_monitor_rule.DataSourceByteplusCloudMonitorRules(),
+			"byteplus_cloud_monitor_object_groups":  cloud_monitor_object_group.DataSourceByteplusCloudMonitorObjectGroups(),
+			"byteplus_cloud_monitor_webhooks":       cloud_monitor_webhook.DataSourceByteplusCloudMonitorWebhooks(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			// ================ ECS ================
@@ -524,6 +536,13 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_direct_connect_virtual_interface": direct_connect_virtual_interface.ResourceByteplusDirectConnectVirtualInterface(),
 			"byteplus_direct_connect_bgp_peer":          direct_connect_bgp_peer.ResourceByteplusDirectConnectBgpPeer(),
 			"byteplus_direct_connect_gateway_route":     direct_connect_gateway_route.ResourceByteplusDirectConnectGatewayRoute(),
+
+			// ============= Cloud Monitor =============
+			"byteplus_cloud_monitor_contact":       cloud_monitor_contact.ResourceByteplusCloudMonitorContact(),
+			"byteplus_cloud_monitor_contact_group": cloud_monitor_contact_group.ResourceByteplusCloudMonitorContactGroup(),
+			"byteplus_cloud_monitor_rule":          cloud_monitor_rule.ResourceByteplusCloudMonitorRule(),
+			"byteplus_cloud_monitor_object_group":  cloud_monitor_object_group.ResourceByteplusCloudMonitorObjectGroup(),
+			"byteplus_cloud_monitor_webhook":       cloud_monitor_webhook.ResourceByteplusCloudMonitorWebhook(),
 		},
 		ConfigureFunc: ProviderConfigure,
 	}

@@ -85,6 +85,11 @@ func (d *Dispatcher) Read(resourceService ResourceService, resourceDate *schema.
 	})
 
 	if err != nil {
+		//if ResourceNotFoundError(callErr) && !resourceDate.IsNewResource() {
+		//	log.Printf("[WARN] Resource %s not found, removing from state", resourceDate.Id())
+		//	resourceDate.SetId("")
+		//	return nil
+		//}
 		return err
 	}
 	handlers := resourceService.WithResourceResponseHandlers(instance)

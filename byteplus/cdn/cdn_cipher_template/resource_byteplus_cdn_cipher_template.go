@@ -69,6 +69,7 @@ func ResourceByteplusCdnCipherTemplate() *schema.Resource {
 							Type:          schema.TypeList,
 							MaxItems:      1,
 							Optional:      true,
+							Computed:      true,
 							ConflictsWith: []string{"http_forced_redirect"},
 							Description:   "Indicates the configuration for the mandatory redirection from HTTP to HTTPS. This feature is disabled by default.",
 							Elem: &schema.Resource{
@@ -173,6 +174,7 @@ func ResourceByteplusCdnCipherTemplate() *schema.Resource {
 			"http_forced_redirect": {
 				Type:          schema.TypeList,
 				Optional:      true,
+				Computed:      true,
 				MaxItems:      1,
 				ConflictsWith: []string{"https.0.forced_redirect"},
 				Description:   "Indicates the configuration module for the forced redirection from HTTPS to HTTP. This feature is disabled by default.",

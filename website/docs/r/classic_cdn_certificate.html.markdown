@@ -22,7 +22,7 @@ The following arguments are supported:
 * `certificate` - (Required, ForceNew) Content of the specified certificate public key file. Line breaks in the content should be replaced with `\r\n`. The file extension for the certificate public key is `.crt` or `.pem`. The public key must include the complete certificate chain. When importing resources, this attribute will not be imported. If this attribute is set, please use lifecycle and ignore_changes ignore changes in fields.
 * `desc` - (Required, ForceNew) Note on the certificate.
 * `private_key` - (Required, ForceNew) The content of the specified certificate private key file. Replace line breaks in the content with `\r\n`. The file extension for the certificate private key is `.key` or `.pem`. The private key must be unencrypted. When importing resources, this attribute will not be imported. If this attribute is set, please use lifecycle and ignore_changes ignore changes in fields.
-* `source` - (Required, ForceNew) Specify the location for storing the certificate. The parameter can take the following values: `volc_cert_center`: indicates that the certificate will be stored in the certificate center.`cdn_cert_hosting`: indicates that the certificate will be hosted on the content delivery network.
+* `source` - (Required, ForceNew) Specify the location for storing the certificate. The parameter can take the following values: `cert_center`: indicates that the certificate will be stored in the certificate center.`cdn_cert_hosting`: indicates that the certificate will be hosted on the content delivery network.
 
 ## Attributes Reference
 In addition to all arguments above, the following attributes are exported:
