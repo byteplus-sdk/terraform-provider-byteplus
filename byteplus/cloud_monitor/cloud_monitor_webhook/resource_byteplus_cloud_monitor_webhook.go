@@ -41,7 +41,7 @@ func ResourceByteplusCloudMonitorWebhook() *schema.Resource {
 			"type": {
 				Type:        schema.TypeString,
 				Required:    true,
-				Description: "Type of the webhook.\n\ncustom：custom webhook\nwecom：WeChat webhook\nlark：Lark webhook\ndingtalk：DingTalk webhook.",
+				Description: "Type of the webhook.\n\ncustom: custom webhook\nwecom: WeChat webhook\nlark: Lark webhook\ndingtalk: DingTalk webhook.",
 			},
 			"url": {
 				Type:        schema.TypeString,
