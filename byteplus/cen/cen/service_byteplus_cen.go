@@ -306,6 +306,7 @@ func getUniversalInfo(actionName string) bp.UniversalInfo {
 		Version:     "2020-04-01",
 		HttpMethod:  bp.GET,
 		ContentType: bp.Default,
+		RegionType:  bp.Global,
 	}
 }
 
@@ -362,5 +363,6 @@ func (s *ByteplusCenService) getIAMUniversalInfo(actionName string) bp.Universal
 		Version:     "2021-08-01",
 		HttpMethod:  bp.GET,
 		Action:      actionName,
+		RegionType:  bp.Global,
 	}
 }
