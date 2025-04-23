@@ -19,22 +19,23 @@ Use the navigation on the left to read about the available resources.
 ```hcl
 # Configure the Byteplus Provider
 provider "byteplus" {
-  access_key = "your ak"
-  secret_key = "your sk"
+  access_key    = "your ak"
+  secret_key    = "your sk"
   session_token = "sts token"
-  region = "cn-beijing"
+  region        = "ap-southeast-1"
+  endpoint      = "open.ap-southeast-1.byteplusapi.com"
 }
 
 # Query Vpc
-data "byteplus_vpcs" "default"{
-  ids = ["vpc-mizl7m1kqccg5smt1bdpijuj"]
+data "byteplus_vpcs" "default" {
+  ids = ["vpc-mizl7m1kqccg5smt1bdp****"]
 }
 
 #Create vpc
 resource "byteplus_vpc" "foo" {
-  vpc_name = "tf-test-1"
-  cidr_block = "172.16.0.0/16"
-  dns_servers = ["8.8.8.8","114.114.114.114"]
+  vpc_name    = "tf-test-vpc"
+  cidr_block  = "172.16.0.0/16"
+  dns_servers = ["8.8.8.8", "114.114.114.114"]
 }
 
 ```
@@ -59,7 +60,7 @@ Usage:
 provider "byteplus" {
    access_key = "your ak"
    secret_key = "your sk"
-   region = "cn-beijing"
+   region     = "ap-southeast-1"
 }
 ```
 
@@ -80,7 +81,7 @@ Usage:
 ```hcl
 $ export BYTEPLUS_ACCESS_KEY="your_public_key"
 $ export BYTEPLUS_SECRET_KEY="your_private_key"
-$ export BYTEPLUS_REGION="cn-beijing"
+$ export BYTEPLUS_REGION="ap-southeast-1"
 $ terraform plan
 ```
 

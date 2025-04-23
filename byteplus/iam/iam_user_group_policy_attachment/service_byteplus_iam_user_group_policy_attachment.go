@@ -174,5 +174,6 @@ func getUniversalInfo(actionName string) bp.UniversalInfo {
 		HttpMethod:  bp.GET,
 		ContentType: bp.Default,
 		Action:      actionName,
+		RegionType:  bp.Global,
 	}
 }

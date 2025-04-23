@@ -44,3 +44,10 @@ const (
 	UrlParam
 	FilePathParam
 )
+
+const (
+	RegionalService = "Regional"
+	GlobalService   = "Global"
+
+	ByteplusIpv4EndpointSuffix = "byteplusapi.com"
+)

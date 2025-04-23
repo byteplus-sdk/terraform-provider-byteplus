@@ -169,8 +169,10 @@ func (p *Project) ModifyProjectOld(trn ProjectTrn, resourceData *schema.Resource
 func (p *Project) getUniversalInfo(actionName string) UniversalInfo {
 	return UniversalInfo{
 		ServiceName: "iam",
+		Action:      actionName,
 		Version:     "2021-08-01",
 		HttpMethod:  GET,
-		Action:      actionName,
+		ContentType: Default,
+		RegionType:  Global,
 	}
 }
