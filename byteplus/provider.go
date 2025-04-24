@@ -128,6 +128,20 @@ import (
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/privatelink/vpc_endpoint_service"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/privatelink/vpc_endpoint_service_permission"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/privatelink/vpc_endpoint_zone"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/rds_mysql/allowlist"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/rds_mysql/allowlist_associate"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/rds_mysql/rds_mysql_account"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/rds_mysql/rds_mysql_backup"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/rds_mysql/rds_mysql_backup_policy"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/rds_mysql/rds_mysql_database"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/rds_mysql/rds_mysql_endpoint"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/rds_mysql/rds_mysql_endpoint_public_address"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/rds_mysql/rds_mysql_instance"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/rds_mysql/rds_mysql_instance_readonly_node"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/rds_mysql/rds_mysql_instance_spec"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/rds_mysql/rds_mysql_parameter_template"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/rds_mysql/rds_mysql_region"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/rds_mysql/rds_mysql_zone"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/rds_postgresql/rds_postgresql_account"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/rds_postgresql/rds_postgresql_database"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/rds_postgresql/rds_postgresql_instance"
@@ -418,6 +432,18 @@ func Provider() terraform.ResourceProvider {
 
 			// ================ ESCloud V2 ================
 			"byteplus_escloud_instances_v2": escloud_instance_v2.DataSourceByteplusEscloudInstanceV2s(),
+
+			// ================ RdsMysql ================
+			"byteplus_rds_mysql_instances":           rds_mysql_instance.DataSourceByteplusRdsMysqlInstances(),
+			"byteplus_rds_mysql_accounts":            rds_mysql_account.DataSourceByteplusRdsMysqlAccounts(),
+			"byteplus_rds_mysql_databases":           rds_mysql_database.DataSourceByteplusRdsMysqlDatabases(),
+			"byteplus_rds_mysql_allowlists":          allowlist.DataSourceByteplusRdsMysqlAllowLists(),
+			"byteplus_rds_mysql_regions":             rds_mysql_region.DataSourceByteplusRdsMysqlRegions(),
+			"byteplus_rds_mysql_zones":               rds_mysql_zone.DataSourceByteplusRdsMysqlZones(),
+			"byteplus_rds_mysql_instance_specs":      rds_mysql_instance_spec.DataSourceByteplusRdsMysqlInstanceSpecs(),
+			"byteplus_rds_mysql_endpoints":           rds_mysql_endpoint.DataSourceByteplusRdsMysqlEndpoints(),
+			"byteplus_rds_mysql_backups":             rds_mysql_backup.DataSourceByteplusRdsMysqlBackups(),
+			"byteplus_rds_mysql_parameter_templates": rds_mysql_parameter_template.DataSourceByteplusRdsMysqlParameterTemplates(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			// ================ ECS ================
@@ -591,6 +617,19 @@ func Provider() terraform.ResourceProvider {
 			// ================ ESCloud V2 ================
 			"byteplus_escloud_instance_v2":   escloud_instance_v2.ResourceByteplusEscloudInstanceV2(),
 			"byteplus_escloud_ip_white_list": escloud_ip_white_list.ResourceByteplusEscloudIpWhiteList(),
+
+			// ================ RdsMysql ================
+			"byteplus_rds_mysql_instance":                rds_mysql_instance.ResourceByteplusRdsMysqlInstance(),
+			"byteplus_rds_mysql_instance_readonly_node":  rds_mysql_instance_readonly_node.ResourceByteplusRdsMysqlInstanceReadonlyNode(),
+			"byteplus_rds_mysql_account":                 rds_mysql_account.ResourceByteplusRdsMysqlAccount(),
+			"byteplus_rds_mysql_database":                rds_mysql_database.ResourceByteplusRdsMysqlDatabase(),
+			"byteplus_rds_mysql_allowlist":               allowlist.ResourceByteplusRdsMysqlAllowlist(),
+			"byteplus_rds_mysql_allowlist_associate":     allowlist_associate.ResourceByteplusRdsMysqlAllowlistAssociate(),
+			"byteplus_rds_mysql_endpoint":                rds_mysql_endpoint.ResourceByteplusRdsMysqlEndpoint(),
+			"byteplus_rds_mysql_endpoint_public_address": rds_mysql_endpoint_public_address.ResourceByteplusRdsMysqlEndpointPublicAddress(),
+			"byteplus_rds_mysql_backup":                  rds_mysql_backup.ResourceByteplusRdsMysqlBackup(),
+			"byteplus_rds_mysql_parameter_template":      rds_mysql_parameter_template.ResourceByteplusRdsMysqlParameterTemplate(),
+			"byteplus_rds_mysql_backup_policy":           rds_mysql_backup_policy.ResourceByteplusRdsMysqlBackupPolicy(),
 		},
 		ConfigureFunc: ProviderConfigure,
 	}
