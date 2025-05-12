@@ -3,8 +3,6 @@ package byteplus
 import (
 	"context"
 	"fmt"
-	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cloud_monitor/cloud_monitor_object_group"
-	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cloud_monitor/cloud_monitor_webhook"
 	"net/http"
 	"net/url"
 	"os"
@@ -21,6 +19,18 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/alb/alb"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/alb/alb_acl"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/alb/alb_ca_certificate"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/alb/alb_certificate"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/alb/alb_customized_cfg"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/alb/alb_health_check_template"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/alb/alb_listener"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/alb/alb_listener_domain_extension"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/alb/alb_rule"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/alb/alb_server_group"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/alb/alb_server_group_server"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/alb/alb_zone"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/autoscaling/scaling_activity"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/autoscaling/scaling_configuration"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/autoscaling/scaling_configuration_attachment"
@@ -67,7 +77,9 @@ import (
 	clbZone "github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/clb/zone"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cloud_monitor/cloud_monitor_contact"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cloud_monitor/cloud_monitor_contact_group"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cloud_monitor/cloud_monitor_object_group"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cloud_monitor/cloud_monitor_rule"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cloud_monitor/cloud_monitor_webhook"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/direct_connect/direct_connect_bgp_peer"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/direct_connect/direct_connect_connection"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/direct_connect/direct_connect_gateway"
@@ -387,6 +399,20 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_cloud_monitor_rules":          cloud_monitor_rule.DataSourceByteplusCloudMonitorRules(),
 			"byteplus_cloud_monitor_object_groups":  cloud_monitor_object_group.DataSourceByteplusCloudMonitorObjectGroups(),
 			"byteplus_cloud_monitor_webhooks":       cloud_monitor_webhook.DataSourceByteplusCloudMonitorWebhooks(),
+
+			// ================ ALB ================
+			"byteplus_alb_zones":                      alb_zone.DataSourceByteplusAlbZones(),
+			"byteplus_alb_acls":                       alb_acl.DataSourceByteplusAlbAcls(),
+			"byteplus_alb_listeners":                  alb_listener.DataSourceByteplusListeners(),
+			"byteplus_alb_customized_cfgs":            alb_customized_cfg.DataSourceByteplusAlbCustomizedCfgs(),
+			"byteplus_alb_health_check_templates":     alb_health_check_template.DataSourceByteplusAlbHealthCheckTemplates(),
+			"byteplus_alb_listener_domain_extensions": alb_listener_domain_extension.DataSourceByteplusListenerDomainExtensions(),
+			"byteplus_alb_server_group_servers":       alb_server_group_server.DataSourceByteplusAlbServerGroupServers(),
+			"byteplus_alb_certificates":               alb_certificate.DataSourceByteplusAlbCertificates(),
+			"byteplus_alb_rules":                      alb_rule.DataSourceByteplusAlbRules(),
+			"byteplus_alb_ca_certificates":            alb_ca_certificate.DataSourceByteplusAlbCaCertificates(),
+			"byteplus_albs":                           alb.DataSourceByteplusAlbs(),
+			"byteplus_alb_server_groups":              alb_server_group.DataSourceByteplusAlbServerGroups(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			// ================ ECS ================
@@ -543,6 +569,19 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_cloud_monitor_rule":          cloud_monitor_rule.ResourceByteplusCloudMonitorRule(),
 			"byteplus_cloud_monitor_object_group":  cloud_monitor_object_group.ResourceByteplusCloudMonitorObjectGroup(),
 			"byteplus_cloud_monitor_webhook":       cloud_monitor_webhook.ResourceByteplusCloudMonitorWebhook(),
+
+			// ================ ALB ================
+			"byteplus_alb_acl":                       alb_acl.ResourceByteplusAlbAcl(),
+			"byteplus_alb_listener":                  alb_listener.ResourceByteplusAlbListener(),
+			"byteplus_alb_customized_cfg":            alb_customized_cfg.ResourceByteplusAlbCustomizedCfg(),
+			"byteplus_alb_health_check_template":     alb_health_check_template.ResourceByteplusAlbHealthCheckTemplate(),
+			"byteplus_alb_listener_domain_extension": alb_listener_domain_extension.ResourceByteplusAlbListenerDomainExtension(),
+			"byteplus_alb_server_group_server":       alb_server_group_server.ResourceByteplusAlbServerGroupServer(),
+			"byteplus_alb_certificate":               alb_certificate.ResourceByteplusAlbCertificate(),
+			"byteplus_alb_rule":                      alb_rule.ResourceByteplusAlbRule(),
+			"byteplus_alb_ca_certificate":            alb_ca_certificate.ResourceByteplusAlbCaCertificate(),
+			"byteplus_alb":                           alb.ResourceByteplusAlb(),
+			"byteplus_alb_server_group":              alb_server_group.ResourceByteplusAlbServerGroup(),
 		},
 		ConfigureFunc: ProviderConfigure,
 	}
