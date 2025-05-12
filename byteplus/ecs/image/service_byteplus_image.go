@@ -125,6 +125,10 @@ func (s *ByteplusImageService) DatasourceResources(data *schema.ResourceData, re
 				TargetField: "ImageIds",
 				ConvertType: bp.ConvertWithN,
 			},
+			"status": {
+				TargetField: "Status",
+				ConvertType: bp.ConvertWithN,
+			},
 		},
 		NameField:    "ImageName",
 		IdField:      "ImageId",
