@@ -140,6 +140,7 @@ var resourceKeys = map[string]string{
 	"privatelink":       "PRIVATELINK",
 	"organization":      "ORGANIZATION",
 	"cloud_monitor":     "CLOUD_MONITOR",
+	"alb":               "ALB",
 }
 
 type Products struct {
