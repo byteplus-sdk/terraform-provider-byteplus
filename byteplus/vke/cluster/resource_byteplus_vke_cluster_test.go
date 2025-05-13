@@ -41,7 +41,7 @@ resource "byteplus_vke_cluster" "foo" {
                 bandwidth = 1
             }
         }
-        resource_public_access_default_enabled = false
+        resource_public_access_default_enabled = true
     }
     pods_config {
         pod_network_mode = "VpcCniShared"
@@ -61,9 +61,6 @@ resource "byteplus_vke_cluster" "foo" {
 `
 
 const testAccByteplusVkeClusterUpdateConfig = `
-data "byteplus_zones" "foo"{
-}
-
 resource "byteplus_vpc" "foo" {
     vpc_name = "acc-test-project1"
     cidr_block = "172.16.0.0/16"
@@ -72,7 +69,7 @@ resource "byteplus_vpc" "foo" {
 resource "byteplus_subnet" "foo" {
     subnet_name = "acc-subnet-test-2"
     cidr_block = "172.16.0.0/24"
-    zone_id = data.byteplus_zones.foo.zones[0].id
+    zone_id = "cn-beijing-a"
     vpc_id = byteplus_vpc.foo.id
 }
 
@@ -94,7 +91,7 @@ resource "byteplus_vke_cluster" "foo" {
                 bandwidth = 2
             }
         }
-        resource_public_access_default_enabled = false
+        resource_public_access_default_enabled = true
     }
     pods_config {
         pod_network_mode = "VpcCniShared"

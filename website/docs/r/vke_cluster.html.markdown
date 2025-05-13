@@ -10,14 +10,17 @@ description: |-
 Provides a resource to manage vke cluster
 ## Example Usage
 ```hcl
+// query available zones in current region
 data "byteplus_zones" "foo" {
 }
 
+// create vpc
 resource "byteplus_vpc" "foo" {
   vpc_name   = "acc-test-vpc"
   cidr_block = "172.16.0.0/16"
 }
 
+// create subnet
 resource "byteplus_subnet" "foo" {
   subnet_name = "acc-test-subnet"
   cidr_block  = "172.16.0.0/24"
@@ -25,14 +28,17 @@ resource "byteplus_subnet" "foo" {
   vpc_id      = byteplus_vpc.foo.id
 }
 
+// create security group
 resource "byteplus_security_group" "foo" {
   security_group_name = "acc-test-security-group"
   vpc_id              = byteplus_vpc.foo.id
 }
 
+// create vke cluster
 resource "byteplus_vke_cluster" "foo" {
   name                      = "acc-test-1"
   description               = "created by terraform"
+  project_name              = "default"
   delete_protection_enabled = false
   cluster_config {
     subnet_ids                       = [byteplus_subnet.foo.id]
@@ -43,7 +49,7 @@ resource "byteplus_vke_cluster" "foo" {
         bandwidth    = 1
       }
     }
-    resource_public_access_default_enabled = false
+    resource_public_access_default_enabled = true
   }
   pods_config {
     pod_network_mode = "VpcCniShared"
@@ -59,6 +65,106 @@ resource "byteplus_vke_cluster" "foo" {
     value = "tf-v1"
   }
 }
+
+// query the image_id which match the specified image_name
+data "byteplus_images" "foo" {
+  name_regex = "veLinux 1.0 CentOS Compatible 64 bit"
+}
+
+// create vke node pool
+resource "byteplus_vke_node_pool" "foo" {
+  cluster_id = byteplus_vke_cluster.foo.id
+  name       = "acc-test-node-pool"
+  auto_scaling {
+    enabled          = true
+    min_replicas     = 0
+    max_replicas     = 5
+    desired_replicas = 0
+    priority         = 5
+    subnet_policy    = "ZoneBalance"
+  }
+  node_config {
+    instance_type_ids = ["ecs.g1ie.xlarge"]
+    subnet_ids        = [byteplus_subnet.foo.id]
+    image_id          = [for image in data.byteplus_images.foo.images : image.image_id if image.image_name == "veLinux 1.0 CentOS Compatible 64 bit"][0]
+    system_volume {
+      type = "ESSD_PL0"
+      size = 80
+    }
+    data_volumes {
+      type        = "ESSD_PL0"
+      size        = 80
+      mount_point = "/tf1"
+    }
+    data_volumes {
+      type        = "ESSD_PL0"
+      size        = 60
+      mount_point = "/tf2"
+    }
+    initialize_script = "ZWNobyBoZWxsbyB0ZXJyYWZvcm0h"
+    security {
+      login {
+        password = "UHdkMTIzNDU2"
+      }
+      security_strategies = ["Hids"]
+      security_group_ids  = [byteplus_security_group.foo.id]
+    }
+    additional_container_storage_enabled = false
+    instance_charge_type                 = "PostPaid"
+    name_prefix                          = "acc-test"
+    project_name                         = "default"
+    ecs_tags {
+      key   = "ecs_k1"
+      value = "ecs_v1"
+    }
+  }
+  kubernetes_config {
+    labels {
+      key   = "label1"
+      value = "value1"
+    }
+    taints {
+      key    = "taint-key/node-type"
+      value  = "taint-value"
+      effect = "NoSchedule"
+    }
+    cordon             = true
+    auto_sync_disabled = false
+  }
+  tags {
+    key   = "node-pool-k1"
+    value = "node-pool-v1"
+  }
+}
+
+// create ecs instance
+resource "byteplus_ecs_instance" "foo" {
+  instance_name        = "acc-test-ecs"
+  host_name            = "tf-acc-test"
+  image_id             = [for image in data.byteplus_images.foo.images : image.image_id if image.image_name == "veLinux 1.0 CentOS Compatible 64 bit"][0]
+  instance_type        = "ecs.g1ie.xlarge"
+  password             = "93f0cb0614Aab12"
+  instance_charge_type = "PostPaid"
+  system_volume_type   = "ESSD_PL0"
+  system_volume_size   = 50
+  subnet_id            = byteplus_subnet.foo.id
+  security_group_ids   = [byteplus_security_group.foo.id]
+  project_name         = "default"
+  tags {
+    key   = "k1"
+    value = "v1"
+  }
+  lifecycle {
+    ignore_changes = [security_group_ids, tags, instance_name]
+  }
+}
+
+// add the ecs instance to the vke node pool
+resource "byteplus_vke_node" "foo" {
+  cluster_id   = byteplus_vke_cluster.foo.id
+  instance_id  = byteplus_ecs_instance.foo.id
+  node_pool_id = byteplus_vke_node_pool.foo.id
+}
 ```
 ## Argument Reference
 The following arguments are supported:
@@ -71,6 +177,7 @@ The following arguments are supported:
 * `description` - (Optional) The description of the cluster.
 * `kubernetes_version` - (Optional, ForceNew) The version of Kubernetes specified when creating a VKE cluster (specified to patch version), with an example value of `1.24`. If not specified, the latest Kubernetes version supported by VKE is used by default, which is a 3-segment version format starting with a lowercase v, that is, KubernetesVersion with IsLatestVersion=True in the return value of ListSupportedVersions.
 * `logging_config` - (Optional) Cluster log configuration information.
+* `project_name` - (Optional) The project name of the cluster.
 * `tags` - (Optional) Tags.
 
 The `api_server_public_access_config` object supports the following:
@@ -80,7 +187,7 @@ The `api_server_public_access_config` object supports the following:
 The `cluster_config` object supports the following:
 
 * `subnet_ids` - (Required) The subnet ID for the cluster control plane to communicate within the private network.
-Up to 3 subnets can be selected from each available zone, and a maximum of 2 subnets can be added to each available zone
+Up to 3 subnets can be selected from each available zone, and a maximum of 2 subnets can be added to each available zone.
 Cannot support deleting configured subnets.
 * `api_server_public_access_config` - (Optional) Cluster API Server public network access configuration.
 * `api_server_public_access_enabled` - (Optional) Cluster API Server public network access configuration, the value is `true` or `false`.

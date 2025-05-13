@@ -41,7 +41,7 @@ resource "byteplus_vke_cluster" "foo" {
                 bandwidth = 1
             }
         }
-        resource_public_access_default_enabled = false
+        resource_public_access_default_enabled = true
     }
     pods_config {
         pod_network_mode = "VpcCniShared"

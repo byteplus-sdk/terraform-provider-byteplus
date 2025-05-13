@@ -625,6 +625,9 @@ func (s *ByteplusVkeClusterService) DatasourceResources(*schema.ResourceData, *s
 			"update_client_token": {
 				TargetField: "Filter.UpdateClientToken",
 			},
+			"project_name": {
+				TargetField: "ProjectName",
+			},
 			"tags": {
 				TargetField: "Tags",
 				ConvertType: bp.ConvertJsonObjectArray,
@@ -717,6 +720,15 @@ func (s *ByteplusVkeClusterService) setResourceTags(resourceData *schema.Resourc
 	callbacks = append(callbacks, addCallback)
 
 	return callbacks
+}
+
+func (s *ByteplusVkeClusterService) ProjectTrn() *bp.ProjectTrn {
+	return &bp.ProjectTrn{
+		ServiceName:          "vke",
+		ResourceType:         "cluster",
+		ProjectResponseField: "ProjectName",
+		ProjectSchemaField:   "project_name",
+	}
 }
 
 func getUniversalInfo(actionName string) bp.UniversalInfo {
