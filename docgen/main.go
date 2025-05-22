@@ -141,6 +141,7 @@ var resourceKeys = map[string]string{
 	"organization":      "ORGANIZATION",
 	"cloud_monitor":     "CLOUD_MONITOR",
 	"alb":               "ALB",
+	"escloud_v2":        "ESCLOUD",
 }
 
 type Products struct {

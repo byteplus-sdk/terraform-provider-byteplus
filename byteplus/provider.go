@@ -101,6 +101,8 @@ import (
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/ecs/zone"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/eip/eip_address"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/eip/eip_associate"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/escloud_v2/escloud_instance_v2"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/escloud_v2/escloud_ip_white_list"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/iam/iam_access_key"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/iam/iam_login_profile"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/iam/iam_policy"
@@ -413,6 +415,9 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_alb_ca_certificates":            alb_ca_certificate.DataSourceByteplusAlbCaCertificates(),
 			"byteplus_albs":                           alb.DataSourceByteplusAlbs(),
 			"byteplus_alb_server_groups":              alb_server_group.DataSourceByteplusAlbServerGroups(),
+
+			// ================ ESCloud V2 ================
+			"byteplus_escloud_instances_v2": escloud_instance_v2.DataSourceByteplusEscloudInstanceV2s(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			// ================ ECS ================
@@ -582,6 +587,10 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_alb_ca_certificate":            alb_ca_certificate.ResourceByteplusAlbCaCertificate(),
 			"byteplus_alb":                           alb.ResourceByteplusAlb(),
 			"byteplus_alb_server_group":              alb_server_group.ResourceByteplusAlbServerGroup(),
+
+			// ================ ESCloud V2 ================
+			"byteplus_escloud_instance_v2":   escloud_instance_v2.ResourceByteplusEscloudInstanceV2(),
+			"byteplus_escloud_ip_white_list": escloud_ip_white_list.ResourceByteplusEscloudIpWhiteList(),
 		},
 		ConfigureFunc: ProviderConfigure,
 	}
