@@ -191,6 +191,11 @@ func (s *ByteplusVpcService) ModifyResource(resourceData *schema.ResourceData, r
 			},
 			BeforeCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (bool, error) {
 				(*call.SdkParam)["VpcId"] = d.Id()
+				if d.HasChange("dns_servers") {
+					if _, exist := d.GetOk("dns_servers"); !exist {
+						(*call.SdkParam)["DnsServers.1"] = ""
+					}
+				}
 				delete(*call.SdkParam, "Tags")
 				return true, nil
 			},
