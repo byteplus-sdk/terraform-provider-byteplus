@@ -2,6 +2,7 @@ package common
 
 import (
 	"fmt"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/logger"
 	"sort"
 	"strconv"
 	"strings"
@@ -308,6 +309,7 @@ func CallProcess(calls []SdkCall, d *schema.ResourceData, client *SdkClient, ser
 					if fn.LockId != nil {
 						key := fn.LockId(d)
 						if key != "" {
+							logger.Debug("lock key: %s, lock action: %s", key, fn.Action)
 							TryLock(key)
 						}
 					}

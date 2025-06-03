@@ -43,6 +43,10 @@ func init() {
 			Limiter:   rate.NewLimiter(4, 10),
 			Semaphore: semaphore.NewWeighted(10),
 		},
+		"Volc_Observe.ListRulesByIds.2022-01-01": {
+			Limiter:   rate.NewLimiter(4, 10),
+			Semaphore: semaphore.NewWeighted(10),
+		},
 	}
 }
 
