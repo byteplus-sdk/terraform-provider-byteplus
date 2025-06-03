@@ -149,6 +149,12 @@ func (s *ByteplusRouteTableService) CreateResource(resourceData *schema.Resource
 		Call: bp.SdkCall{
 			Action:      "CreateRouteTable",
 			ConvertMode: bp.RequestConvertAll,
+			Convert: map[string]bp.RequestConvert{
+				"tags": {
+					TargetField: "Tags",
+					ConvertType: bp.ConvertListN,
+				},
+			},
 			ExecuteCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (*map[string]interface{}, error) {
 				logger.Debug(logger.ReqFormat, call.Action, call.SdkParam)
 				return s.Client.UniversalClient.DoCall(getUniversalInfo(call.Action), call.SdkParam)
@@ -178,12 +184,15 @@ func (s *ByteplusRouteTableService) CreateResource(resourceData *schema.Resource
 }
 
 func (s *ByteplusRouteTableService) ModifyResource(resourceData *schema.ResourceData, resource *schema.Resource) []bp.Callback {
+	var callbacks []bp.Callback
+
 	callback := bp.Callback{
 		Call: bp.SdkCall{
 			Action:      "ModifyRouteTableAttributes",
 			ConvertMode: bp.RequestConvertAll,
 			BeforeCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (bool, error) {
 				(*call.SdkParam)["RouteTableId"] = d.Id()
+				delete(*call.SdkParam, "Tags")
 				return true, nil
 			},
 			ExecuteCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (*map[string]interface{}, error) {
@@ -206,7 +215,13 @@ func (s *ByteplusRouteTableService) ModifyResource(resourceData *schema.Resource
 			},
 		},
 	}
-	return []bp.Callback{callback}
+	callbacks = append(callbacks, callback)
+
+	// 更新Tags
+	setResourceTagsCallbacks := bp.SetResourceTags(s.Client, "TagResources", "UntagResources", "routetable", resourceData, getUniversalInfo)
+	callbacks = append(callbacks, setResourceTagsCallbacks...)
+
+	return callbacks
 }
 
 func (s *ByteplusRouteTableService) RemoveResource(resourceData *schema.ResourceData, r *schema.Resource) []bp.Callback {
@@ -255,6 +270,15 @@ func (s *ByteplusRouteTableService) DatasourceResources(*schema.ResourceData, *s
 		RequestConverts: map[string]bp.RequestConvert{
 			"ids": {
 				TargetField: "RouteTableIds",
+			},
+			"tags": {
+				TargetField: "TagFilters",
+				ConvertType: bp.ConvertListN,
+				NextLevelConvert: map[string]bp.RequestConvert{
+					"value": {
+						TargetField: "Values.1",
+					},
+				},
 			},
 		},
 		NameField:    "RouteTableName",

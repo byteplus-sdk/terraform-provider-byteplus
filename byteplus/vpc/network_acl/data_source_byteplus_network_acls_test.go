@@ -33,9 +33,8 @@ const testAccNetworkAclConfig = `
 		destination_cidr_ip = "192.168.0.0/16"
 	  }
 	}
-
 	data "byteplus_network_acls" "foo"{
-	  ids = [byteplus_network_acl.foo.id]
+  	network_acl_name = "acc-test-acl"
 	}
 `
 
