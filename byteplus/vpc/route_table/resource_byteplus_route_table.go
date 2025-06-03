@@ -56,6 +56,7 @@ func ResourceByteplusRouteTable() *schema.Resource {
 				Computed:    true,
 				Description: "The ProjectName of the route table.",
 			},
+			"tags": bp.TagsSchema(),
 		},
 	}
 }

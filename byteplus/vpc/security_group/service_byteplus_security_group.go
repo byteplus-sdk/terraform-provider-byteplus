@@ -33,16 +33,15 @@ func (s *ByteplusSecurityGroupService) ReadResources(m map[string]interface{}) (
 		ok      bool
 	)
 	return bp.WithPageNumberQuery(m, "PageSize", "PageNumber", 20, 1, func(condition map[string]interface{}) ([]interface{}, error) {
-		vpcClient := s.Client.UniversalClient
 		action := "DescribeSecurityGroups"
 		logger.Debug(logger.ReqFormat, action, condition)
 		if condition == nil {
-			resp, err = vpcClient.DoCall(getUniversalInfo(action), nil)
+			resp, err = s.Client.UniversalClient.DoCall(getUniversalInfo(action), nil)
 			if err != nil {
 				return data, err
 			}
 		} else {
-			resp, err = vpcClient.DoCall(getUniversalInfo(action), &condition)
+			resp, err = s.Client.UniversalClient.DoCall(getUniversalInfo(action), &condition)
 			if err != nil {
 				return data, err
 			}
@@ -59,7 +58,7 @@ func (s *ByteplusSecurityGroupService) ReadResources(m map[string]interface{}) (
 		if data, ok = results.([]interface{}); !ok {
 			return data, errors.New("Result.SecurityGroups is not Slice")
 		}
-		logger.Debug(logger.ReqFormat, "", data)
+		logger.Debug(logger.ReqFormat, "DescribeSecurityGroups", data)
 
 		return data, err
 	})
