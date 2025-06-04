@@ -147,6 +147,18 @@ import (
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/rds_postgresql/rds_postgresql_instance"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/rds_postgresql/rds_postgresql_instance_readonly_node"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/rds_postgresql/rds_postgresql_schema"
+	redisAccount "github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/account"
+	redisAllowList "github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/allow_list"
+	redisAllowListAssociate "github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/allow_list_associate"
+	redisBackup "github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/backup"
+	redisBackupRestore "github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/backup_restore"
+	redisContinuousBackup "github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/continuous_backup"
+	redisEndpoint "github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/endpoint"
+	redisInstance "github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/instance"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/instance_state"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/pitr_time_period"
+	redisRegion "github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/region"
+	redisZone "github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/zone"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vke/addon"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vke/cluster"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vke/default_node_pool"
@@ -444,6 +456,15 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_rds_mysql_endpoints":           rds_mysql_endpoint.DataSourceByteplusRdsMysqlEndpoints(),
 			"byteplus_rds_mysql_backups":             rds_mysql_backup.DataSourceByteplusRdsMysqlBackups(),
 			"byteplus_rds_mysql_parameter_templates": rds_mysql_parameter_template.DataSourceByteplusRdsMysqlParameterTemplates(),
+
+			// ================ Redis =============
+			"byteplus_redis_allow_lists":       redisAllowList.DataSourceByteplusRedisAllowLists(),
+			"byteplus_redis_backups":           redisBackup.DataSourceByteplusRedisBackups(),
+			"byteplus_redis_regions":           redisRegion.DataSourceByteplusRedisRegions(),
+			"byteplus_redis_zones":             redisZone.DataSourceByteplusRedisZones(),
+			"byteplus_redis_accounts":          redisAccount.DataSourceByteplusRedisAccounts(),
+			"byteplus_redis_instances":         redisInstance.DataSourceByteplusRedisDbInstances(),
+			"byteplus_redis_pitr_time_periods": pitr_time_period.DataSourceByteplusRedisPitrTimeWindows(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			// ================ ECS ================
@@ -630,6 +651,17 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_rds_mysql_backup":                  rds_mysql_backup.ResourceByteplusRdsMysqlBackup(),
 			"byteplus_rds_mysql_parameter_template":      rds_mysql_parameter_template.ResourceByteplusRdsMysqlParameterTemplate(),
 			"byteplus_rds_mysql_backup_policy":           rds_mysql_backup_policy.ResourceByteplusRdsMysqlBackupPolicy(),
+
+			// ================ Redis ==============
+			"byteplus_redis_allow_list":           redisAllowList.ResourceByteplusRedisAllowList(),
+			"byteplus_redis_endpoint":             redisEndpoint.ResourceByteplusRedisEndpoint(),
+			"byteplus_redis_allow_list_associate": redisAllowListAssociate.ResourceByteplusRedisAllowListAssociate(),
+			"byteplus_redis_backup":               redisBackup.ResourceByteplusRedisBackup(),
+			"byteplus_redis_backup_restore":       redisBackupRestore.ResourceByteplusRedisBackupRestore(),
+			"byteplus_redis_account":              redisAccount.ResourceByteplusRedisAccount(),
+			"byteplus_redis_instance":             redisInstance.ResourceByteplusRedisDbInstance(),
+			"byteplus_redis_instance_state":       instance_state.ResourceByteplusRedisInstanceState(),
+			"byteplus_redis_continuous_backup":    redisContinuousBackup.ResourceByteplusRedisContinuousBackup(),
 		},
 		ConfigureFunc: ProviderConfigure,
 	}
