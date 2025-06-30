@@ -6,6 +6,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpc/route_table"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpc/vpc"
 	bp "github.com/byteplus-sdk/terraform-provider-byteplus/common"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/logger"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
@@ -161,10 +163,20 @@ func (ByteplusRouteEntryService) WithResourceResponseHandlers(entries map[string
 }
 
 func (s *ByteplusRouteEntryService) CreateResource(resourceData *schema.ResourceData, resource *schema.Resource) []bp.Callback {
+	var vpcId string
 	callback := bp.Callback{
 		Call: bp.SdkCall{
 			Action:      "CreateRouteEntry",
 			ConvertMode: bp.RequestConvertAll,
+			BeforeCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (bool, error) {
+				routeTableId := resourceData.Get("route_table_id").(string)
+				resp, err := route_table.NewRouteTableService(s.Client).ReadResource(resourceData, routeTableId)
+				if err != nil {
+					return false, err
+				}
+				vpcId = resp["VpcId"].(string)
+				return true, nil
+			},
 			ExecuteCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (*map[string]interface{}, error) {
 				logger.Debug(logger.ReqFormat, call.Action, call.SdkParam)
 				return s.Client.UniversalClient.DoCall(getUniversalInfo(call.Action), call.SdkParam)
@@ -175,9 +187,22 @@ func (s *ByteplusRouteEntryService) CreateResource(resourceData *schema.Resource
 				d.SetId(fmt.Sprint((*call.SdkParam)["RouteTableId"], ":", id))
 				return nil
 			},
+			LockId: func(d *schema.ResourceData) string {
+				return d.Get("route_table_id").(string)
+			},
 			Refresh: &bp.StateRefresh{
 				Target:  []string{"Available"},
 				Timeout: resourceData.Timeout(schema.TimeoutCreate),
+			},
+			// 外部定义vpcId无法传入ExtraRefresh中
+			ExtraRefreshCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (map[bp.ResourceService]*bp.StateRefresh, error) {
+				return map[bp.ResourceService]*bp.StateRefresh{
+					vpc.NewVpcService(s.Client): {
+						Target:     []string{"Available"},
+						Timeout:    resourceData.Timeout(schema.TimeoutCreate),
+						ResourceId: vpcId,
+					},
+				}, nil
 			},
 		},
 	}
@@ -186,11 +211,19 @@ func (s *ByteplusRouteEntryService) CreateResource(resourceData *schema.Resource
 
 func (s *ByteplusRouteEntryService) ModifyResource(resourceData *schema.ResourceData, resource *schema.Resource) []bp.Callback {
 	ids := strings.Split(s.ReadResourceId(resourceData.Id()), ":")
+	var vpcId string
 	callback := bp.Callback{
 		Call: bp.SdkCall{
 			Action:      "ModifyRouteEntry",
 			ConvertMode: bp.RequestConvertAll,
 			BeforeCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (bool, error) {
+				routeTableId := resourceData.Get("route_table_id").(string)
+				resp, err := route_table.NewRouteTableService(s.Client).ReadResource(resourceData, routeTableId)
+				if err != nil {
+					return false, err
+				}
+				vpcId = resp["VpcId"].(string)
+
 				(*call.SdkParam)["RouteEntryId"] = ids[1]
 				return true, nil
 			},
@@ -198,9 +231,22 @@ func (s *ByteplusRouteEntryService) ModifyResource(resourceData *schema.Resource
 				logger.Debug(logger.ReqFormat, call.Action, call.SdkParam)
 				return s.Client.UniversalClient.DoCall(getUniversalInfo(call.Action), call.SdkParam)
 			},
+			LockId: func(d *schema.ResourceData) string {
+				return d.Get("route_table_id").(string)
+			},
 			Refresh: &bp.StateRefresh{
 				Target:  []string{"Available"},
 				Timeout: resourceData.Timeout(schema.TimeoutUpdate),
+			},
+			// 外部定义vpcId无法传入ExtraRefresh中
+			ExtraRefreshCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (map[bp.ResourceService]*bp.StateRefresh, error) {
+				return map[bp.ResourceService]*bp.StateRefresh{
+					vpc.NewVpcService(s.Client): {
+						Target:     []string{"Available"},
+						Timeout:    resourceData.Timeout(schema.TimeoutCreate),
+						ResourceId: vpcId,
+					},
+				}, nil
 			},
 		},
 	}
@@ -209,6 +255,7 @@ func (s *ByteplusRouteEntryService) ModifyResource(resourceData *schema.Resource
 
 func (s *ByteplusRouteEntryService) RemoveResource(resourceData *schema.ResourceData, r *schema.Resource) []bp.Callback {
 	ids := strings.Split(resourceData.Id(), ":")
+	var vpcId string
 	callback := bp.Callback{
 		Call: bp.SdkCall{
 			Action:      "DeleteRouteEntry",
@@ -216,9 +263,31 @@ func (s *ByteplusRouteEntryService) RemoveResource(resourceData *schema.Resource
 			SdkParam: &map[string]interface{}{
 				"RouteEntryId": ids[1],
 			},
+			BeforeCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (bool, error) {
+				routeTableId := resourceData.Get("route_table_id").(string)
+				resp, err := route_table.NewRouteTableService(s.Client).ReadResource(resourceData, routeTableId)
+				if err != nil {
+					return false, err
+				}
+				vpcId = resp["VpcId"].(string)
+				return true, nil
+			},
 			ExecuteCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (*map[string]interface{}, error) {
 				logger.Debug(logger.ReqFormat, call.Action, call.SdkParam)
 				return s.Client.UniversalClient.DoCall(getUniversalInfo(call.Action), call.SdkParam)
+			},
+			LockId: func(d *schema.ResourceData) string {
+				return d.Get("route_table_id").(string)
+			},
+			// 外部定义vpcId无法传入ExtraRefresh中
+			ExtraRefreshCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (map[bp.ResourceService]*bp.StateRefresh, error) {
+				return map[bp.ResourceService]*bp.StateRefresh{
+					vpc.NewVpcService(s.Client): {
+						Target:     []string{"Available"},
+						Timeout:    resourceData.Timeout(schema.TimeoutCreate),
+						ResourceId: vpcId,
+					},
+				}, nil
 			},
 			CallError: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall, baseErr error) error {
 				//出现错误后重试
