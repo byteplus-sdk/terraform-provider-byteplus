@@ -152,11 +152,15 @@ import (
 	redisAllowListAssociate "github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/allow_list_associate"
 	redisBackup "github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/backup"
 	redisBackupRestore "github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/backup_restore"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/big_key"
 	redisContinuousBackup "github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/continuous_backup"
 	redisEndpoint "github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/endpoint"
 	redisInstance "github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/instance"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/instance_spec"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/instance_state"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/parameter_group"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/pitr_time_period"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/planned_event"
 	redisRegion "github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/region"
 	redisZone "github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/zone"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vke/addon"
@@ -465,6 +469,10 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_redis_accounts":          redisAccount.DataSourceByteplusRedisAccounts(),
 			"byteplus_redis_instances":         redisInstance.DataSourceByteplusRedisDbInstances(),
 			"byteplus_redis_pitr_time_periods": pitr_time_period.DataSourceByteplusRedisPitrTimeWindows(),
+			"byteplus_redis_parameter_groups":  parameter_group.DataSourceByteplusParameterGroups(),
+			"byteplus_redis_instance_specs":    instance_spec.DataSourceByteplusInstanceSpecs(),
+			"byteplus_redis_big_keys":          big_key.DataSourceByteplusBigKeys(),
+			"byteplus_redis_planned_events":    planned_event.DataSourceByteplusPlannedEvents(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			// ================ ECS ================
@@ -662,6 +670,7 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_redis_instance":             redisInstance.ResourceByteplusRedisDbInstance(),
 			"byteplus_redis_instance_state":       instance_state.ResourceByteplusRedisInstanceState(),
 			"byteplus_redis_continuous_backup":    redisContinuousBackup.ResourceByteplusRedisContinuousBackup(),
+			"byteplus_redis_parameter_group":      parameter_group.ResourceByteplusParameterGroup(),
 		},
 		ConfigureFunc: ProviderConfigure,
 	}

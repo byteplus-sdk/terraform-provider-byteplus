@@ -104,6 +104,11 @@ func (s *ByteplusRedisAllowListService) ReadResource(resourceData *schema.Resour
 	data["AllowList"] = strings.Split(ips.(string), ",")
 	data["AllowListIPNum"] = len(strings.Split(ips.(string), ","))
 	data["AssociatedInstanceNum"] = len(data["AssociatedInstances"].([]interface{}))
+
+	if _, exists := data["SecurityGroupBindInfos"]; !exists {
+		data["SecurityGroupBindInfos"] = []interface{}{}
+	}
+
 	return data, err
 }
 
@@ -225,6 +230,14 @@ func (s *ByteplusRedisAllowListService) RemoveResource(resourceData *schema.Reso
 
 func (s *ByteplusRedisAllowListService) DatasourceResources(data *schema.ResourceData, resource2 *schema.Resource) bp.DataSourceInfo {
 	return bp.DataSourceInfo{
+		RequestConverts: map[string]bp.RequestConvert{
+			"ip_address": {
+				TargetField: "IPAddress",
+			},
+			"ip_segment": {
+				TargetField: "IPSegment",
+			},
+		},
 		ContentType:  bp.ContentTypeJson,
 		NameField:    "AllowListName",
 		IdField:      "AllowListId",

@@ -30,7 +30,6 @@ resource "byteplus_redis_instance" "foo" {
   project_name        = "default"
 }
 
-resource "byteplus_redis_backup" "foo" {
-  instance_id       = byteplus_redis_instance.foo.id
-  backup_point_name = "acc-test-tf-redis-backup"
+data "byteplus_redis_planned_events" "foo" {
+  instance_id = byteplus_redis_instance.foo.id
 }
