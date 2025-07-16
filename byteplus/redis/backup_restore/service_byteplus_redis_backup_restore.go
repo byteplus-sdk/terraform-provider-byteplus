@@ -95,45 +95,48 @@ func (s *ByteplusRedisBackupRestoreService) CreateResource(resourceData *schema.
 	return []bp.Callback{callback}
 }
 
-func (s *ByteplusRedisBackupRestoreService) ModifyResource(resourceData *schema.ResourceData, resource *schema.Resource) []bp.Callback {
-	if !resourceData.HasChange("time_point") {
-		return nil
+func (s *ByteplusRedisBackupRestoreService) ModifyResource(resourceData *schema.ResourceData, resource *schema.Resource) (callbacks []bp.Callback) {
+	if resourceData.HasChanges("time_point", "backup_point_id") {
+		callback := bp.Callback{
+			Call: bp.SdkCall{
+				Action:      ActionRestoreDBInstance,
+				ContentType: bp.ContentTypeJson,
+				ConvertMode: bp.RequestConvertInConvert,
+				Convert: map[string]bp.RequestConvert{
+					"instance_id": {
+						ForceGet: true,
+					},
+					"backup_type": {
+						ForceGet: true,
+					},
+					"time_point": {
+						TargetField: "TimePoint",
+					},
+					"backup_point_id": {
+						TargetField: "BackupPointId",
+					},
+				},
+				ExecuteCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (*map[string]interface{}, error) {
+					logger.Debug(logger.ReqFormat, call.Action, *call.SdkParam)
+					output, err := s.Client.UniversalClient.DoCall(getUniversalInfo(call.Action), call.SdkParam)
+					logger.Debug(logger.RespFormat, call.Action, *call.SdkParam, *output)
+					return output, err
+				},
+				LockId: func(d *schema.ResourceData) string {
+					return d.Get("instance_id").(string)
+				},
+				ExtraRefresh: map[bp.ResourceService]*bp.StateRefresh{
+					instance.NewRedisDbInstanceService(s.Client): {
+						Target:     []string{"Running"},
+						Timeout:    resourceData.Timeout(schema.TimeoutCreate),
+						ResourceId: resourceData.Get("instance_id").(string),
+					},
+				},
+			},
+		}
+		callbacks = append(callbacks, callback)
 	}
-	callback := bp.Callback{
-		Call: bp.SdkCall{
-			Action:      ActionRestoreDBInstance,
-			ContentType: bp.ContentTypeJson,
-			ConvertMode: bp.RequestConvertInConvert,
-			Convert: map[string]bp.RequestConvert{
-				"instance_id": {
-					ForceGet: true,
-				},
-				"backup_type": {
-					ForceGet: true,
-				},
-				"time_point": {
-					TargetField: "TimePoint",
-				},
-			},
-			ExecuteCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (*map[string]interface{}, error) {
-				logger.Debug(logger.ReqFormat, call.Action, *call.SdkParam)
-				output, err := s.Client.UniversalClient.DoCall(getUniversalInfo(call.Action), call.SdkParam)
-				logger.Debug(logger.RespFormat, call.Action, *call.SdkParam, *output)
-				return output, err
-			},
-			LockId: func(d *schema.ResourceData) string {
-				return d.Get("instance_id").(string)
-			},
-			ExtraRefresh: map[bp.ResourceService]*bp.StateRefresh{
-				instance.NewRedisDbInstanceService(s.Client): {
-					Target:     []string{"Running"},
-					Timeout:    resourceData.Timeout(schema.TimeoutCreate),
-					ResourceId: resourceData.Get("instance_id").(string),
-				},
-			},
-		},
-	}
-	return []bp.Callback{callback}
+	return callbacks
 }
 
 func (s *ByteplusRedisBackupRestoreService) RemoveResource(resourceData *schema.ResourceData, r *schema.Resource) []bp.Callback {

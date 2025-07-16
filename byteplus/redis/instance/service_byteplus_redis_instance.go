@@ -50,6 +50,95 @@ func (s *ByteplusRedisDbInstanceService) readInstanceDetails(id string) (instanc
 	return instance, err
 }
 
+func (s *ByteplusRedisDbInstanceService) readInstanceBandwidthPerShard(id string) (instance interface{}, err error) {
+	action := "DescribeDBInstanceBandwidthPerShard"
+	cond := map[string]interface{}{
+		"InstanceId": id,
+	}
+	logger.Debug(logger.RespFormat, action, cond)
+	resp, err := s.Client.UniversalClient.DoCall(getUniversalInfo(action), &cond)
+	logger.Debug(logger.RespFormat, action, *resp)
+	if err != nil {
+		return instance, err
+	}
+
+	instance, err = bp.ObtainSdkValue("Result", *resp)
+	if err != nil {
+		return instance, err
+	}
+	if instance == nil {
+		return instance, fmt.Errorf("instance %s is not exist", id)
+	}
+	return instance, err
+}
+
+//
+//func (s *ByteplusRedisDbInstanceService) readInstanceAclCategories(id string) (instance interface{}, err error) {
+//	action := "DescribeDBInstanceAclCategories"
+//	cond := map[string]interface{}{
+//		"InstanceId": id,
+//	}
+//	logger.Debug(logger.RespFormat, action, cond)
+//	resp, err := s.Client.UniversalClient.DoCall(getUniversalInfo(action), &cond)
+//	logger.Debug(logger.RespFormat, action, *resp)
+//	if err != nil {
+//		return instance, err
+//	}
+//
+//	instance, err = bp.ObtainSdkValue("Result", *resp)
+//	if err != nil {
+//		return instance, err
+//	}
+//	if instance == nil {
+//		return instance, fmt.Errorf("instance %s is not exist", id)
+//	}
+//	return instance, err
+//}
+
+func (s *ByteplusRedisDbInstanceService) readInstanceShards(id string) (instance interface{}, err error) {
+	var (
+		resp *map[string]interface{}
+		ok   bool
+	)
+	cond := map[string]interface{}{
+		"InstanceId": id,
+	}
+
+	action := "DescribeDBInstanceShards"
+	pageCall := func(condition map[string]interface{}) (data []interface{}, err error) {
+		logger.Debug(logger.RespFormat, action, condition)
+		if condition == nil {
+			resp, err = s.Client.UniversalClient.DoCall(getUniversalInfo(action), nil)
+			if err != nil {
+				return data, err
+			}
+		} else {
+			resp, err = s.Client.UniversalClient.DoCall(getUniversalInfo(action), &condition)
+			if err != nil {
+				return data, err
+			}
+		}
+		logger.Debug(logger.RespFormat, action, condition, *resp)
+
+		paramsResults, err := bp.ObtainSdkValue("Result.InstanceShards", *resp)
+		if err != nil {
+			return data, err
+		}
+		if paramsResults == nil {
+			paramsResults = []interface{}{}
+		}
+		if data, ok = paramsResults.([]interface{}); !ok {
+			return data, errors.New("Results.Params is not slice")
+		}
+		return data, nil
+	}
+	params, err := bp.WithPageNumberQuery(cond, "PageSize", "PageNumber", 100, 1, pageCall)
+	if err != nil {
+		return params, err
+	}
+	return params, nil
+}
+
 func (s *ByteplusRedisDbInstanceService) readInstanceParams(id string) (params interface{}, err error) {
 	var (
 		resp *map[string]interface{}
@@ -217,6 +306,55 @@ func (s *ByteplusRedisDbInstanceService) ReadResources(condition map[string]inte
 				ins["ConfigureNodes"] = nodes
 			}
 
+			instanceClass, ok := detail.(map[string]interface{})["InstanceClass"]
+			if ok {
+				ins["InstanceClass"] = instanceClass
+			}
+
+			maxConnections, ok := detail.(map[string]interface{})["MaxConnections"]
+			if ok {
+				ins["MaxConnections"] = maxConnections
+			}
+
+			dataLayout, ok := detail.(map[string]interface{})["DataLayout"]
+			if ok {
+				ins["DataLayout"] = dataLayout
+			}
+
+			shardCapacityV2, ok := detail.(map[string]interface{})["ShardCapacityV2"]
+			if ok {
+				ins["ShardCapacityV2"] = shardCapacityV2
+			}
+
+			maintenanceTime, ok := detail.(map[string]interface{})["MaintenanceTime"]
+			if ok {
+				ins["TimeScope"] = maintenanceTime
+			}
+			instanceShards, err := s.readInstanceShards(instanceId)
+			if err != nil {
+				return data, err
+			}
+			ins["InstanceShards"] = instanceShards
+
+			bandwidthPerShard, err := s.readInstanceBandwidthPerShard(instanceId)
+			if err != nil {
+				return data, err
+			}
+			if defaultBandwidthPerShard, ok := bandwidthPerShard.(map[string]interface{})["DefaultBandwidthPerShard"]; ok {
+				ins["DefaultBandwidthPerShard"] = defaultBandwidthPerShard
+			}
+			if additionalBandwidthPerShard, ok := bandwidthPerShard.(map[string]interface{})["AdditionalBandwidthPerShard"]; ok {
+				ins["AdditionalBandwidthPerShard"] = additionalBandwidthPerShard
+			}
+
+			//instanceAclCategories, err := s.readInstanceAclCategories(instanceId)
+			//if err != nil {
+			//	return data, err
+			//}
+			//if categories, ok := instanceAclCategories.(map[string]interface{})["Categories"]; ok {
+			//	ins["Categories"] = categories
+			//}
+
 			//data = append(data, ins)
 		}
 		data = instances
@@ -283,6 +421,59 @@ func (s *ByteplusRedisDbInstanceService) ReadResource(resourceData *schema.Resou
 			if len(nodes.([]interface{})) == len(configNodes.([]interface{})) {
 				// 数量相等则用本地的
 				data["ConfigureNodes"] = configNodes
+			}
+		}
+	}
+
+	if visitAddrs, exist := data["VisitAddrs"]; exist {
+		visitAddr, ok := visitAddrs.([]interface{})
+		if ok {
+			for _, addr := range visitAddr {
+				addrMap := addr.(map[string]interface{})
+				addrType, ok := resourceData.Get("addr_type").(string)
+				if ok {
+					if addrMap["AddrType"].(string) == addrType {
+						port := addrMap["Port"]
+						portString, ok := port.(string)
+						if ok {
+							newport, err := strconv.Atoi(portString)
+							if err != nil {
+								data["NewPort"] = newport
+							}
+						}
+						break
+					}
+				}
+
+			}
+		}
+	}
+
+	if visitAddrs, exist := data["VisitAddrs"]; exist {
+		visitAddr, ok := visitAddrs.([]interface{})
+		if ok {
+			for _, addr := range visitAddr {
+				addrMap := addr.(map[string]interface{})
+				addrType, ok := resourceData.Get("addr_type").(string)
+				if ok {
+					if addrMap["AddrType"].(string) == addrType {
+						address := addrMap["Address"]
+						addressString, ok := address.(string)
+						if ok {
+							regionEndPointVolces := ".redis." + s.Client.Region + ".volces.com"
+							regionEndPoinvIVolces := ".redis." + s.Client.Region + ".ivolces.com"
+							targets := []string{".redis.ivolces.com", ".redis.volces.com", regionEndPointVolces, regionEndPoinvIVolces}
+							for _, target := range targets {
+								addressPrefix := getPrefixBeforeEndPoint(addressString, target)
+								if addressPrefix != "" {
+									data["NewAddressPrefix"] = addressPrefix
+								}
+							}
+						}
+						break
+					}
+				}
+
 			}
 		}
 	}
@@ -561,6 +752,14 @@ func (s *ByteplusRedisDbInstanceService) ModifyResource(resourceData *schema.Res
 				ConvertMode: bp.RequestConvertInConvert,
 				ContentType: bp.ContentTypeJson,
 				Convert: map[string]bp.RequestConvert{
+					"create_backup": {
+						TargetField: "CreateBackup",
+						ForceGet:    true,
+					},
+					"backup_point_name": {
+						TargetField: "BackupPointName",
+						ForceGet:    true,
+					},
 					"sharded_cluster": {
 						TargetField: "ShardedCluster",
 					},
@@ -611,6 +810,14 @@ func (s *ByteplusRedisDbInstanceService) ModifyResource(resourceData *schema.Res
 				Convert: map[string]bp.RequestConvert{
 					"multi_az": {
 						TargetField: "MultiAZ",
+						ForceGet:    true,
+					},
+					"create_backup": {
+						TargetField: "CreateBackup",
+						ForceGet:    true,
+					},
+					"backup_point_name": {
+						TargetField: "BackupPointName",
 						ForceGet:    true,
 					},
 					"configure_nodes": {
@@ -809,8 +1016,9 @@ func (s *ByteplusRedisDbInstanceService) ModifyResource(resourceData *schema.Res
 					if len(*call.SdkParam) == 0 {
 						return false, nil
 					}
-					if chargeType, ok := (*call.SdkParam)["ChargeType"]; ok && chargeType.(string) != "PrePaid" {
-						return false, fmt.Errorf("only supports PostPaid to PrePaid currently")
+					if chargeType, ok := (*call.SdkParam)["ChargeType"]; ok {
+						(*call.SdkParam)["ChargeType"] = chargeType
+
 					}
 					(*call.SdkParam)["InstanceIds"] = []interface{}{d.Id()}
 					(*call.SdkParam)["ClientToken"] = uuid.New().String()
@@ -962,6 +1170,14 @@ func (s *ByteplusRedisDbInstanceService) ModifyResource(resourceData *schema.Res
 						TargetField: "ApplyImmediately",
 						ForceGet:    true,
 					},
+					"create_backup": {
+						TargetField: "CreateBackup",
+						ForceGet:    true,
+					},
+					"backup_point_name": {
+						TargetField: "BackupPointName",
+						ForceGet:    true,
+					},
 				},
 				BeforeCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (bool, error) {
 					if len(*call.SdkParam) == 0 {
@@ -1030,6 +1246,14 @@ func (s *ByteplusRedisDbInstanceService) ModifyResource(resourceData *schema.Res
 					},
 					"apply_immediately": {
 						TargetField: "ApplyImmediately",
+						ForceGet:    true,
+					},
+					"create_backup": {
+						TargetField: "CreateBackup",
+						ForceGet:    true,
+					},
+					"backup_point_name": {
+						TargetField: "BackupPointName",
 						ForceGet:    true,
 					},
 				},
@@ -1104,6 +1328,14 @@ func (s *ByteplusRedisDbInstanceService) ModifyResource(resourceData *schema.Res
 						TargetField: "ApplyImmediately",
 						ForceGet:    true,
 					},
+					"create_backup": {
+						TargetField: "CreateBackup",
+						ForceGet:    true,
+					},
+					"backup_point_name": {
+						TargetField: "BackupPointName",
+						ForceGet:    true,
+					},
 				},
 				BeforeCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (bool, error) {
 					if len(*call.SdkParam) == 0 {
@@ -1163,6 +1395,117 @@ func (s *ByteplusRedisDbInstanceService) ModifyResource(resourceData *schema.Res
 		callbacks = append(callbacks, callback)
 	}
 
+	if resourceData.HasChange("time_scope") {
+		callback := bp.Callback{
+			Call: bp.SdkCall{
+				Action:      "ModifyMaintenanceTime",
+				ConvertMode: bp.RequestConvertInConvert,
+				ContentType: bp.ContentTypeJson,
+				Convert: map[string]bp.RequestConvert{
+					"time_scope": {
+						TargetField: "TimeScope",
+					},
+				},
+				BeforeCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (bool, error) {
+					if len(*call.SdkParam) == 0 {
+						return false, nil
+					}
+					(*call.SdkParam)["InstanceId"] = d.Id()
+					(*call.SdkParam)["TimeScope"] = d.Get("time_scope")
+					(*call.SdkParam)["ClientToken"] = uuid.New().String()
+					return true, nil
+				},
+				ExecuteCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (*map[string]interface{}, error) {
+					logger.Debug(logger.ReqFormat, call.Action, call.SdkParam)
+					return s.Client.UniversalClient.DoCall(getUniversalInfo(call.Action), call.SdkParam)
+				},
+				Refresh: &bp.StateRefresh{
+					Target:  []string{"Running"},
+					Timeout: resourceData.Timeout(schema.TimeoutUpdate),
+				},
+			},
+		}
+		callbacks = append(callbacks, callback)
+	}
+
+	if resourceData.HasChange("max_connections") {
+		callback := bp.Callback{
+			Call: bp.SdkCall{
+				Action:      "ModifyDBInstanceMaxConn",
+				ConvertMode: bp.RequestConvertInConvert,
+				ContentType: bp.ContentTypeJson,
+				Convert: map[string]bp.RequestConvert{
+					"max_connections": {
+						TargetField: "MaxConnections",
+					},
+				},
+				BeforeCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (bool, error) {
+					if len(*call.SdkParam) == 0 {
+						return false, nil
+					}
+					(*call.SdkParam)["InstanceId"] = d.Id()
+					(*call.SdkParam)["MaxConnections"] = d.Get("max_connections")
+					(*call.SdkParam)["ClientToken"] = uuid.New().String()
+					return true, nil
+				},
+				ExecuteCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (*map[string]interface{}, error) {
+					logger.Debug(logger.ReqFormat, call.Action, call.SdkParam)
+					return s.Client.UniversalClient.DoCall(getUniversalInfo(call.Action), call.SdkParam)
+				},
+				Refresh: &bp.StateRefresh{
+					Target:  []string{"Running"},
+					Timeout: resourceData.Timeout(schema.TimeoutUpdate),
+				},
+			},
+		}
+		callbacks = append(callbacks, callback)
+	}
+
+	if resourceData.HasChanges("addr_type", "new_address_prefix", "new_port", "upgrade_region_domain") {
+		callback := bp.Callback{
+			Call: bp.SdkCall{
+				Action:      "ModifyDBInstanceVisitAddress",
+				ConvertMode: bp.RequestConvertInConvert,
+				ContentType: bp.ContentTypeJson,
+				Convert: map[string]bp.RequestConvert{
+					"addr_type": {
+						TargetField: "AddrType",
+					},
+					"new_address_prefix": {
+						TargetField: "NewAddressPrefix",
+					},
+					"new_port": {
+						TargetField: "NewPort",
+					},
+					"upgrade_region_domain": {
+						TargetField: "UpgradeRegionDomain",
+					},
+				},
+				BeforeCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (bool, error) {
+					if len(*call.SdkParam) == 0 {
+						return false, nil
+					}
+					(*call.SdkParam)["InstanceId"] = d.Id()
+					(*call.SdkParam)["AddrType"] = d.Get("addr_type")
+					(*call.SdkParam)["NewAddressPrefix"] = d.Get("new_address_prefix")
+					(*call.SdkParam)["NewPort"] = d.Get("new_port")
+					(*call.SdkParam)["UpgradeRegionDomain"] = d.Get("upgrade_region_domain")
+					(*call.SdkParam)["ClientToken"] = uuid.New().String()
+					return true, nil
+				},
+				ExecuteCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (*map[string]interface{}, error) {
+					logger.Debug(logger.ReqFormat, call.Action, call.SdkParam)
+					return s.Client.UniversalClient.DoCall(getUniversalInfo(call.Action), call.SdkParam)
+				},
+				Refresh: &bp.StateRefresh{
+					Target:  []string{"Running"},
+					Timeout: resourceData.Timeout(schema.TimeoutUpdate),
+				},
+			},
+		}
+		callbacks = append(callbacks, callback)
+	}
+
 	// 更新Tags
 	callbacks = s.setResourceTags(resourceData, callbacks)
 
@@ -1184,11 +1527,19 @@ func (s *ByteplusRedisDbInstanceService) RemoveResource(resourceData *schema.Res
 					(*call.SdkParam)["CreateBackup"] = d.Get("create_backup")
 				}
 				(*call.SdkParam)["ClientToken"] = uuid.New().String()
+				backupPointName, ok := d.Get("backup_point_name").(string)
+				if ok {
+					if backupPointName != "" {
+						(*call.SdkParam)["BackupPointName"] = backupPointName
+					}
+				}
 				return true, nil
 			},
 			ExecuteCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (*map[string]interface{}, error) {
 				logger.Debug(logger.ReqFormat, call.Action, *call.SdkParam)
-				return s.Client.UniversalClient.DoCall(getUniversalInfo(call.Action), call.SdkParam)
+				resp, err := s.Client.UniversalClient.DoCall(getUniversalInfo(call.Action), call.SdkParam)
+				logger.Debug(logger.RespFormat, call.Action, resp, err)
+				return resp, err
 			},
 			CallError: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall, baseErr error) error {
 				// 开启删除保护时，跳过 CallError
@@ -1251,6 +1602,9 @@ func (s *ByteplusRedisDbInstanceService) DatasourceResources(data *schema.Resour
 			},
 			"VIPv6": {
 				TargetField: "vip_v6",
+			},
+			"ShardCapacityV2": {
+				TargetField: "shard_capacity_v2",
 			},
 		},
 	}
@@ -1371,4 +1725,12 @@ func getVpcUniversalInfo(actionName string) bp.UniversalInfo {
 		ContentType: bp.Default,
 		Action:      actionName,
 	}
+}
+
+func getPrefixBeforeEndPoint(domain, target string) string {
+	index := strings.Index(domain, target)
+	if index == -1 {
+		return ""
+	}
+	return domain[:index]
 }
