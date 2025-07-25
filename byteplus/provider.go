@@ -114,6 +114,18 @@ import (
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/iam/iam_user_group_attachment"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/iam/iam_user_group_policy_attachment"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/iam/iam_user_policy_attachment"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/kafka/kafka_allow_list"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/kafka/kafka_allow_list_associate"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/kafka/kafka_consumed_partition"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/kafka/kafka_consumed_topic"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/kafka/kafka_group"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/kafka/kafka_instance"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/kafka/kafka_public_address"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/kafka/kafka_region"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/kafka/kafka_sasl_user"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/kafka/kafka_topic"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/kafka/kafka_topic_partition"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/kafka/kafka_zone"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/nat/dnat_entry"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/nat/nat_gateway"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/nat/snat_entry"
@@ -147,6 +159,22 @@ import (
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/rds_postgresql/rds_postgresql_instance"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/rds_postgresql/rds_postgresql_instance_readonly_node"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/rds_postgresql/rds_postgresql_schema"
+	redisAccount "github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/account"
+	redisAllowList "github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/allow_list"
+	redisAllowListAssociate "github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/allow_list_associate"
+	redisBackup "github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/backup"
+	redisBackupRestore "github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/backup_restore"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/big_key"
+	redisContinuousBackup "github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/continuous_backup"
+	redisEndpoint "github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/endpoint"
+	redisInstance "github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/instance"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/instance_spec"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/instance_state"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/parameter_group"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/pitr_time_period"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/planned_event"
+	redisRegion "github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/region"
+	redisZone "github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/zone"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vke/addon"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vke/cluster"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vke/default_node_pool"
@@ -444,6 +472,31 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_rds_mysql_endpoints":           rds_mysql_endpoint.DataSourceByteplusRdsMysqlEndpoints(),
 			"byteplus_rds_mysql_backups":             rds_mysql_backup.DataSourceByteplusRdsMysqlBackups(),
 			"byteplus_rds_mysql_parameter_templates": rds_mysql_parameter_template.DataSourceByteplusRdsMysqlParameterTemplates(),
+
+			// ================ Redis =============
+			"byteplus_redis_allow_lists":       redisAllowList.DataSourceByteplusRedisAllowLists(),
+			"byteplus_redis_backups":           redisBackup.DataSourceByteplusRedisBackups(),
+			"byteplus_redis_regions":           redisRegion.DataSourceByteplusRedisRegions(),
+			"byteplus_redis_zones":             redisZone.DataSourceByteplusRedisZones(),
+			"byteplus_redis_accounts":          redisAccount.DataSourceByteplusRedisAccounts(),
+			"byteplus_redis_instances":         redisInstance.DataSourceByteplusRedisDbInstances(),
+			"byteplus_redis_pitr_time_periods": pitr_time_period.DataSourceByteplusRedisPitrTimeWindows(),
+			"byteplus_redis_parameter_groups":  parameter_group.DataSourceByteplusParameterGroups(),
+			"byteplus_redis_instance_specs":    instance_spec.DataSourceByteplusInstanceSpecs(),
+			"byteplus_redis_big_keys":          big_key.DataSourceByteplusBigKeys(),
+			"byteplus_redis_planned_events":    planned_event.DataSourceByteplusPlannedEvents(),
+
+			// ================ Kafka ================
+			"byteplus_kafka_sasl_users":          kafka_sasl_user.DataSourceByteplusKafkaSaslUsers(),
+			"byteplus_kafka_topic_partitions":    kafka_topic_partition.DataSourceByteplusKafkaTopicPartitions(),
+			"byteplus_kafka_groups":              kafka_group.DataSourceByteplusKafkaGroups(),
+			"byteplus_kafka_topics":              kafka_topic.DataSourceByteplusKafkaTopics(),
+			"byteplus_kafka_instances":           kafka_instance.DataSourceByteplusKafkaInstances(),
+			"byteplus_kafka_regions":             kafka_region.DataSourceByteplusRegions(),
+			"byteplus_kafka_zones":               kafka_zone.DataSourceByteplusZones(),
+			"byteplus_kafka_consumed_topics":     kafka_consumed_topic.DataSourceByteplusKafkaConsumedTopics(),
+			"byteplus_kafka_consumed_partitions": kafka_consumed_partition.DataSourceByteplusKafkaConsumedPartitions(),
+			"byteplus_kafka_allow_lists":         kafka_allow_list.DataSourceByteplusKafkaAllowLists(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			// ================ ECS ================
@@ -630,6 +683,27 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_rds_mysql_backup":                  rds_mysql_backup.ResourceByteplusRdsMysqlBackup(),
 			"byteplus_rds_mysql_parameter_template":      rds_mysql_parameter_template.ResourceByteplusRdsMysqlParameterTemplate(),
 			"byteplus_rds_mysql_backup_policy":           rds_mysql_backup_policy.ResourceByteplusRdsMysqlBackupPolicy(),
+
+			// ================ Redis ==============
+			"byteplus_redis_allow_list":           redisAllowList.ResourceByteplusRedisAllowList(),
+			"byteplus_redis_endpoint":             redisEndpoint.ResourceByteplusRedisEndpoint(),
+			"byteplus_redis_allow_list_associate": redisAllowListAssociate.ResourceByteplusRedisAllowListAssociate(),
+			"byteplus_redis_backup":               redisBackup.ResourceByteplusRedisBackup(),
+			"byteplus_redis_backup_restore":       redisBackupRestore.ResourceByteplusRedisBackupRestore(),
+			"byteplus_redis_account":              redisAccount.ResourceByteplusRedisAccount(),
+			"byteplus_redis_instance":             redisInstance.ResourceByteplusRedisDbInstance(),
+			"byteplus_redis_instance_state":       instance_state.ResourceByteplusRedisInstanceState(),
+			"byteplus_redis_continuous_backup":    redisContinuousBackup.ResourceByteplusRedisContinuousBackup(),
+			"byteplus_redis_parameter_group":      parameter_group.ResourceByteplusParameterGroup(),
+
+			// ================ Kafka ================
+			"byteplus_kafka_sasl_user":            kafka_sasl_user.ResourceByteplusKafkaSaslUser(),
+			"byteplus_kafka_group":                kafka_group.ResourceByteplusKafkaGroup(),
+			"byteplus_kafka_topic":                kafka_topic.ResourceByteplusKafkaTopic(),
+			"byteplus_kafka_instance":             kafka_instance.ResourceByteplusKafkaInstance(),
+			"byteplus_kafka_public_address":       kafka_public_address.ResourceByteplusKafkaPublicAddress(),
+			"byteplus_kafka_allow_list":           kafka_allow_list.ResourceByteplusKafkaAllowList(),
+			"byteplus_kafka_allow_list_associate": kafka_allow_list_associate.ResourceByteplusKafkaAllowListAssociate(),
 		},
 		ConfigureFunc: ProviderConfigure,
 	}
