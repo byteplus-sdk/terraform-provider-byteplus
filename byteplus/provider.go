@@ -114,6 +114,18 @@ import (
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/iam/iam_user_group_attachment"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/iam/iam_user_group_policy_attachment"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/iam/iam_user_policy_attachment"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/kafka/kafka_allow_list"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/kafka/kafka_allow_list_associate"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/kafka/kafka_consumed_partition"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/kafka/kafka_consumed_topic"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/kafka/kafka_group"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/kafka/kafka_instance"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/kafka/kafka_public_address"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/kafka/kafka_region"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/kafka/kafka_sasl_user"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/kafka/kafka_topic"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/kafka/kafka_topic_partition"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/kafka/kafka_zone"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/nat/dnat_entry"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/nat/nat_gateway"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/nat/snat_entry"
@@ -473,6 +485,18 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_redis_instance_specs":    instance_spec.DataSourceByteplusInstanceSpecs(),
 			"byteplus_redis_big_keys":          big_key.DataSourceByteplusBigKeys(),
 			"byteplus_redis_planned_events":    planned_event.DataSourceByteplusPlannedEvents(),
+
+			// ================ Kafka ================
+			"byteplus_kafka_sasl_users":          kafka_sasl_user.DataSourceByteplusKafkaSaslUsers(),
+			"byteplus_kafka_topic_partitions":    kafka_topic_partition.DataSourceByteplusKafkaTopicPartitions(),
+			"byteplus_kafka_groups":              kafka_group.DataSourceByteplusKafkaGroups(),
+			"byteplus_kafka_topics":              kafka_topic.DataSourceByteplusKafkaTopics(),
+			"byteplus_kafka_instances":           kafka_instance.DataSourceByteplusKafkaInstances(),
+			"byteplus_kafka_regions":             kafka_region.DataSourceByteplusRegions(),
+			"byteplus_kafka_zones":               kafka_zone.DataSourceByteplusZones(),
+			"byteplus_kafka_consumed_topics":     kafka_consumed_topic.DataSourceByteplusKafkaConsumedTopics(),
+			"byteplus_kafka_consumed_partitions": kafka_consumed_partition.DataSourceByteplusKafkaConsumedPartitions(),
+			"byteplus_kafka_allow_lists":         kafka_allow_list.DataSourceByteplusKafkaAllowLists(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			// ================ ECS ================
@@ -671,6 +695,15 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_redis_instance_state":       instance_state.ResourceByteplusRedisInstanceState(),
 			"byteplus_redis_continuous_backup":    redisContinuousBackup.ResourceByteplusRedisContinuousBackup(),
 			"byteplus_redis_parameter_group":      parameter_group.ResourceByteplusParameterGroup(),
+
+			// ================ Kafka ================
+			"byteplus_kafka_sasl_user":            kafka_sasl_user.ResourceByteplusKafkaSaslUser(),
+			"byteplus_kafka_group":                kafka_group.ResourceByteplusKafkaGroup(),
+			"byteplus_kafka_topic":                kafka_topic.ResourceByteplusKafkaTopic(),
+			"byteplus_kafka_instance":             kafka_instance.ResourceByteplusKafkaInstance(),
+			"byteplus_kafka_public_address":       kafka_public_address.ResourceByteplusKafkaPublicAddress(),
+			"byteplus_kafka_allow_list":           kafka_allow_list.ResourceByteplusKafkaAllowList(),
+			"byteplus_kafka_allow_list_associate": kafka_allow_list_associate.ResourceByteplusKafkaAllowListAssociate(),
 		},
 		ConfigureFunc: ProviderConfigure,
 	}
