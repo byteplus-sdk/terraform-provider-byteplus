@@ -80,6 +80,15 @@ import (
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cloud_monitor/cloud_monitor_object_group"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cloud_monitor/cloud_monitor_rule"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cloud_monitor/cloud_monitor_webhook"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cr/cr_authorization_token"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cr/cr_endpoint"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cr/cr_endpoint_acl_policy"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cr/cr_namespace"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cr/cr_registry"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cr/cr_registry_state"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cr/cr_repository"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cr/cr_tag"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/cr/cr_vpc_endpoint"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/direct_connect/direct_connect_bgp_peer"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/direct_connect/direct_connect_connection"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/direct_connect/direct_connect_gateway"
@@ -497,6 +506,15 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_kafka_consumed_topics":     kafka_consumed_topic.DataSourceByteplusKafkaConsumedTopics(),
 			"byteplus_kafka_consumed_partitions": kafka_consumed_partition.DataSourceByteplusKafkaConsumedPartitions(),
 			"byteplus_kafka_allow_lists":         kafka_allow_list.DataSourceByteplusKafkaAllowLists(),
+
+			// ================ CR ================
+			"byteplus_cr_registries":           cr_registry.DataSourceByteplusCrRegistries(),
+			"byteplus_cr_namespaces":           cr_namespace.DataSourceByteplusCrNamespaces(),
+			"byteplus_cr_repositories":         cr_repository.DataSourceByteplusCrRepositories(),
+			"byteplus_cr_tags":                 cr_tag.DataSourceByteplusCrTags(),
+			"byteplus_cr_authorization_tokens": cr_authorization_token.DataSourceByteplusCrAuthorizationTokens(),
+			"byteplus_cr_endpoints":            cr_endpoint.DataSourceByteplusCrEndpoints(),
+			"byteplus_cr_vpc_endpoints":        cr_vpc_endpoint.DataSourceByteplusCrVpcEndpoints(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			// ================ ECS ================
@@ -704,6 +722,16 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_kafka_public_address":       kafka_public_address.ResourceByteplusKafkaPublicAddress(),
 			"byteplus_kafka_allow_list":           kafka_allow_list.ResourceByteplusKafkaAllowList(),
 			"byteplus_kafka_allow_list_associate": kafka_allow_list_associate.ResourceByteplusKafkaAllowListAssociate(),
+
+			// ================ CR ================
+			"byteplus_cr_registry":            cr_registry.ResourceByteplusCrRegistry(),
+			"byteplus_cr_registry_state":      cr_registry_state.ResourceByteplusCrRegistryState(),
+			"byteplus_cr_namespace":           cr_namespace.ResourceByteplusCrNamespace(),
+			"byteplus_cr_repository":          cr_repository.ResourceByteplusCrRepository(),
+			"byteplus_cr_tag":                 cr_tag.ResourceByteplusCrTag(),
+			"byteplus_cr_endpoint":            cr_endpoint.ResourceByteplusCrEndpoint(),
+			"byteplus_cr_vpc_endpoint":        cr_vpc_endpoint.ResourceByteplusCrVpcEndpoint(),
+			"byteplus_cr_endpoint_acl_policy": cr_endpoint_acl_policy.ResourceByteplusCrEndpointAclPolicy(),
 		},
 		ConfigureFunc: ProviderConfigure,
 	}
