@@ -277,6 +277,18 @@ func Provider() terraform.ResourceProvider {
 				DefaultFunc: schema.EnvDefaultFunc("BYTEPLUS_CUSTOMER_ENDPOINTS", nil),
 				Description: "CUSTOMER ENDPOINTS for BytePlus Provider",
 			},
+			"enable_standard_endpoint": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				DefaultFunc: schema.EnvDefaultFunc("BYTEPLUS_ENABLE_STANDARD_ENDPOINT", nil),
+				Description: "ENABLE STANDARD ENDPOINT for BytePlus Provider",
+			},
+			"standard_endpoint_suffix": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				DefaultFunc: schema.EnvDefaultFunc("BYTEPLUS_STANDARD_ENDPOINT_SUFFIX", nil),
+				Description: "STANDARD ENDPOINT SUFFIX for BytePlus Provider",
+			},
 			"proxy_url": {
 				Type:        schema.TypeString,
 				Optional:    true,
@@ -771,15 +783,17 @@ func Provider() terraform.ResourceProvider {
 
 func ProviderConfigure(d *schema.ResourceData) (interface{}, error) {
 	config := bp.Config{
-		AccessKey:         d.Get("access_key").(string),
-		SecretKey:         d.Get("secret_key").(string),
-		SessionToken:      d.Get("session_token").(string),
-		Region:            d.Get("region").(string),
-		Endpoint:          d.Get("endpoint").(string),
-		DisableSSL:        d.Get("disable_ssl").(bool),
-		CustomerHeaders:   map[string]string{},
-		CustomerEndpoints: map[string]string{},
-		ProxyUrl:          d.Get("proxy_url").(string),
+		AccessKey:              d.Get("access_key").(string),
+		SecretKey:              d.Get("secret_key").(string),
+		SessionToken:           d.Get("session_token").(string),
+		Region:                 d.Get("region").(string),
+		Endpoint:               d.Get("endpoint").(string),
+		DisableSSL:             d.Get("disable_ssl").(bool),
+		EnableStandardEndpoint: d.Get("enable_standard_endpoint").(bool),
+		StandardEndpointSuffix: d.Get("standard_endpoint_suffix").(string),
+		CustomerHeaders:        map[string]string{},
+		CustomerEndpoints:      map[string]string{},
+		ProxyUrl:               d.Get("proxy_url").(string),
 	}
 
 	headers := d.Get("customer_headers").(string)
@@ -887,7 +901,7 @@ func assumeRole(c bp.Config, arTrn, arSessionName, arPolicy string, arDurationSe
 		return nil, err
 	}
 
-	universalClient := bp.NewUniversalClient(sess, c.CustomerEndpoints)
+	universalClient := bp.NewUniversalClient(sess, c.CustomerEndpoints, c.EnableStandardEndpoint, c.StandardEndpointSuffix)
 
 	action := "AssumeRole"
 	req := map[string]interface{}{
