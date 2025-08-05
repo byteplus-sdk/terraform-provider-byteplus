@@ -135,6 +135,17 @@ import (
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/kafka/kafka_topic"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/kafka/kafka_topic_partition"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/kafka/kafka_zone"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/mongodb/account"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/mongodb/allow_list"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/mongodb/allow_list_associate"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/mongodb/endpoint"
+	mongodbInstance "github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/mongodb/instance"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/mongodb/instance_parameter"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/mongodb/instance_parameter_log"
+	mongodbRegion "github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/mongodb/region"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/mongodb/spec"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/mongodb/ssl_state"
+	mongodbZone "github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/mongodb/zone"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/nat/dnat_entry"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/nat/nat_gateway"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/nat/snat_entry"
@@ -265,6 +276,18 @@ func Provider() terraform.ResourceProvider {
 				Optional:    true,
 				DefaultFunc: schema.EnvDefaultFunc("BYTEPLUS_CUSTOMER_ENDPOINTS", nil),
 				Description: "CUSTOMER ENDPOINTS for BytePlus Provider",
+			},
+			"enable_standard_endpoint": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				DefaultFunc: schema.EnvDefaultFunc("BYTEPLUS_ENABLE_STANDARD_ENDPOINT", nil),
+				Description: "ENABLE STANDARD ENDPOINT for BytePlus Provider",
+			},
+			"standard_endpoint_suffix": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				DefaultFunc: schema.EnvDefaultFunc("BYTEPLUS_STANDARD_ENDPOINT_SUFFIX", nil),
+				Description: "STANDARD ENDPOINT SUFFIX for BytePlus Provider",
 			},
 			"proxy_url": {
 				Type:        schema.TypeString,
@@ -515,6 +538,18 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_cr_authorization_tokens": cr_authorization_token.DataSourceByteplusCrAuthorizationTokens(),
 			"byteplus_cr_endpoints":            cr_endpoint.DataSourceByteplusCrEndpoints(),
 			"byteplus_cr_vpc_endpoints":        cr_vpc_endpoint.DataSourceByteplusCrVpcEndpoints(),
+
+			// ================ MongoDB =============
+			"byteplus_mongodb_instances":               mongodbInstance.DataSourceByteplusMongoDBInstances(),
+			"byteplus_mongodb_endpoints":               endpoint.DataSourceByteplusMongoDBEndpoints(),
+			"byteplus_mongodb_allow_lists":             allow_list.DataSourceByteplusMongoDBAllowLists(),
+			"byteplus_mongodb_instance_parameters":     instance_parameter.DataSourceByteplusMongoDBInstanceParameters(),
+			"byteplus_mongodb_instance_parameter_logs": instance_parameter_log.DataSourceByteplusMongoDBInstanceParameterLogs(),
+			"byteplus_mongodb_regions":                 mongodbRegion.DataSourceByteplusMongoDBRegions(),
+			"byteplus_mongodb_zones":                   mongodbZone.DataSourceByteplusMongoDBZones(),
+			"byteplus_mongodb_accounts":                account.DataSourceByteplusMongoDBAccounts(),
+			"byteplus_mongodb_specs":                   spec.DataSourceByteplusMongoDBSpecs(),
+			"byteplus_mongodb_ssl_states":              ssl_state.DataSourceByteplusMongoDBSSLStates(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			// ================ ECS ================
@@ -732,6 +767,15 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_cr_endpoint":            cr_endpoint.ResourceByteplusCrEndpoint(),
 			"byteplus_cr_vpc_endpoint":        cr_vpc_endpoint.ResourceByteplusCrVpcEndpoint(),
 			"byteplus_cr_endpoint_acl_policy": cr_endpoint_acl_policy.ResourceByteplusCrEndpointAclPolicy(),
+
+			// ================ MongoDB ================
+			"byteplus_mongodb_instance":             mongodbInstance.ResourceByteplusMongoDBInstance(),
+			"byteplus_mongodb_endpoint":             endpoint.ResourceByteplusMongoDBEndpoint(),
+			"byteplus_mongodb_allow_list":           allow_list.ResourceByteplusMongoDBAllowList(),
+			"byteplus_mongodb_instance_parameter":   instance_parameter.ResourceByteplusMongoDBInstanceParameter(),
+			"byteplus_mongodb_allow_list_associate": allow_list_associate.ResourceByteplusMongodbAllowListAssociate(),
+			"byteplus_mongodb_ssl_state":            ssl_state.ResourceByteplusMongoDBSSLState(),
+			"byteplus_mongodb_account":              account.ResourceByteplusMongoDBAccount(),
 		},
 		ConfigureFunc: ProviderConfigure,
 	}
@@ -739,15 +783,17 @@ func Provider() terraform.ResourceProvider {
 
 func ProviderConfigure(d *schema.ResourceData) (interface{}, error) {
 	config := bp.Config{
-		AccessKey:         d.Get("access_key").(string),
-		SecretKey:         d.Get("secret_key").(string),
-		SessionToken:      d.Get("session_token").(string),
-		Region:            d.Get("region").(string),
-		Endpoint:          d.Get("endpoint").(string),
-		DisableSSL:        d.Get("disable_ssl").(bool),
-		CustomerHeaders:   map[string]string{},
-		CustomerEndpoints: map[string]string{},
-		ProxyUrl:          d.Get("proxy_url").(string),
+		AccessKey:              d.Get("access_key").(string),
+		SecretKey:              d.Get("secret_key").(string),
+		SessionToken:           d.Get("session_token").(string),
+		Region:                 d.Get("region").(string),
+		Endpoint:               d.Get("endpoint").(string),
+		DisableSSL:             d.Get("disable_ssl").(bool),
+		EnableStandardEndpoint: d.Get("enable_standard_endpoint").(bool),
+		StandardEndpointSuffix: d.Get("standard_endpoint_suffix").(string),
+		CustomerHeaders:        map[string]string{},
+		CustomerEndpoints:      map[string]string{},
+		ProxyUrl:               d.Get("proxy_url").(string),
 	}
 
 	headers := d.Get("customer_headers").(string)
@@ -855,7 +901,7 @@ func assumeRole(c bp.Config, arTrn, arSessionName, arPolicy string, arDurationSe
 		return nil, err
 	}
 
-	universalClient := bp.NewUniversalClient(sess, c.CustomerEndpoints)
+	universalClient := bp.NewUniversalClient(sess, c.CustomerEndpoints, c.EnableStandardEndpoint, c.StandardEndpointSuffix)
 
 	action := "AssumeRole"
 	req := map[string]interface{}{

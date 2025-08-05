@@ -13,15 +13,17 @@ import (
 )
 
 type Config struct {
-	AccessKey         string
-	SecretKey         string
-	SessionToken      string
-	Region            string
-	Endpoint          string
-	DisableSSL        bool
-	CustomerHeaders   map[string]string
-	CustomerEndpoints map[string]string
-	ProxyUrl          string
+	AccessKey              string
+	SecretKey              string
+	SessionToken           string
+	Region                 string
+	Endpoint               string
+	DisableSSL             bool
+	EnableStandardEndpoint bool
+	StandardEndpointSuffix string
+	CustomerHeaders        map[string]string
+	CustomerEndpoints      map[string]string
+	ProxyUrl               string
 }
 
 func (c *Config) Client() (*SdkClient, error) {
@@ -57,7 +59,7 @@ func (c *Config) Client() (*SdkClient, error) {
 	}
 
 	client.Region = c.Region
-	client.UniversalClient = NewUniversalClient(sess, c.CustomerEndpoints)
+	client.UniversalClient = NewUniversalClient(sess, c.CustomerEndpoints, c.EnableStandardEndpoint, c.StandardEndpointSuffix)
 	client.BypassSvcClient = NewBypassClient(sess)
 
 	return &client, nil
