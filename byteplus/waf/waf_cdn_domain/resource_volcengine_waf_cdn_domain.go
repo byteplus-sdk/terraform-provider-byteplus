@@ -13,7 +13,7 @@ import (
 Import
 WafCdnDomain can be imported using the id, e.g.
 ```
-$ terraform import volcengine_waf_cdn_domain.default resource_id
+$ terraform import byteplus_waf_cdn_domain.default resource_id
 ```
 
 */

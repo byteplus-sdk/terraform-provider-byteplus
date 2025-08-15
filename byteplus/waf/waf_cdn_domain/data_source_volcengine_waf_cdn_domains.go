@@ -1,14 +1,14 @@
 package waf_cdn_domain
 
 import (
+	bp "github.com/byteplus-sdk/terraform-provider-byteplus/common"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
-	ve "github.com/volcengine/terraform-provider-volcengine/common"
 )
 
-func DataSourceVolcengineWafCdnDomains() *schema.Resource {
+func DataSourceByteplusWafCdnDomains() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceVolcengineWafCdnDomainsRead,
+		Read: dataSourceByteplusWafCdnDomainsRead,
 		Schema: map[string]*schema.Schema{
 			"name_regex": {
 				Type:         schema.TypeString,
@@ -469,7 +469,7 @@ func DataSourceVolcengineWafCdnDomains() *schema.Resource {
 	}
 }
 
-func dataSourceVolcengineWafCdnDomainsRead(d *schema.ResourceData, meta interface{}) error {
-	service := NewWafCdnDomainService(meta.(*ve.SdkClient))
-	return service.Dispatcher.Data(service, d, DataSourceVolcengineWafCdnDomains())
+func dataSourceByteplusWafCdnDomainsRead(d *schema.ResourceData, meta interface{}) error {
+	service := NewWafCdnDomainService(meta.(*bp.SdkClient))
+	return service.Dispatcher.Data(service, d, DataSourceByteplusWafCdnDomains())
 }

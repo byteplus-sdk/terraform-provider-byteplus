@@ -5,12 +5,12 @@ import (
 	"errors"
 	"fmt"
 	bp "github.com/byteplus-sdk/terraform-provider-byteplus/common"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/logger"
 	"strconv"
 	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/volcengine/terraform-provider-volcengine/logger"
 )
 
 type ByteplusWafDomainService struct {

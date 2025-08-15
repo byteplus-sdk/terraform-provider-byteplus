@@ -3,6 +3,7 @@ package byteplus
 import (
 	"context"
 	"fmt"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/waf/waf_cdn_domain"
 	"net/http"
 	"net/url"
 	"os"
@@ -595,6 +596,7 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_waf_host_groups":               waf_host_group.DataSourceByteplusWafHostGroups(),
 			"byteplus_waf_ip_groups":                 waf_ip_group.DataSourceByteplusWafIpGroups(),
 			"byteplus_waf_service_certificates":      waf_service_certificate.DataSourceByteplusWafServiceCertificates(),
+			"byteplus_waf_cdn_domains":               waf_cdn_domain.DataSourceByteplusWafCdnDomains(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			// ================ ECS ================
@@ -844,6 +846,7 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_waf_host_group":               waf_host_group.ResourceByteplusWafHostGroup(),
 			"byteplus_waf_ip_group":                 waf_ip_group.ResourceByteplusWafIpGroup(),
 			"byteplus_waf_vulnerability":            waf_vulnerability.ResourceByteplusWafVulnerability(),
+			"byteplus_waf_cdn_domain":               waf_cdn_domain.ResourceByteplusWafCdnDomain(),
 		},
 		ConfigureFunc: ProviderConfigure,
 	}
