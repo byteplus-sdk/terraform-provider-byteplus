@@ -36,7 +36,6 @@ func ResourceByteplusWafCdnDomain() *schema.Resource {
 			"project_name": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				ForceNew:    true,
 				Computed:    true,
 				Description: "The name of project.",
 			},
@@ -653,12 +652,8 @@ func ResourceByteplusWafCdnDomain() *schema.Resource {
 				Description: "WAF instance IP. If your domain is added from BytePlus CDN, the value is null.",
 			},
 			"protocols": {
-				Type:     schema.TypeSet,
+				Type:     schema.TypeString,
 				Computed: true,
-				Set:      schema.HashString,
-				Elem: &schema.Schema{
-					Type: schema.TypeString,
-				},
 				Description: "Protocols of provisioning. " +
 					"If your domain is added from BytePlus CDN, the value is null.",
 			},
