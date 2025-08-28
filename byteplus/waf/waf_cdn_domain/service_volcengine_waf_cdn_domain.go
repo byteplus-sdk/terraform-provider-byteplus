@@ -53,7 +53,10 @@ func (s *ByteplusWafDomainService) ReadResources(m map[string]interface{}) (data
 		}
 		respBytes, _ := json.Marshal(resp)
 		logger.Debug(logger.RespFormat, action, condition, string(respBytes))
+		logger.Debug(logger.RespFormat, "Result.Data is", resp)
 		results, err = bp.ObtainSdkValue("Result.Data", *resp)
+		logger.Debug(logger.RespFormat, "Result.Data is", results)
+
 		if err != nil {
 			return data, err
 		}
@@ -208,13 +211,21 @@ func (s *ByteplusWafDomainService) CreateResource(resourceData *schema.ResourceD
 			},
 			ExecuteCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (*map[string]interface{}, error) {
 				logger.Debug(logger.RespFormat, call.Action, call.SdkParam)
+				logger.Debug(logger.RespFormat, "before execute", "wxy-test")
 				resp, err := s.Client.UniversalClient.DoCall(getUniversalInfo(call.Action), call.SdkParam)
 				logger.Debug(logger.RespFormat, call.Action, resp, err)
 				return resp, err
 			},
 			AfterCall: func(d *schema.ResourceData, client *bp.SdkClient, resp *map[string]interface{}, call bp.SdkCall) error {
-				id, _ := bp.ObtainSdkValue("Result.Domain", *resp)
-				d.SetId(id.(string))
+				logger.Debug(logger.RespFormat, "id is before", resp)
+				id, _ := bp.ObtainSdkValue("Result.DomainList", *resp)
+				logger.Debug(logger.RespFormat, "id is", id)
+				domainId, ok := id.([]interface{})[0].(string)
+				if !ok {
+					return errors.New("id is not string")
+				}
+				logger.Debug(logger.RespFormat, "domainId is", domainId)
+				d.SetId(domainId)
 				return nil
 			},
 			Refresh: &bp.StateRefresh{
@@ -385,7 +396,7 @@ func (s *ByteplusWafDomainService) RemoveResource(resourceData *schema.ResourceD
 			ConvertMode: bp.RequestConvertIgnore,
 			ContentType: bp.ContentTypeJson,
 			SdkParam: &map[string]interface{}{
-				"Id": resourceData.Id(),
+				"Host": resourceData.Id(),
 			},
 			ExecuteCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (*map[string]interface{}, error) {
 				logger.Debug(logger.RespFormat, call.Action, call.SdkParam)
