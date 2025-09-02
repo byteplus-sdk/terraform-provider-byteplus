@@ -119,7 +119,7 @@ func (s *ByteplusWafProhibitionService) ReadResourceId(id string) string {
 func getUniversalInfo(actionName string) bp.UniversalInfo {
 	return bp.UniversalInfo{
 		ServiceName: "waf",
-		Version:     "2020-12-09",
+		Version:     "2023-12-25",
 		HttpMethod:  bp.POST,
 		ContentType: bp.ApplicationJSON,
 		Action:      actionName,
