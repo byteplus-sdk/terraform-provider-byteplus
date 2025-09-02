@@ -52,17 +52,6 @@ func DataSourceByteplusWafCdnDomains() *schema.Resource {
 							Computed:    true,
 							Description: "domain names that need to be protected by WAF.",
 						},
-						"advanced_defense_ip": {
-							Type:     schema.TypeString,
-							Computed: true,
-							Description: "IP address of Advanced DDoS Protection instance." +
-								" Displayed if the instance is provisioned via Advanced DDoS Protection, otherwise, it is null.",
-						},
-						"advanced_defense_ipv6": {
-							Type:        schema.TypeString,
-							Computed:    true,
-							Description: "Advanced Defense IPv6. Displayed if the instance is provisioned via Advanced DDoS Protection, otherwise, it is null.",
-						},
 						"cname": {
 							Type:        schema.TypeString,
 							Computed:    true,
@@ -88,79 +77,11 @@ func DataSourceByteplusWafCdnDomains() *schema.Resource {
 							Computed:    true,
 							Description: "Access mode. If your domain is added from BytePlus CDN, this parameter is set to 6.",
 						},
-						"cloud_access_config": {
-							Type:     schema.TypeList,
-							Computed: true,
-							Description: "Displayed when cloud WAF instance is provisioned through load balancing, otherwise, it is null. " +
-								"If your domain is added from BytePlus CDN, the value is null.",
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"instance_id": {
-										Type:        schema.TypeString,
-										Computed:    true,
-										Description: "The ID of instance.",
-									},
-									"listener_id": {
-										Type:        schema.TypeString,
-										Computed:    true,
-										Description: "The ID of listener.",
-									},
-									"protocol": {
-										Type:        schema.TypeString,
-										Computed:    true,
-										Description: "The protocol type of the forwarding rule.",
-									},
-									"port": {
-										Type:        schema.TypeString,
-										Computed:    true,
-										Description: "The port number of the forwarding rule.",
-									},
-									"access_protocol": {
-										Type:        schema.TypeString,
-										Computed:    true,
-										Description: "Protocol type.",
-									},
-								},
-							},
-						},
 						"public_real_server": {
 							Type:     schema.TypeInt,
 							Computed: true,
 							Description: "Back-to-origin mode of CNAME provisioning." +
 								" If your domain is added from BytePlus CDN, the default value is set to 0.",
-						},
-						"vpc_id": {
-							Type:     schema.TypeString,
-							Computed: true,
-							Description: "VPC ID, displayed when the back-to-origin method is set as Private IP address within VPC ( PublicRealServer=0). " +
-								"If your domain is added from BytePlus CDN, the value is null.",
-						},
-						"protocol_ports": {
-							Type:     schema.TypeList,
-							MaxItems: 1,
-							Computed: true,
-							Description: "Back-to-origin port. " +
-								"If your domain is added from BytePlus CDN, the value is null.",
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"http": {
-										Type:     schema.TypeList,
-										Computed: true,
-										Elem: &schema.Schema{
-											Type: schema.TypeInt,
-										},
-										Description: "Back-to-origin port numbers for the HTTP protocol.",
-									},
-									"https": {
-										Type:     schema.TypeList,
-										Computed: true,
-										Elem: &schema.Schema{
-											Type: schema.TypeInt,
-										},
-										Description: "Back-to-origin port numbers for the HTTPS protocol.",
-									},
-								},
-							},
 						},
 						"enable_http2": {
 							Type:     schema.TypeInt,
@@ -173,58 +94,6 @@ func DataSourceByteplusWafCdnDomains() *schema.Resource {
 							Computed: true,
 							Description: "Whether IPv6 request is enabled." +
 								" If your domain is added from BytePlus CDN, the default value is set to 0.",
-						},
-						"backend_groups": {
-							Type:     schema.TypeList,
-							Computed: true,
-							Description: "Details of the origin servergroup. " +
-								"If your domain is added from BytePlus CDN, the value is null.",
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-									"access_port": {
-										Type:     schema.TypeList,
-										Computed: true,
-										Elem: &schema.Schema{
-											Type: schema.TypeInt,
-										},
-										Description: "Access port number.",
-									},
-									"backends": {
-										Type:        schema.TypeList,
-										Computed:    true,
-										Description: "Details of the origin server group.",
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-												"protocol": {
-													Type:        schema.TypeString,
-													Computed:    true,
-													Description: "Protocol of origin server.",
-												},
-												"ip": {
-													Type:        schema.TypeString,
-													Computed:    true,
-													Description: "IP address of origin server.",
-												},
-												"port": {
-													Type:        schema.TypeInt,
-													Computed:    true,
-													Description: "Port number of the origin server.",
-												},
-												"weight": {
-													Type:        schema.TypeInt,
-													Computed:    true,
-													Description: "The weight of the origin server.",
-												},
-											},
-										},
-									},
-									"name": {
-										Type:        schema.TypeString,
-										Computed:    true,
-										Description: "Name of the origin server group.",
-									},
-								},
-							},
 						},
 						"protocol_follow": {
 							Type:     schema.TypeInt,
@@ -244,37 +113,10 @@ func DataSourceByteplusWafCdnDomains() *schema.Resource {
 							Description: "Method to obtain client IP. " +
 								"If your domain is added from BytePlus CDN, the default value is set to 0.",
 						},
-						"custom_header": {
-							Type:     schema.TypeList,
-							Computed: true,
-							Description: "After setting the client IP acquisition method to a custom field, it will display." +
-								" If your domain is added from BytePlus CDN, the value is null.",
-							Elem: &schema.Schema{
-								Type: schema.TypeString,
-							},
-						},
 						"tls_enable": {
 							Type:        schema.TypeInt,
 							Computed:    true,
 							Description: "Whether the Torch Log Service is enabled.",
-						},
-						"ssl_protocols": {
-							Type:     schema.TypeList,
-							Computed: true,
-							Elem: &schema.Schema{
-								Type: schema.TypeString,
-							},
-							Description: "TLS protocol version." +
-								" If your domain is added from BytePlus CDN, the value is null.",
-						},
-						"ssl_ciphers": {
-							Type:     schema.TypeList,
-							Computed: true,
-							Elem: &schema.Schema{
-								Type: schema.TypeString,
-							},
-							Description: "TLS encryption cipher suite." +
-								" If your domain is added from BytePlus CDN, the value is null.",
 						},
 						"client_max_body_size": {
 							Type:     schema.TypeInt,
@@ -345,12 +187,6 @@ func DataSourceByteplusWafCdnDomains() *schema.Resource {
 							Computed: true,
 							Description: "Whether the SNI configuration is enabled. " +
 								"If your domain is added from BytePlus CDN, the default value is set to 0.",
-						},
-						"custom_sni": {
-							Type:     schema.TypeString,
-							Computed: true,
-							Description: "Custom SNI domain name. " +
-								"If your domain is added from BytePlus CDN, the value is null.",
 						},
 						"project_name": {
 							Type:        schema.TypeString,
@@ -439,28 +275,10 @@ func DataSourceByteplusWafCdnDomains() *schema.Resource {
 							Computed:    true,
 							Description: "Whether to enable the intelligent CC protection strategy.",
 						},
-						"src_ips": {
-							Type:     schema.TypeString,
-							Computed: true,
-							Description: "Back-to-origin IP of WAF instance. " +
-								"If your domain is added from BytePlus CDN, the value is null.",
-						},
 						"update_time": {
 							Type:        schema.TypeString,
 							Computed:    true,
 							Description: "The update time.",
-						},
-						"server_ips": {
-							Type:     schema.TypeString,
-							Computed: true,
-							Description: "WAF instance IP." +
-								" If your domain is added from BytePlus CDN, the value is null.",
-						},
-						"protocols": {
-							Type:     schema.TypeString,
-							Computed: true,
-							Description: "Protocols of provisioning. " +
-								"If your domain is added from BytePlus CDN, the value is null.",
 						},
 					},
 				},

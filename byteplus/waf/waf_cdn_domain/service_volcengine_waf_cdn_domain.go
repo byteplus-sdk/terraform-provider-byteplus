@@ -239,7 +239,23 @@ func (s *ByteplusWafDomainService) CreateResource(resourceData *schema.ResourceD
 
 func (ByteplusWafDomainService) WithResourceResponseHandlers(d map[string]interface{}) []bp.ResourceResponseHandler {
 	handler := func() (map[string]interface{}, map[string]bp.ResponseConvert, error) {
-		return d, nil, nil
+		return d, map[string]bp.ResponseConvert{
+			"LBAlgorithm": {
+				TargetField: "lb_algorithm",
+			},
+			"EnableHTTP2": {
+				TargetField: "enable_http2",
+			},
+			"EnableIPv6": {
+				TargetField: "enable_ipv6",
+			},
+			"EnableSNI": {
+				TargetField: "enable_sni",
+			},
+			"AutoCCEnable": {
+				TargetField: "auto_cc_enable",
+			},
+		}, nil
 	}
 	return []bp.ResourceResponseHandler{handler}
 }
@@ -412,19 +428,24 @@ func (s *ByteplusWafDomainService) RemoveResource(resourceData *schema.ResourceD
 
 func (s *ByteplusWafDomainService) DatasourceResources(*schema.ResourceData, *schema.Resource) bp.DataSourceInfo {
 	return bp.DataSourceInfo{
-		RequestConverts: map[string]bp.RequestConvert{
-			"ids": {
-				TargetField: "Ids",
-				ConvertType: bp.ConvertWithN,
-			},
-		},
 		NameField:    "Name",
-		IdField:      "Id",
-		CollectField: "instances",
+		IdField:      "Domain",
+		CollectField: "data",
 		ResponseConverts: map[string]bp.ResponseConvert{
-			"Id": {
-				TargetField: "id",
-				KeepDefault: true,
+			"LBAlgorithm": {
+				TargetField: "lb_algorithm",
+			},
+			"EnableHTTP2": {
+				TargetField: "enable_http2",
+			},
+			"EnableIPv6": {
+				TargetField: "enable_ipv6",
+			},
+			"EnableSNI": {
+				TargetField: "enable_sni",
+			},
+			"AutoCCEnable": {
+				TargetField: "auto_cc_enable",
 			},
 		},
 	}

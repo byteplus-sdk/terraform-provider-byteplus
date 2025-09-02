@@ -3,5 +3,5 @@ resource "byteplus_waf_system_bot" "foo" {
   project_name = "default"
   action       = "observe"
   enable       = 0
-  host         = "www.tf-test.com"
+  host         = "tf-test.com"
 }
