@@ -31,6 +31,11 @@ func DataSourceByteplusWafCustomBots() *schema.Resource {
 				Optional:    true,
 				Description: "The domain names that need to be viewed.",
 			},
+			"rule_tag": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Rule identification, exact match search.",
+			},
 			"data": {
 				Description: "The Details of Custom bot.",
 				Type:        schema.TypeList,

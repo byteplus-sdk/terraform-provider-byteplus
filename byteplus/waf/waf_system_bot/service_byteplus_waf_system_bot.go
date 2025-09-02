@@ -172,53 +172,52 @@ func (s *ByteplusWafSystemBotService) ModifyResource(resourceData *schema.Resour
 }
 
 func (s *ByteplusWafSystemBotService) RemoveResource(resourceData *schema.ResourceData, r *schema.Resource) []bp.Callback {
-	//callback := bp.Callback{
-	//	Call: bp.SdkCall{
-	//		Action:      "UpdateSystemBotConfig",
-	//		ConvertMode: bp.RequestConvertIgnore,
-	//		ContentType: bp.ContentTypeJson,
-	//		BeforeCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (bool, error) {
-	//			parts := strings.Split(d.Id(), ":")
-	//			if len(parts) != 2 {
-	//				return false, fmt.Errorf("format of waf system bot resource id is invalid,%s", d.Id())
-	//			}
-	//			botType := parts[0]
-	//			host := parts[1]
-	//			(*call.SdkParam)["BotType"] = botType
-	//			(*call.SdkParam)["Host"] = host
-	//			(*call.SdkParam)["Action"] = d.Get("action")
-	//			(*call.SdkParam)["Enable"] = 0
-	//			return true, nil
-	//		},
-	//		ExecuteCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (*map[string]interface{}, error) {
-	//			logger.Debug(logger.RespFormat, call.Action, call.SdkParam)
-	//			return s.Client.UniversalClient.DoCall(getUniversalInfo(call.Action), call.SdkParam)
-	//		},
-	//		AfterCall: func(d *schema.ResourceData, client *bp.SdkClient, resp *map[string]interface{}, call bp.SdkCall) error {
-	//			return s.checkResourceUtilRemoved(d, 5*time.Minute)
-	//		},
-	//		CallError: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall, baseErr error) error {
-	//			//出现错误后重试
-	//			return resource.Retry(5*time.Minute, func() *resource.RetryError {
-	//				_, callErr := s.ReadResource(d, "")
-	//				if callErr != nil {
-	//					if bp.ResourceNotFoundError(callErr) {
-	//						return nil
-	//					} else {
-	//						return resource.NonRetryableError(fmt.Errorf("error on  reading waf custom page on delete %q, %w", d.Id(), callErr))
-	//					}
-	//				}
-	//				_, callErr = call.ExecuteCall(d, client, call)
-	//				if callErr == nil {
-	//					return nil
-	//				}
-	//				return resource.RetryableError(callErr)
-	//			})
-	//		},
-	//	},
-	//}
-	logger.Debug(logger.ReqFormat, "RemoveResource", "Remove only from tf management")
-	return []bp.Callback{}
+	callback := bp.Callback{
+		Call: bp.SdkCall{
+			Action:      "UpdateSystemBotConfig",
+			ConvertMode: bp.RequestConvertIgnore,
+			ContentType: bp.ContentTypeJson,
+			BeforeCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (bool, error) {
+				parts := strings.Split(d.Id(), ":")
+				if len(parts) != 2 {
+					return false, fmt.Errorf("format of waf system bot resource id is invalid,%s", d.Id())
+				}
+				botType := parts[0]
+				host := parts[1]
+				(*call.SdkParam)["BotType"] = botType
+				(*call.SdkParam)["Host"] = host
+				(*call.SdkParam)["Action"] = d.Get("action")
+				(*call.SdkParam)["Enable"] = 0
+				return true, nil
+			},
+			ExecuteCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (*map[string]interface{}, error) {
+				logger.Debug(logger.RespFormat, call.Action, call.SdkParam)
+				return s.Client.UniversalClient.DoCall(getUniversalInfo(call.Action), call.SdkParam)
+			},
+			AfterCall: func(d *schema.ResourceData, client *bp.SdkClient, resp *map[string]interface{}, call bp.SdkCall) error {
+				return s.checkResourceUtilRemoved(d, 5*time.Minute)
+			},
+			CallError: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall, baseErr error) error {
+				//出现错误后重试
+				return resource.Retry(5*time.Minute, func() *resource.RetryError {
+					_, callErr := s.ReadResource(d, "")
+					if callErr != nil {
+						if bp.ResourceNotFoundError(callErr) {
+							return nil
+						} else {
+							return resource.NonRetryableError(fmt.Errorf("error on  reading waf custom page on delete %q, %w", d.Id(), callErr))
+						}
+					}
+					_, callErr = call.ExecuteCall(d, client, call)
+					if callErr == nil {
+						return nil
+					}
+					return resource.RetryableError(callErr)
+				})
+			},
+		},
+	}
+	return []bp.Callback{callback}
 }
 
 func (s *ByteplusWafSystemBotService) DatasourceResources(*schema.ResourceData, *schema.Resource) bp.DataSourceInfo {
