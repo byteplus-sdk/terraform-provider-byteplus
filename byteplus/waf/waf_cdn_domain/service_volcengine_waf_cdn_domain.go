@@ -255,6 +255,21 @@ func (ByteplusWafDomainService) WithResourceResponseHandlers(d map[string]interf
 			"AutoCCEnable": {
 				TargetField: "auto_cc_enable",
 			},
+			"AdvancedDefenseIP": {
+				TargetField: "advanced_defense_ip",
+			},
+			"AdvancedDefenseIPv6": {
+				TargetField: "advanced_defense_ipv6",
+			},
+			"SSLProtocols": {
+				TargetField: "ssl_protocols",
+			},
+			"SSLCiphers": {
+				TargetField: "ssl_ciphers",
+			},
+			"CustomSNI": {
+				TargetField: "custom_sni",
+			},
 		}, nil
 	}
 	return []bp.ResourceResponseHandler{handler}
@@ -446,6 +461,21 @@ func (s *ByteplusWafDomainService) DatasourceResources(*schema.ResourceData, *sc
 			},
 			"AutoCCEnable": {
 				TargetField: "auto_cc_enable",
+			},
+			"AdvancedDefenseIP": {
+				TargetField: "advanced_defense_ip",
+			},
+			"AdvancedDefenseIPv6": {
+				TargetField: "advanced_defense_ipv6",
+			},
+			"SSLProtocols": {
+				TargetField: "ssl_protocols",
+			},
+			"SSLCiphers": {
+				TargetField: "ssl_ciphers",
+			},
+			"CustomSNI": {
+				TargetField: "custom_sni",
 			},
 		},
 	}
