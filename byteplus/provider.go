@@ -195,6 +195,14 @@ import (
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/planned_event"
 	redisRegion "github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/region"
 	redisZone "github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/redis/zone"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/tos/bucket"
+	tos_bucket_cors "github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/tos/bucket_cors"
+	tos_bucket_encryption "github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/tos/bucket_encryption"
+	tos_bucket_inventory "github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/tos/bucket_inventory"
+	tos_bucket_notification "github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/tos/bucket_notification"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/tos/bucket_policy"
+	tos_bucket_realtime_log "github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/tos/bucket_realtime_log"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/tos/object"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vke/addon"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vke/cluster"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vke/default_node_pool"
@@ -276,6 +284,12 @@ func Provider() terraform.ResourceProvider {
 				Optional:    true,
 				DefaultFunc: schema.EnvDefaultFunc("BYTEPLUS_CUSTOMER_ENDPOINTS", nil),
 				Description: "CUSTOMER ENDPOINTS for BytePlus Provider",
+			},
+			"customer_endpoint_suffix": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				DefaultFunc: schema.EnvDefaultFunc("BYTEPLUS_CUSTOMER_ENDPOINT_SUFFIX", nil),
+				Description: "CUSTOMER ENDPOINT SUFFIX for BytePlus Provider",
 			},
 			"enable_standard_endpoint": {
 				Type:        schema.TypeBool,
@@ -550,6 +564,11 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_mongodb_accounts":                account.DataSourceByteplusMongoDBAccounts(),
 			"byteplus_mongodb_specs":                   spec.DataSourceByteplusMongoDBSpecs(),
 			"byteplus_mongodb_ssl_states":              ssl_state.DataSourceByteplusMongoDBSSLStates(),
+
+			// ================ TOS ================
+			"byteplus_tos_buckets":            bucket.DataSourceByteplusTosBuckets(),
+			"byteplus_tos_objects":            object.DataSourceByteplusTosObjects(),
+			"byteplus_tos_bucket_inventories": tos_bucket_inventory.DataSourceByteplusTosBucketInventories(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			// ================ ECS ================
@@ -776,6 +795,16 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_mongodb_allow_list_associate": allow_list_associate.ResourceByteplusMongodbAllowListAssociate(),
 			"byteplus_mongodb_ssl_state":            ssl_state.ResourceByteplusMongoDBSSLState(),
 			"byteplus_mongodb_account":              account.ResourceByteplusMongoDBAccount(),
+
+			//================= TOS =================
+			"byteplus_tos_bucket":              bucket.ResourceByteplusTosBucket(),
+			"byteplus_tos_object":              object.ResourceByteplusTosObject(),
+			"byteplus_tos_bucket_policy":       bucket_policy.ResourceByteplusTosBucketPolicy(),
+			"byteplus_tos_bucket_inventory":    tos_bucket_inventory.ResourceByteplusTosBucketInventory(),
+			"byteplus_tos_bucket_realtime_log": tos_bucket_realtime_log.ResourceByteplusTosBucketRealtimeLog(),
+			"byteplus_tos_bucket_notification": tos_bucket_notification.ResourceByteplusTosBucketNotification(),
+			"byteplus_tos_bucket_encryption":   tos_bucket_encryption.ResourceByteplusTosBucketEncryption(),
+			"byteplus_tos_bucket_cors":         tos_bucket_cors.ResourceByteplusTosBucketCors(),
 		},
 		ConfigureFunc: ProviderConfigure,
 	}
@@ -793,6 +822,7 @@ func ProviderConfigure(d *schema.ResourceData) (interface{}, error) {
 		StandardEndpointSuffix: d.Get("standard_endpoint_suffix").(string),
 		CustomerHeaders:        map[string]string{},
 		CustomerEndpoints:      map[string]string{},
+		CustomerEndpointSuffix: map[string]string{},
 		ProxyUrl:               d.Get("proxy_url").(string),
 	}
 
@@ -814,6 +844,17 @@ func ProviderConfigure(d *schema.ResourceData) (interface{}, error) {
 			point := strings.Split(end, ":")
 			if len(point) == 2 {
 				config.CustomerEndpoints[point[0]] = point[1]
+			}
+		}
+	}
+
+	endpointSuffix := d.Get("customer_endpoint_suffix").(string)
+	if endpointSuffix != "" {
+		ends := strings.Split(endpointSuffix, ",")
+		for _, end := range ends {
+			point := strings.Split(end, ":")
+			if len(point) == 2 {
+				config.CustomerEndpointSuffix[point[0]] = point[1]
 			}
 		}
 	}

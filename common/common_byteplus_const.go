@@ -49,5 +49,6 @@ const (
 	RegionalService = "Regional"
 	GlobalService   = "Global"
 
-	ByteplusIpv4EndpointSuffix = "byteplusapi.com"
+	ByteplusIpv4EndpointSuffix   = "byteplusapi.com"
+	ByteplusBypassEndpointSuffix = "bytepluses.com"
 )
