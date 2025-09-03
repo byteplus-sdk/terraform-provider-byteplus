@@ -146,6 +146,7 @@ var resourceKeys = map[string]string{
 	"redis":             "REDIS",
 	"kafka":             "KAFKA",
 	"mongodb":           "MONGODB",
+	"tos":               "TOS",
 }
 
 type Products struct {
