@@ -23,6 +23,7 @@ type Config struct {
 	StandardEndpointSuffix string
 	CustomerHeaders        map[string]string
 	CustomerEndpoints      map[string]string
+	CustomerEndpointSuffix map[string]string
 	ProxyUrl               string
 }
 
@@ -60,7 +61,7 @@ func (c *Config) Client() (*SdkClient, error) {
 
 	client.Region = c.Region
 	client.UniversalClient = NewUniversalClient(sess, c.CustomerEndpoints, c.EnableStandardEndpoint, c.StandardEndpointSuffix)
-	client.BypassSvcClient = NewBypassClient(sess)
+	client.BypassSvcClient = NewBypassClient(sess, c.CustomerEndpointSuffix)
 
 	return &client, nil
 }
