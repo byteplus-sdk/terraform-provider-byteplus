@@ -19,6 +19,7 @@ The following arguments are supported:
 * `host` - (Optional) The domain names that need to be viewed.
 * `name_regex` - (Optional) A Name Regex of Resource.
 * `output_file` - (Optional) File name where to save data source results.
+* `rule_tag` - (Optional) Rule identification, exact match search.
 
 ## Attributes Reference
 In addition to all arguments above, the following attributes are exported:
