@@ -44,8 +44,10 @@ var tobRegion = map[string]bool{
 }
 
 type Universal struct {
-	Session   *session.Session
-	endpoints map[string]string
+	Session                *session.Session
+	endpoints              map[string]string
+	enableStandardEndpoint bool
+	standardEndpointSuffix string
 }
 
 type UniversalInfo struct {
@@ -57,10 +59,12 @@ type UniversalInfo struct {
 	RegionType  RegionType
 }
 
-func NewUniversalClient(session *session.Session, endpoints map[string]string) *Universal {
+func NewUniversalClient(session *session.Session, endpoints map[string]string, enableStandardEndpoint bool, standardEndpointSuffix string) *Universal {
 	return &Universal{
-		Session:   session,
-		endpoints: endpoints,
+		Session:                session,
+		endpoints:              endpoints,
+		enableStandardEndpoint: enableStandardEndpoint,
+		standardEndpointSuffix: standardEndpointSuffix,
 	}
 }
 
@@ -76,14 +80,22 @@ func (u *Universal) loadEndpoint(info UniversalInfo, defaultEndpoint, region str
 	// todo: secondly, query endpoint by location DescribeOpenAPIEndpoints
 
 	// thirdly, combine standard endpoint for target region
-	if v, exist := tobRegion[region]; exist && v && endpoint == "" {
+	if v, exist := tobRegion[region]; endpoint == "" && ((exist && v) || u.enableStandardEndpoint) {
 		serviceName := strings.ReplaceAll(strings.ToLower(info.ServiceName), "_", "-")
 		regionType := getRegionType(info.RegionType)
-		var standardEndpoint string
+		var (
+			standardEndpoint       string
+			standardEndpointSuffix string
+		)
+		if u.standardEndpointSuffix != "" {
+			standardEndpointSuffix = u.standardEndpointSuffix
+		} else {
+			standardEndpointSuffix = ByteplusIpv4EndpointSuffix
+		}
 		if regionType == RegionalService {
-			standardEndpoint = fmt.Sprintf("%s.%s.%s", serviceName, region, ByteplusIpv4EndpointSuffix)
+			standardEndpoint = fmt.Sprintf("%s.%s.%s", serviceName, region, standardEndpointSuffix)
 		} else if regionType == GlobalService {
-			standardEndpoint = fmt.Sprintf("%s.%s", serviceName, ByteplusIpv4EndpointSuffix)
+			standardEndpoint = fmt.Sprintf("%s.%s", serviceName, standardEndpointSuffix)
 		}
 		endpoint = defaultEndpoint[0:strings.Index(defaultEndpoint, "//")] + "//" + standardEndpoint
 	}
