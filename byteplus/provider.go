@@ -3,7 +3,6 @@ package byteplus
 import (
 	"context"
 	"fmt"
-	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/waf/waf_cdn_domain"
 	"net/http"
 	"net/url"
 	"os"
@@ -236,6 +235,7 @@ import (
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/waf/waf_acl_rule"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/waf/waf_bot_analyse_protect_rule"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/waf/waf_cc_rule"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/waf/waf_cdn_domain"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/waf/waf_custom_bot"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/waf/waf_custom_page"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/waf/waf_domain"

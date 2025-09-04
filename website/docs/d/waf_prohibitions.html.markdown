@@ -11,9 +11,9 @@ Use this data source to query detailed information of waf prohibitions
 ## Example Usage
 ```hcl
 data "byteplus_waf_prohibitions" "foo" {
-  start_time = 1749805224
-  end_time   = 1749808824
-  host       = "www.tf-test.com"
+  start_time = 1756790806
+  end_time   = 1756801606
+  host       = "tf-test.com"
 }
 ```
 ## Argument Reference
