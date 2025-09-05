@@ -232,6 +232,20 @@ import (
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpn/vpn_connection"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpn/vpn_gateway"
 	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/vpn/vpn_gateway_route"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/waf/waf_acl_rule"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/waf/waf_bot_analyse_protect_rule"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/waf/waf_cc_rule"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/waf/waf_cdn_domain"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/waf/waf_custom_bot"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/waf/waf_custom_page"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/waf/waf_domain"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/waf/waf_host_group"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/waf/waf_instance_ctl"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/waf/waf_ip_group"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/waf/waf_prohibition"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/waf/waf_service_certificate"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/waf/waf_system_bot"
+	"github.com/byteplus-sdk/terraform-provider-byteplus/byteplus/waf/waf_vulnerability"
 )
 
 func Provider() terraform.ResourceProvider {
@@ -518,7 +532,19 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_rds_mysql_endpoints":           rds_mysql_endpoint.DataSourceByteplusRdsMysqlEndpoints(),
 			"byteplus_rds_mysql_backups":             rds_mysql_backup.DataSourceByteplusRdsMysqlBackups(),
 			"byteplus_rds_mysql_parameter_templates": rds_mysql_parameter_template.DataSourceByteplusRdsMysqlParameterTemplates(),
-
+			// ================ WAF ================
+			"byteplus_waf_domains":                   waf_domain.DataSourceByteplusWafDomains(),
+			"byteplus_waf_acl_rules":                 waf_acl_rule.DataSourceByteplusWafAclRules(),
+			"byteplus_waf_cc_rules":                  waf_cc_rule.DataSourceByteplusWafCcRules(),
+			"byteplus_waf_custom_pages":              waf_custom_page.DataSourceByteplusWafCustomPages(),
+			"byteplus_waf_system_bots":               waf_system_bot.DataSourceByteplusWafSystemBots(),
+			"byteplus_waf_custom_bots":               waf_custom_bot.DataSourceByteplusWafCustomBots(),
+			"byteplus_waf_bot_analyse_protect_rules": waf_bot_analyse_protect_rule.DataSourceByteplusWafBotAnalyseProtectRules(),
+			"byteplus_waf_prohibitions":              waf_prohibition.DataSourceByteplusWafProhibitions(),
+			"byteplus_waf_host_groups":               waf_host_group.DataSourceByteplusWafHostGroups(),
+			"byteplus_waf_ip_groups":                 waf_ip_group.DataSourceByteplusWafIpGroups(),
+			"byteplus_waf_service_certificates":      waf_service_certificate.DataSourceByteplusWafServiceCertificates(),
+			"byteplus_waf_cdn_domains":               waf_cdn_domain.DataSourceByteplusWafCdnDomains(),
 			// ================ Redis =============
 			"byteplus_redis_allow_lists":       redisAllowList.DataSourceByteplusRedisAllowLists(),
 			"byteplus_redis_backups":           redisBackup.DataSourceByteplusRedisBackups(),
@@ -756,6 +782,19 @@ func Provider() terraform.ResourceProvider {
 			"byteplus_rds_mysql_parameter_template":      rds_mysql_parameter_template.ResourceByteplusRdsMysqlParameterTemplate(),
 			"byteplus_rds_mysql_backup_policy":           rds_mysql_backup_policy.ResourceByteplusRdsMysqlBackupPolicy(),
 
+			// ================ WAF ================
+			"byteplus_waf_domain":                   waf_domain.ResourceByteplusWafDomain(),
+			"byteplus_waf_acl_rule":                 waf_acl_rule.ResourceByteplusWafAclRule(),
+			"byteplus_waf_cc_rule":                  waf_cc_rule.ResourceByteplusWafCcRule(),
+			"byteplus_waf_custom_page":              waf_custom_page.ResourceByteplusWafCustomPage(),
+			"byteplus_waf_system_bot":               waf_system_bot.ResourceByteplusWafSystemBot(),
+			"byteplus_waf_custom_bot":               waf_custom_bot.ResourceByteplusWafCustomBot(),
+			"byteplus_waf_instance_ctl":             waf_instance_ctl.ResourceByteplusWafInstanceCtl(),
+			"byteplus_waf_bot_analyse_protect_rule": waf_bot_analyse_protect_rule.ResourceByteplusWafBotAnalyseProtectRule(),
+			"byteplus_waf_host_group":               waf_host_group.ResourceByteplusWafHostGroup(),
+			"byteplus_waf_ip_group":                 waf_ip_group.ResourceByteplusWafIpGroup(),
+			"byteplus_waf_vulnerability":            waf_vulnerability.ResourceByteplusWafVulnerability(),
+			"byteplus_waf_cdn_domain":               waf_cdn_domain.ResourceByteplusWafCdnDomain(),
 			// ================ Redis ==============
 			"byteplus_redis_allow_list":           redisAllowList.ResourceByteplusRedisAllowList(),
 			"byteplus_redis_endpoint":             redisEndpoint.ResourceByteplusRedisEndpoint(),

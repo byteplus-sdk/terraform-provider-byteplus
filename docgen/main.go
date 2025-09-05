@@ -143,6 +143,7 @@ var resourceKeys = map[string]string{
 	"alb":               "ALB",
 	"escloud_v2":        "ESCLOUD",
 	"rds_mysql":         "RDS_MYSQL",
+	"waf":               "WAF",
 	"redis":             "REDIS",
 	"kafka":             "KAFKA",
 	"mongodb":           "MONGODB",
