@@ -40,12 +40,12 @@ func (s *ByteplusIamSamlProviderService) ReadResources(m map[string]interface{})
 		bytes, _ := json.Marshal(condition)
 		logger.Debug(logger.ReqFormat, action, string(bytes))
 		if condition == nil {
-			resp, err = s.Client.UniversalClient.DoCall(getUniversalInfo(action), nil)
+			resp, err = s.Client.UniversalClient.DoCall(getUniversalInfoDefault(action), nil)
 			if err != nil {
 				return data, err
 			}
 		} else {
-			resp, err = s.Client.UniversalClient.DoCall(getUniversalInfo(action), &condition)
+			resp, err = s.Client.UniversalClient.DoCall(getUniversalInfoDefault(action), &condition)
 			if err != nil {
 				return data, err
 			}
@@ -70,7 +70,7 @@ func (s *ByteplusIamSamlProviderService) ReadResources(m map[string]interface{})
 			}
 			action = "GetSAMLProvider"
 			logger.Debug(logger.ReqFormat, action, query)
-			resp, err = s.Client.UniversalClient.DoCall(getUniversalInfo(action), &query)
+			resp, err = s.Client.UniversalClient.DoCall(getUniversalInfoDefault(action), &query)
 			if err != nil {
 				return data, err
 			}
@@ -135,7 +135,7 @@ func (s *ByteplusIamSamlProviderService) CreateResource(resourceData *schema.Res
 			},
 			ExecuteCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (*map[string]interface{}, error) {
 				logger.Debug(logger.RespFormat, call.Action, call.SdkParam)
-				resp, err := s.Client.UniversalClient.DoCall(getUniversalInfo(call.Action), call.SdkParam)
+				resp, err := s.Client.UniversalClient.DoCall(getUniversalInfoPost(call.Action), call.SdkParam)
 				logger.Debug(logger.RespFormat, call.Action, resp, err)
 				return resp, err
 			},
@@ -181,7 +181,7 @@ func (s *ByteplusIamSamlProviderService) ModifyResource(resourceData *schema.Res
 			},
 			ExecuteCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (*map[string]interface{}, error) {
 				logger.Debug(logger.ReqFormat, call.Action, call.SdkParam)
-				resp, err := s.Client.UniversalClient.DoCall(getUniversalInfo(call.Action), call.SdkParam)
+				resp, err := s.Client.UniversalClient.DoCall(getUniversalInfoPost(call.Action), call.SdkParam)
 				logger.Debug(logger.RespFormat, call.Action, resp, err)
 				return resp, err
 			},
@@ -200,7 +200,7 @@ func (s *ByteplusIamSamlProviderService) RemoveResource(resourceData *schema.Res
 			},
 			ExecuteCall: func(d *schema.ResourceData, client *bp.SdkClient, call bp.SdkCall) (*map[string]interface{}, error) {
 				logger.Debug(logger.RespFormat, call.Action, call.SdkParam)
-				return s.Client.UniversalClient.DoCall(getUniversalInfo(call.Action), call.SdkParam)
+				return s.Client.UniversalClient.DoCall(getUniversalInfoDefault(call.Action), call.SdkParam)
 			},
 			AfterCall: func(d *schema.ResourceData, client *bp.SdkClient, resp *map[string]interface{}, call bp.SdkCall) error {
 				return bp.CheckResourceUtilRemoved(d, s.ReadResource, 5*time.Minute)
@@ -233,13 +233,23 @@ func (s *ByteplusIamSamlProviderService) ReadResourceId(id string) string {
 	return id
 }
 
-func getUniversalInfo(actionName string) bp.UniversalInfo {
+// 获取默认的get请求信息
+func getUniversalInfoDefault(actionName string) bp.UniversalInfo {
+	return getUniversalInfo(actionName, bp.GET, bp.Default)
+}
+
+// 获取post请求信息，当前content-type为x-www-form-urlencoded
+func getUniversalInfoPost(actionName string) bp.UniversalInfo {
+	return getUniversalInfo(actionName, bp.POST, bp.FormUrlencoded)
+}
+
+func getUniversalInfo(actionName string, httMethod bp.HttpMethod, contentType bp.ContentType) bp.UniversalInfo {
 	return bp.UniversalInfo{
 		ServiceName: "iam",
-		Version:     "2018-01-01",
-		HttpMethod:  bp.GET,
-		ContentType: bp.Default,
 		Action:      actionName,
+		Version:     "2018-01-01",
+		HttpMethod:  httMethod,
+		ContentType: contentType,
 		RegionType:  bp.Global,
 	}
 }
