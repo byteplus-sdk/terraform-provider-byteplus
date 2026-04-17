@@ -7,6 +7,8 @@ The byteplus provider is used to interact with many resources supported by Bytep
 ---
 
 # Byteplus Provider
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 
 The Byteplus provider is used to interact with many resources supported by [Byteplus](https://www.byteplus.com/en).
 The provider needs to be configured with the proper credentials before it can be used.
