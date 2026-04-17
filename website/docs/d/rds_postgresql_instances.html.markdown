@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-datasource-rds_postgresql_instances"
 description: |-
   Use this data source to query detailed information of rds postgresql instances
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_rds_postgresql_instances
 Use this data source to query detailed information of rds postgresql instances
 ## Example Usage

@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-datasource-waf_bot_analyse_protect_rules"
 description: |-
   Use this data source to query detailed information of waf bot analyse protect rules
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_waf_bot_analyse_protect_rules
 Use this data source to query detailed information of waf bot analyse protect rules
 ## Example Usage

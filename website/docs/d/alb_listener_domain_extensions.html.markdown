@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-datasource-alb_listener_domain_extensions"
 description: |-
   Use this data source to query detailed information of alb listener domain extensions
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_alb_listener_domain_extensions
 Use this data source to query detailed information of alb listener domain extensions
 ## Example Usage

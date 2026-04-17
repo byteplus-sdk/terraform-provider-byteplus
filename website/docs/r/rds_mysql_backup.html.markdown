@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-rds_mysql_backup"
 description: |-
   Provides a resource to manage rds mysql backup
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_rds_mysql_backup
 Provides a resource to manage rds mysql backup
 ## Example Usage

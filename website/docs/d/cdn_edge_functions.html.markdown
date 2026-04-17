@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-datasource-cdn_edge_functions"
 description: |-
   Use this data source to query detailed information of cdn edge functions
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_cdn_edge_functions
 Use this data source to query detailed information of cdn edge functions
 ## Example Usage

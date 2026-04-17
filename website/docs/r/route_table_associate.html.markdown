@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-route_table_associate"
 description: |-
   Provides a resource to manage route table associate
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_route_table_associate
 Provides a resource to manage route table associate
 ## Example Usage

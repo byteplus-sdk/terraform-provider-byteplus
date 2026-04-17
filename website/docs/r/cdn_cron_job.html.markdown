@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-cdn_cron_job"
 description: |-
   Provides a resource to manage cdn cron job
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_cdn_cron_job
 Provides a resource to manage cdn cron job
 ## Example Usage

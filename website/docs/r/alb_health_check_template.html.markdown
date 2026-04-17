@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-alb_health_check_template"
 description: |-
   Provides a resource to manage alb health check template
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_alb_health_check_template
 Provides a resource to manage alb health check template
 ## Example Usage

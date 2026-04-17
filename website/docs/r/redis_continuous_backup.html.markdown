@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-redis_continuous_backup"
 description: |-
   Provides a resource to manage redis continuous backup
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_redis_continuous_backup
 Provides a resource to manage redis continuous backup
 ## Example Usage

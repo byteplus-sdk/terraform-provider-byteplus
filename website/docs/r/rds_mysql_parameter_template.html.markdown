@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-rds_mysql_parameter_template"
 description: |-
   Provides a resource to manage rds mysql parameter template
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_rds_mysql_parameter_template
 Provides a resource to manage rds mysql parameter template
 ## Example Usage

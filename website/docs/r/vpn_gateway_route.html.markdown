@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-vpn_gateway_route"
 description: |-
   Provides a resource to manage vpn gateway route
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_vpn_gateway_route
 Provides a resource to manage vpn gateway route
 ## Example Usage

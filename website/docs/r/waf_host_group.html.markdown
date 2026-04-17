@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-waf_host_group"
 description: |-
   Provides a resource to manage waf host group
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_waf_host_group
 Provides a resource to manage waf host group
 ## Example Usage

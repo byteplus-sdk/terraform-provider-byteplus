@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-vpn_connection"
 description: |-
   Provides a resource to manage vpn connection
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_vpn_connection
 Provides a resource to manage vpn connection
 ## Example Usage

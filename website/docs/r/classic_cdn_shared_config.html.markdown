@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-classic_cdn_shared_config"
 description: |-
   Provides a resource to manage classic cdn shared config
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_classic_cdn_shared_config
 Provides a resource to manage classic cdn shared config
 ## Example Usage

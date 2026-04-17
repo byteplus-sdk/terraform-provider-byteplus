@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-scaling_instance_attachment"
 description: |-
   Provides a resource to manage scaling instance attachment
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_scaling_instance_attachment
 Provides a resource to manage scaling instance attachment
 ## Example Usage

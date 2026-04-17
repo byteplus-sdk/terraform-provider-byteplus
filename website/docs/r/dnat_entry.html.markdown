@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-dnat_entry"
 description: |-
   Provides a resource to manage dnat entry
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_dnat_entry
 Provides a resource to manage dnat entry
 ## Example Usage

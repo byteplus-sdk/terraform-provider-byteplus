@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-subnet"
 description: |-
   Provides a resource to manage subnet
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_subnet
 Provides a resource to manage subnet
 ## Example Usage

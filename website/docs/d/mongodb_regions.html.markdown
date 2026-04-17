@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-datasource-mongodb_regions"
 description: |-
   Use this data source to query detailed information of mongodb regions
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_mongodb_regions
 Use this data source to query detailed information of mongodb regions
 ## Example Usage

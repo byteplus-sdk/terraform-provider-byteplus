@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-datasource-waf_custom_bots"
 description: |-
   Use this data source to query detailed information of waf custom bots
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_waf_custom_bots
 Use this data source to query detailed information of waf custom bots
 ## Example Usage

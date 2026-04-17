@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-ecs_launch_template"
 description: |-
   Provides a resource to manage ecs launch template
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_ecs_launch_template
 Provides a resource to manage ecs launch template
 ## Notice

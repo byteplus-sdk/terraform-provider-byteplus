@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-datasource-tos_objects"
 description: |-
   Use this data source to query detailed information of tos objects
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_tos_objects
 Use this data source to query detailed information of tos objects
 ## Example Usage

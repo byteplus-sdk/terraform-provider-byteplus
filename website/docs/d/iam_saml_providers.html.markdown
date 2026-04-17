@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-datasource-iam_saml_providers"
 description: |-
   Use this data source to query detailed information of iam saml providers
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_iam_saml_providers
 Use this data source to query detailed information of iam saml providers
 ## Example Usage

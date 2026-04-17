@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-datasource-iam_policies"
 description: |-
   Use this data source to query detailed information of iam policies
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_iam_policies
 Use this data source to query detailed information of iam policies
 ## Example Usage

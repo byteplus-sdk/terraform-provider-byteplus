@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-datasource-images"
 description: |-
   Use this data source to query detailed information of images
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_images
 Use this data source to query detailed information of images
 ## Example Usage

@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-datasource-rds_mysql_databases"
 description: |-
   Use this data source to query detailed information of rds mysql databases
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_rds_mysql_databases
 Use this data source to query detailed information of rds mysql databases
 ## Example Usage

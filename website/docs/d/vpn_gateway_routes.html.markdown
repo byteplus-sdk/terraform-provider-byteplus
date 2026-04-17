@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-datasource-vpn_gateway_routes"
 description: |-
   Use this data source to query detailed information of vpn gateway routes
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_vpn_gateway_routes
 Use this data source to query detailed information of vpn gateway routes
 ## Example Usage

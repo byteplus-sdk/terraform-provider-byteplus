@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-vke_default_node_pool"
 description: |-
   Provides a resource to manage vke default node pool
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_vke_default_node_pool
 Provides a resource to manage vke default node pool
 ## Example Usage

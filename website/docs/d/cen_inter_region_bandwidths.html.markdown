@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-datasource-cen_inter_region_bandwidths"
 description: |-
   Use this data source to query detailed information of cen inter region bandwidths
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_cen_inter_region_bandwidths
 Use this data source to query detailed information of cen inter region bandwidths
 ## Example Usage

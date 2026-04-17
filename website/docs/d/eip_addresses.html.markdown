@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-datasource-eip_addresses"
 description: |-
   Use this data source to query detailed information of eip addresses
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_eip_addresses
 Use this data source to query detailed information of eip addresses
 ## Example Usage

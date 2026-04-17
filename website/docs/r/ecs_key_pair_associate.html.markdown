@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-ecs_key_pair_associate"
 description: |-
   Provides a resource to manage ecs key pair associate
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_ecs_key_pair_associate
 Provides a resource to manage ecs key pair associate
 ## Example Usage

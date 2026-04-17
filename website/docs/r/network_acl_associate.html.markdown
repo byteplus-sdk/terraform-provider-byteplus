@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-network_acl_associate"
 description: |-
   Provides a resource to manage network acl associate
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_network_acl_associate
 Provides a resource to manage network acl associate
 ## Example Usage

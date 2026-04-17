@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-security_group_rule"
 description: |-
   Provides a resource to manage security group rule
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_security_group_rule
 Provides a resource to manage security group rule
 ## Example Usage

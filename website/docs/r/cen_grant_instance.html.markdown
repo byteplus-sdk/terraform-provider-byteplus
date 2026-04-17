@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-cen_grant_instance"
 description: |-
   Provides a resource to manage cen grant instance
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_cen_grant_instance
 Provides a resource to manage cen grant instance
 ## Example Usage

@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-cen"
 description: |-
   Provides a resource to manage cen
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_cen
 Provides a resource to manage cen
 ## Example Usage

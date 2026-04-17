@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-organization_account"
 description: |-
   Provides a resource to manage organization account
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_organization_account
 Provides a resource to manage organization account
 ## Example Usage

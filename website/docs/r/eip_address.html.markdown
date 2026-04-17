@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-eip_address"
 description: |-
   Provides a resource to manage eip address
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_eip_address
 Provides a resource to manage eip address
 ## Notice

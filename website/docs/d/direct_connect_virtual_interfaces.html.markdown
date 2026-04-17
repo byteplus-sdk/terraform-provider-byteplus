@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-datasource-direct_connect_virtual_interfaces"
 description: |-
   Use this data source to query detailed information of direct connect virtual interfaces
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_direct_connect_virtual_interfaces
 Use this data source to query detailed information of direct connect virtual interfaces
 ## Example Usage

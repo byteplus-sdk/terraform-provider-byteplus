@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-datasource-vke_support_resource_types"
 description: |-
   Use this data source to query detailed information of vke support resource types
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_vke_support_resource_types
 Use this data source to query detailed information of vke support resource types
 ## Example Usage

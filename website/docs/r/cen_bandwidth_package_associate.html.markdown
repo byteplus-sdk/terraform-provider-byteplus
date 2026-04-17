@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-cen_bandwidth_package_associate"
 description: |-
   Provides a resource to manage cen bandwidth package associate
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_cen_bandwidth_package_associate
 Provides a resource to manage cen bandwidth package associate
 ## Example Usage

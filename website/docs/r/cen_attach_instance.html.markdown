@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-cen_attach_instance"
 description: |-
   Provides a resource to manage cen attach instance
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_cen_attach_instance
 Provides a resource to manage cen attach instance
 ## Example Usage

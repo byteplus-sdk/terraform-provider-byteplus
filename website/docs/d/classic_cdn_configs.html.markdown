@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-datasource-classic_cdn_configs"
 description: |-
   Use this data source to query detailed information of classic cdn configs
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_classic_cdn_configs
 Use this data source to query detailed information of classic cdn configs
 ## Example Usage

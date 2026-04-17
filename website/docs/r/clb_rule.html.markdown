@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-clb_rule"
 description: |-
   Provides a resource to manage clb rule
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_clb_rule
 Provides a resource to manage clb rule
 ## Example Usage

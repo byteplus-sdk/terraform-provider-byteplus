@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-acl"
 description: |-
   Provides a resource to manage acl
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_acl
 Provides a resource to manage acl
 ## Example Usage

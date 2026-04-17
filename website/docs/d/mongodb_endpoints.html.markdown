@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-datasource-mongodb_endpoints"
 description: |-
   Use this data source to query detailed information of mongodb endpoints
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_mongodb_endpoints
 Use this data source to query detailed information of mongodb endpoints
 ## Example Usage
