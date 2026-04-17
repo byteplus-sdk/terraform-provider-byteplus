@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-datasource-ecs_available_resources"
 description: |-
   Use this data source to query detailed information of ecs available resources
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_ecs_available_resources
 Use this data source to query detailed information of ecs available resources
 ## Example Usage

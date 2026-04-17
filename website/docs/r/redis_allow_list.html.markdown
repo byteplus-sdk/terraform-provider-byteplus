@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-redis_allow_list"
 description: |-
   Provides a resource to manage redis allow list
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_redis_allow_list
 Provides a resource to manage redis allow list
 ## Example Usage

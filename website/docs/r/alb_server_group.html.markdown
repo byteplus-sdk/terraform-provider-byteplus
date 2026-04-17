@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-alb_server_group"
 description: |-
   Provides a resource to manage alb server group
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_alb_server_group
 Provides a resource to manage alb server group
 ## Example Usage

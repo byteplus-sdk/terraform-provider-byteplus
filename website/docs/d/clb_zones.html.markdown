@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-datasource-clb_zones"
 description: |-
   Use this data source to query detailed information of clb zones
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_clb_zones
 Use this data source to query detailed information of clb zones
 ## Example Usage

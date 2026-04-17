@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-volume"
 description: |-
   Provides a resource to manage volume
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_volume
 Provides a resource to manage volume
 ## Notice

@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-datasource-cdn_kv_namespaces"
 description: |-
   Use this data source to query detailed information of cdn kv namespaces
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_cdn_kv_namespaces
 Use this data source to query detailed information of cdn kv namespaces
 ## Example Usage

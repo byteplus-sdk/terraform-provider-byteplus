@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-datasource-iam_user_group_policy_attachments"
 description: |-
   Use this data source to query detailed information of iam user group policy attachments
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_iam_user_group_policy_attachments
 Use this data source to query detailed information of iam user group policy attachments
 ## Example Usage

@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-cr_registry"
 description: |-
   Provides a resource to manage cr registry
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_cr_registry
 Provides a resource to manage cr registry
 ## Example Usage

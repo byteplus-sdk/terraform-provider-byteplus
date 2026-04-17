@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-vpc_ipv6_address_bandwidth"
 description: |-
   Provides a resource to manage vpc ipv6 address bandwidth
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_vpc_ipv6_address_bandwidth
 Provides a resource to manage vpc ipv6 address bandwidth
 ## Notice

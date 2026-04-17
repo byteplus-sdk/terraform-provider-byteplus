@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-cdn_kv_namespace"
 description: |-
   Provides a resource to manage cdn kv namespace
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_cdn_kv_namespace
 Provides a resource to manage cdn kv namespace
 ## Example Usage

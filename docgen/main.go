@@ -28,6 +28,8 @@ sidebar_current: "docs-{{.cloud_mark}}-{{.docType}}-{{.resource}}"
 description: |-
   {{.description_short}}
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # {{.name}}
 {{.description}}
 {{- if eq .hasPaid "true" }}

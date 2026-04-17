@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-route_table"
 description: |-
   Provides a resource to manage route table
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_route_table
 Provides a resource to manage route table
 ## Example Usage

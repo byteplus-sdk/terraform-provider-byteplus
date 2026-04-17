@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-server_group_server"
 description: |-
   Provides a resource to manage server group server
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_server_group_server
 Provides a resource to manage server group server
 ## Example Usage

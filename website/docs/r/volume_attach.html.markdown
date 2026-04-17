@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-volume_attach"
 description: |-
   Provides a resource to manage volume attach
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_volume_attach
 Provides a resource to manage volume attach
 ## Example Usage

@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-rds_mysql_endpoint_public_address"
 description: |-
   Provides a resource to manage rds mysql endpoint public address
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_rds_mysql_endpoint_public_address
 Provides a resource to manage rds mysql endpoint public address
 ## Example Usage

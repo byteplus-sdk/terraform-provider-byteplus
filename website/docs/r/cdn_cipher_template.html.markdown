@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-cdn_cipher_template"
 description: |-
   Provides a resource to manage cdn cipher template
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_cdn_cipher_template
 Provides a resource to manage cdn cipher template
 ## Example Usage

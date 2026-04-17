@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-escloud_ip_white_list"
 description: |-
   Provides a resource to manage escloud ip white list
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_escloud_ip_white_list
 Provides a resource to manage escloud ip white list
 ## Example Usage

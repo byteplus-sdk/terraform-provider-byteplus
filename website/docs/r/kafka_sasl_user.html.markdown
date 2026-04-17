@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-kafka_sasl_user"
 description: |-
   Provides a resource to manage kafka sasl user
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_kafka_sasl_user
 Provides a resource to manage kafka sasl user
 ## Example Usage

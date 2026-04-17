@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-tos_bucket_policy"
 description: |-
   Provides a resource to manage tos bucket policy
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_tos_bucket_policy
 Provides a resource to manage tos bucket policy
 ## Example Usage

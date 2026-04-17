@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-datasource-scaling_policies"
 description: |-
   Use this data source to query detailed information of scaling policies
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_scaling_policies
 Use this data source to query detailed information of scaling policies
 ## Example Usage

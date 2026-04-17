@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-cen_inter_region_bandwidth"
 description: |-
   Provides a resource to manage cen inter region bandwidth
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_cen_inter_region_bandwidth
 Provides a resource to manage cen inter region bandwidth
 ## Example Usage

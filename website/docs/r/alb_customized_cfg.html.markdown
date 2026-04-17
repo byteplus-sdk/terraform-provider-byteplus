@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-alb_customized_cfg"
 description: |-
   Provides a resource to manage alb customized cfg
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_alb_customized_cfg
 Provides a resource to manage alb customized cfg
 ## Example Usage

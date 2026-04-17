@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-iam_saml_provider"
 description: |-
   Provides a resource to manage iam saml provider
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_iam_saml_provider
 Provides a resource to manage iam saml provider
 ## Example Usage

@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-kafka_allow_list"
 description: |-
   Provides a resource to manage kafka allow list
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_kafka_allow_list
 Provides a resource to manage kafka allow list
 ## Example Usage

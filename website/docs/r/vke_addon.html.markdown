@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-vke_addon"
 description: |-
   Provides a resource to manage vke addon
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_vke_addon
 Provides a resource to manage vke addon
 ## Example Usage

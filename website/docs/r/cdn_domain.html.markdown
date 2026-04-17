@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-cdn_domain"
 description: |-
   Provides a resource to manage cdn domain
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_cdn_domain
 Provides a resource to manage cdn domain
 ## Example Usage

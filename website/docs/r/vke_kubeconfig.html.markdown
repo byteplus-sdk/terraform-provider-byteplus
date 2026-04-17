@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-vke_kubeconfig"
 description: |-
   Provides a resource to manage vke kubeconfig
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_vke_kubeconfig
 Provides a resource to manage vke kubeconfig
 ## Example Usage

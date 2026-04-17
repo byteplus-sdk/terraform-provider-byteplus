@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-datasource-security_group_rules"
 description: |-
   Use this data source to query detailed information of security group rules
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_security_group_rules
 Use this data source to query detailed information of security group rules
 ## Example Usage

@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-waf_system_bot"
 description: |-
   Provides a resource to manage waf system bot
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_waf_system_bot
 Provides a resource to manage waf system bot
 ## Example Usage

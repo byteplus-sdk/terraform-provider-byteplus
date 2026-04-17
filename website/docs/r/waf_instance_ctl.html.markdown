@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-waf_instance_ctl"
 description: |-
   Provides a resource to manage waf instance ctl
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_waf_instance_ctl
 Provides a resource to manage waf instance ctl
 ## Example Usage

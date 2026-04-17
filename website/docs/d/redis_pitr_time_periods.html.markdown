@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-datasource-redis_pitr_time_periods"
 description: |-
   Use this data source to query detailed information of redis pitr time periods
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_redis_pitr_time_periods
 Use this data source to query detailed information of redis pitr time periods
 ## Example Usage

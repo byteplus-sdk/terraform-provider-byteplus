@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-cloud_monitor_contact_group"
 description: |-
   Provides a resource to manage cloud monitor contact group
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_cloud_monitor_contact_group
 Provides a resource to manage cloud monitor contact group
 ## Example Usage

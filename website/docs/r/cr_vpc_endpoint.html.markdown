@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-cr_vpc_endpoint"
 description: |-
   Provides a resource to manage cr vpc endpoint
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_cr_vpc_endpoint
 Provides a resource to manage cr vpc endpoint
 ## Example Usage

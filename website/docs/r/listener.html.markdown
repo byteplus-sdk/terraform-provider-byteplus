@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-listener"
 description: |-
   Provides a resource to manage listener
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_listener
 Provides a resource to manage listener
 ## Example Usage

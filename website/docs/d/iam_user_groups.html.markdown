@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-datasource-iam_user_groups"
 description: |-
   Use this data source to query detailed information of iam user groups
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_iam_user_groups
 Use this data source to query detailed information of iam user groups
 ## Example Usage

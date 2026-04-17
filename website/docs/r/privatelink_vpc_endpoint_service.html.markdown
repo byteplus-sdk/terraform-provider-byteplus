@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-privatelink_vpc_endpoint_service"
 description: |-
   Provides a resource to manage privatelink vpc endpoint service
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_privatelink_vpc_endpoint_service
 Provides a resource to manage privatelink vpc endpoint service
 ## Example Usage

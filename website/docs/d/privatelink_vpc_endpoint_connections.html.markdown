@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-datasource-privatelink_vpc_endpoint_connections"
 description: |-
   Use this data source to query detailed information of privatelink vpc endpoint connections
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_privatelink_vpc_endpoint_connections
 Use this data source to query detailed information of privatelink vpc endpoint connections
 ## Example Usage

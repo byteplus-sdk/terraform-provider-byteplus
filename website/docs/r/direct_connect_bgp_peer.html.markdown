@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-direct_connect_bgp_peer"
 description: |-
   Provides a resource to manage direct connect bgp peer
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_direct_connect_bgp_peer
 Provides a resource to manage direct connect bgp peer
 ## Example Usage

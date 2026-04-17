@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-iam_user_group_policy_attachment"
 description: |-
   Provides a resource to manage iam user group policy attachment
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_iam_user_group_policy_attachment
 Provides a resource to manage iam user group policy attachment
 ## Example Usage

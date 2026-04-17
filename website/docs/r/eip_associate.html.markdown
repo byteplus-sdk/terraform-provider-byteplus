@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-eip_associate"
 description: |-
   Provides a resource to manage eip associate
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_eip_associate
 Provides a resource to manage eip associate
 ## Example Usage

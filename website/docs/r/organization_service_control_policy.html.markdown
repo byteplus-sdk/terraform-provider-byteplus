@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-resource-organization_service_control_policy"
 description: |-
   Provides a resource to manage organization service control policy
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_organization_service_control_policy
 Provides a resource to manage organization service control policy
 ## Example Usage

@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-datasource-escloud_instances_v2"
 description: |-
   Use this data source to query detailed information of escloud instances v2
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_escloud_instances_v2
 Use this data source to query detailed information of escloud instances v2
 ## Example Usage

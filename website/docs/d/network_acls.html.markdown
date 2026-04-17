@@ -6,6 +6,8 @@ sidebar_current: "docs-byteplus-datasource-network_acls"
 description: |-
   Use this data source to query detailed information of network acls
 ---
+**❗Notice:**
+The current provider is no longer being maintained. We recommend that you use the [bytepluscc](https://registry.terraform.io/providers/byteplus-sdk/bytepluscc/latest/docs) instead.
 # byteplus_network_acls
 Use this data source to query detailed information of network acls
 ## Example Usage
