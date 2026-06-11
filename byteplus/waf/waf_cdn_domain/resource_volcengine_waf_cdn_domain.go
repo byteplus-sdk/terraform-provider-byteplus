@@ -2,8 +2,9 @@ package waf_cdn_domain
 
 import (
 	"fmt"
-	bp "github.com/byteplus-sdk/terraform-provider-byteplus/common"
 	"time"
+
+	bp "github.com/byteplus-sdk/terraform-provider-byteplus/common"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
@@ -119,10 +120,10 @@ func ResourceByteplusWafCdnDomain() *schema.Resource {
 				Optional:    true,
 				Computed:    true,
 				Description: "Whether to enable the bot frequency limit policy. Works only on modified scenes.",
-				DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
-					// 创建时不存在这个参数，修改时存在这个参数
-					return d.Id() == ""
-				},
+				//DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
+				//	// 创建时不存在这个参数，修改时存在这个参数
+				//	return d.Id() == ""
+				//},
 			},
 			"bot_dytoken_enable": {
 				Type:        schema.TypeInt,
@@ -139,170 +140,170 @@ func ResourceByteplusWafCdnDomain() *schema.Resource {
 				Optional:    true,
 				Computed:    true,
 				Description: "Whether to enable the intelligent CC protection strategy. Works only on modified scenes.",
-				DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
-					// 创建时不存在这个参数，修改时存在这个参数
-					return d.Id() == ""
-				},
+				//DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
+				//	// 创建时不存在这个参数，修改时存在这个参数
+				//	return d.Id() == ""
+				//},
 			},
 			"bot_sequence_enable": {
 				Type:        schema.TypeInt,
 				Optional:    true,
 				Computed:    true,
 				Description: "Whether to enable the bot behavior map. Works only on modified scenes.",
-				DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
-					// 创建时不存在这个参数，修改时存在这个参数
-					return d.Id() == ""
-				},
+				//DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
+				//	// 创建时不存在这个参数，修改时存在这个参数
+				//	return d.Id() == ""
+				//},
 			},
 			"bot_sequence_default_action": {
 				Type:        schema.TypeInt,
 				Optional:    true,
 				Computed:    true,
 				Description: "Set the default actions of the bot behavior map strategy. Works only on modified scenes.",
-				DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
-					// 创建时不存在这个参数，修改时存在这个参数
-					return d.Id() == ""
-				},
+				//DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
+				//	// 创建时不存在这个参数，修改时存在这个参数
+				//	return d.Id() == ""
+				//},
 			},
 			"bot_frequency_enable": {
 				Type:        schema.TypeInt,
 				Optional:    true,
 				Computed:    true,
 				Description: "Whether to enable the bot frequency limit policy. Works only on modified scenes.",
-				DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
-					// 创建时不存在这个参数，修改时存在这个参数
-					return d.Id() == ""
-				},
+				//DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
+				//	// 创建时不存在这个参数，修改时存在这个参数
+				//	return d.Id() == ""
+				//},
 			},
 			"waf_enable": {
 				Type:        schema.TypeInt,
 				Optional:    true,
 				Computed:    true,
 				Description: "Whether to enable the vulnerability protection strategy. Works only on modified scenes.",
-				DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
-					// 创建时不存在这个参数，修改时存在这个参数
-					return d.Id() == ""
-				},
+				//DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
+				//	// 创建时不存在这个参数，修改时存在这个参数
+				//	return d.Id() == ""
+				//},
 			},
 			"cc_enable": {
 				Type:        schema.TypeInt,
 				Optional:    true,
 				Computed:    true,
 				Description: "Whether to enable the CC protection policy. Works only on modified scenes.",
-				DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
-					// 创建时不存在这个参数，修改时存在这个参数
-					return d.Id() == ""
-				},
+				//DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
+				//	// 创建时不存在这个参数，修改时存在这个参数
+				//	return d.Id() == ""
+				//},
 			},
 			"white_enable": {
 				Type:        schema.TypeInt,
 				Optional:    true,
 				Computed:    true,
 				Description: "Whether to enable the access list policy. Works only on modified scenes.",
-				DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
-					// 创建时不存在这个参数，修改时存在这个参数
-					return d.Id() == ""
-				},
+				//DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
+				//	// 创建时不存在这个参数，修改时存在这个参数
+				//	return d.Id() == ""
+				//},
 			},
 			"black_ip_enable": {
 				Type:        schema.TypeInt,
 				Optional:    true,
 				Computed:    true,
 				Description: "Whether to enable the access ban list policy. Works only on modified scenes.",
-				DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
-					// 创建时不存在这个参数，修改时存在这个参数
-					return d.Id() == ""
-				},
+				//DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
+				//	// 创建时不存在这个参数，修改时存在这个参数
+				//	return d.Id() == ""
+				//},
 			},
 			"black_lct_enable": {
 				Type:        schema.TypeInt,
 				Optional:    true,
 				Computed:    true,
 				Description: "Whether to enable the geographical location access control policy. Works only on modified scenes.",
-				DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
-					// 创建时不存在这个参数，修改时存在这个参数
-					return d.Id() == ""
-				},
+				//DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
+				//	// 创建时不存在这个参数，修改时存在这个参数
+				//	return d.Id() == ""
+				//},
 			},
 			"waf_white_req_enable": {
 				Type:        schema.TypeInt,
 				Optional:    true,
 				Computed:    true,
 				Description: "Whether to enable the whitening strategy for vulnerability protection requests. Works only on modified scenes.",
-				DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
-					// 创建时不存在这个参数，修改时存在这个参数
-					return d.Id() == ""
-				},
+				//DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
+				//	// 创建时不存在这个参数，修改时存在这个参数
+				//	return d.Id() == ""
+				//},
 			},
 			"white_field_enable": {
 				Type:        schema.TypeInt,
 				Optional:    true,
 				Computed:    true,
 				Description: "Whether to enable the whitening strategy for vulnerability protection fields. Works only on modified scenes.",
-				DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
-					// 创建时不存在这个参数，修改时存在这个参数
-					return d.Id() == ""
-				},
+				//DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
+				//	// 创建时不存在这个参数，修改时存在这个参数
+				//	return d.Id() == ""
+				//},
 			},
 			"custom_rsp_enable": {
 				Type:        schema.TypeInt,
 				Optional:    true,
 				Computed:    true,
 				Description: "Whether to enable the custom response interception policy. Works only on modified scenes.",
-				DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
-					// 创建时不存在这个参数，修改时存在这个参数
-					return d.Id() == ""
-				},
+				//DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
+				//	// 创建时不存在这个参数，修改时存在这个参数
+				//	return d.Id() == ""
+				//},
 			},
 			"system_bot_enable": {
 				Type:        schema.TypeInt,
 				Optional:    true,
 				Computed:    true,
 				Description: "Whether to enable the managed Bot classification strategy. Works only on modified scenes.",
-				DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
-					// 创建时不存在这个参数，修改时存在这个参数
-					return d.Id() == ""
-				},
+				//DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
+				//	// 创建时不存在这个参数，修改时存在这个参数
+				//	return d.Id() == ""
+				//},
 			},
 			"custom_bot_enable": {
 				Type:        schema.TypeInt,
 				Optional:    true,
 				Computed:    true,
 				Description: "Whether to enable the custom Bot classification strategy. Works only on modified scenes.",
-				DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
-					// 创建时不存在这个参数，修改时存在这个参数
-					return d.Id() == ""
-				},
+				//DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
+				//	// 创建时不存在这个参数，修改时存在这个参数
+				//	return d.Id() == ""
+				//},
 			},
 			"api_enable": {
 				Type:        schema.TypeInt,
 				Optional:    true,
 				Computed:    true,
 				Description: "Whether to enable the API protection policy. Works only on modified scenes.",
-				DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
-					// 创建时不存在这个参数，修改时存在这个参数
-					return d.Id() == ""
-				},
+				//DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
+				//	// 创建时不存在这个参数，修改时存在这个参数
+				//	return d.Id() == ""
+				//},
 			},
 			"tamper_proof_enable": {
 				Type:        schema.TypeInt,
 				Optional:    true,
 				Computed:    true,
 				Description: "Whether to enable the page tamper-proof policy. Works only on modified scenes.",
-				DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
-					// 创建时不存在这个参数，修改时存在这个参数
-					return d.Id() == ""
-				},
+				//DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
+				//	// 创建时不存在这个参数，修改时存在这个参数
+				//	return d.Id() == ""
+				//},
 			},
 			"dlp_enable": {
 				Type:        schema.TypeInt,
 				Optional:    true,
 				Computed:    true,
 				Description: "Whether to activate the strategy for preventing the leakage of sensitive information. Works only on modified scenes.",
-				DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
-					// 创建时不存在这个参数，修改时存在这个参数
-					return d.Id() == ""
-				},
+				//DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
+				//	// 创建时不存在这个参数，修改时存在这个参数
+				//	return d.Id() == ""
+				//},
 			},
 			// 更新域名防护模式
 			"extra_defence_mode_lb_instance": {
