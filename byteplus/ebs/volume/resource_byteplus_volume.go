@@ -60,6 +60,12 @@ func ResourceByteplusVolume() *schema.Resource {
 				Required:    true,
 				Description: "The size of Volume.",
 			},
+			"snapshot_id": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				ForceNew:    true,
+				Description: "The snapshot ID used to create the volume.",
+			},
 			"description": {
 				Type:        schema.TypeString,
 				Optional:    true,

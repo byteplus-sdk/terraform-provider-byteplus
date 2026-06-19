@@ -57,6 +57,16 @@ func (s *ByteplusVolumeService) ReadResources(condition map[string]interface{}) 
 		if data, ok = results.([]interface{}); !ok {
 			return data, errors.New("Result.Volumes is not Slice")
 		}
+
+		// Filter system tags (e.g., sys:ecs:linkedresource) from all volumes
+		for _, d := range data {
+			if volume, ok := d.(map[string]interface{}); ok {
+				if tags, ok := volume["Tags"].([]interface{}); ok {
+					volume["Tags"] = bp.FilterSystemTags(tags)
+				}
+			}
+		}
+
 		return data, err
 	})
 }
@@ -143,6 +153,9 @@ func (s *ByteplusVolumeService) RefreshResourceState(resourceData *schema.Resour
 
 func (ByteplusVolumeService) WithResourceResponseHandlers(volume map[string]interface{}) []bp.ResourceResponseHandler {
 	handler := func() (map[string]interface{}, map[string]bp.ResponseConvert, error) {
+		if tags, ok := volume["Tags"].([]interface{}); ok {
+			volume["Tags"] = bp.FilterSystemTags(tags)
+		}
 		return volume, map[string]bp.ResponseConvert{
 			"Size": {
 				TargetField: "size",

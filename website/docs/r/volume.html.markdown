@@ -38,6 +38,7 @@ resource "byteplus_volume" "PostVolume" {
 The following arguments are supported:
 * `kind` - (Required, ForceNew) The kind of Volume, the value is `data`.
 * `size` - (Required) The size of Volume.
+* `snapshot_id` - (Optional, ForceNew) The snapshot ID used to create the volume.
 * `volume_name` - (Required) The name of Volume.
 * `volume_type` - (Required, ForceNew) The type of Volume, the value is `PTSSD` or `ESSD_PL0` or `ESSD_PL1` or `ESSD_PL2` or `ESSD_FlexPL`.
 * `zone_id` - (Required, ForceNew) The id of the Zone.
@@ -67,4 +68,3 @@ Volume can be imported using the id, e.g.
 ```
 $ terraform import byteplus_volume.default vol-mizl7m1kqccg5smt1bdpijuj
 ```
-
